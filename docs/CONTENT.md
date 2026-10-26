@@ -199,6 +199,23 @@ CTA : `Découvrir notre méthode →`
 - **Immobilier & BTP** — « Chantiers, biens, loyers : *une vue d'ensemble*. » Défis : suivi de chantiers et d'approvisionnements, gestion locative et encaissements, coordination des équipes.
 - **Santé & cliniques** — « Patients, rendez-vous, pharmacie : *moins de papier, plus de soin*. » Défis : dossiers papier, stock de pharmacie, facturation et prises en charge. Mention : nous ne fournissons pas de dispositif médical ; la conformité spécifique au secteur est étudiée au cas par cas.
 
+#### Compléments rédigés au lot 1 (à relire par Kilakodon)
+- **Logistique & transit** — Intro : Dans le transit, chaque dossier passe par de nombreuses mains et de nombreux documents. Un outil adapté à votre circuit vous permet de savoir où en est chaque dossier, sans passer la journée au téléphone. — Ce que ça change : Chaque dossier suivi étape par étape · Documents rattachés au bon dossier · Des réponses claires à vos clients
+- **Immobilier & BTP** — Intro : Chantiers en cours, biens en location, équipes sur le terrain : quand l'information est éparpillée, les retards et les impayés se découvrent trop tard. Un outil commun remet chaque chantier et chaque bien sous vos yeux. — Ce que ça change : Avancement et approvisionnements suivis par chantier · Loyers et encaissements suivis par bien · Des équipes qui partagent la même information
+- **Santé & cliniques** — Intro : Dossiers papier, stock de pharmacie, facturation : l'administratif prend du temps aux équipes soignantes. (+ mention ci-dessus) — Ce que ça change : Dossiers administratifs centralisés · Stock de pharmacie suivi avec alertes · Facturation plus rapide
+
+---
+
+## 4 bis. Textes d'interface ajoutés au lot 1
+- Page Solutions : H1 « Six expertises, *un seul interlocuteur* » ; état vide « Nos fiches solutions arrivent bientôt. » + « En attendant, le diagnostic gratuit vous indique en 3 minutes les modules adaptés à votre entreprise. »
+- Page solution : « Ce qui vous freine aujourd'hui », « Pour qui ? », « Ce que vous *obtenez* », « Comment on travaille », « Délai et prix » (délai vide ou à valider → « Précisé après le diagnostic » ; « Le délai ferme et le prix figurent dans le devis, après notre échange. »), CTA « Un diagnostic *pré-rempli* pour cette solution ».
+- Page secteur : « Vos défis », « Ce que ça *change* », « Les solutions recommandées », « Voyez-le *en action* », CTA « Diagnostic {secteur} : *3 minutes* ».
+- Réalisations : H1 « Des projets menés *avec nos clients* » ; « Chaque réalisation est publiée avec l'accord écrit du client concerné. » ; état vide « Nos études de cas sont en préparation. » ; accueil « Ils nous ont fait *confiance* » (seulement s'il existe une réalisation autorisée).
+- Ressources : H1 « Des conseils concrets pour *mieux gérer* » ; état vide « Nos premiers articles sont en cours de relecture. » ; fin d'article « Et dans *votre* entreprise ? ».
+- Contact : H1 « Parlons de *votre projet* » ; « Le plus rapide : *WhatsApp* » ; sujets : Un projet de logiciel · Une démonstration · Le support d'un logiciel existant · Autre demande ; succès si horaires non validés : « Merci, votre message est bien arrivé. Un conseiller vous recontacte. »
+- Accueil : FAQ « Vos questions, nos réponses ».
+- Prévisualisation équipe : « Prévisualisation équipe : les brouillons et les éléments « [À VALIDER] » sont visibles. Le public ne voit que les contenus publiés. »
+
 ---
 
 ## 5. Démo Lab

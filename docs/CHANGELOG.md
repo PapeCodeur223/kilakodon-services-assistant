@@ -2,6 +2,25 @@
 
 ## [Non publié]
 
+### Lot 1 — Site public, contenus et SEO (2026-10-26)
+#### Ajouté
+- Contenus : tables `services`, `sectors`, `case_studies`, `articles`, `faqs`, `pages`, `content_revisions` ; traits `Publishable` (verrou de publication) et `HasRevisions` ; actions `PublishContent` (admin, refus si [À VALIDER] ou réalisation non autorisée), `ChangeContentStatus`, `RestoreRevision`, `AttestCaseStudyAuthorization` ; politique `ContentPolicy`.
+- `ContentSeeder` depuis CONTENT.md (brouillon si [À VALIDER], articles toujours en brouillon) et commande `kh:content-audit` (`--all`).
+- Filament : Solutions, Secteurs, Réalisations (attestation d'autorisation), Articles, FAQ, Pages ; historique des versions avec restauration ; aperçu ; liste des leads (lecture).
+- CRM de base : `companies`, `contacts`, `consents`, `leads` (colonnes complètes) ; `CreateLeadFromContact` idempotent, consentements séparés et versionnés, e-mails mis en file.
+- Pages publiques : accueil complet (UX §5.1), solutions, secteurs, réalisations, ressources, méthode, à propos, légales (sommaire ancré), contact (honeypot, 5 envois/h/IP) ; prévisualisation des brouillons pour l'équipe ; navigation limitée aux contenus publiés.
+- `WhatsAppLink` contextuel (solution, brief, démo, assistant ≤ 300 caractères).
+- SEO : `x-kh.seo` (title, description, canonical, Open Graph, Twitter), JSON-LD (Organization/LocalBusiness, Service, FAQPage, Article, BreadcrumbList), image de partage, `sitemap.xml` (+ `sitemap:generate` quotidien), `robots.txt`, `X-Robots-Tag` sur les espaces privés, capture des UTM.
+- Middleware `LegacyRedirects` (TRD §5.3).
+- Composants : breadcrumb, faq, markdown, textarea, select, checkbox, cta-band, page-hero, status-marker ; préchargement de Fraunces.
+
+#### Modifié
+- Flottement continu des artefacts réservé au desktop (performance mobile).
+- `SettingsSeeder` : IA activée avec budget de 1 USD en local uniquement (BACKEND_SCHEMA §9).
+
+#### Écarts notés dans DECISIONS.md
+- Solutions et pages éditoriales en brouillon (contiennent [À VALIDER]) ; textes de l'accueil en fichier ; colonnes `sectors.icon` et `faqs.on_home` ; secteurs 4.4–4.6 et articles rédigés pour relecture ; e-mails en file jusqu'au lot 3 ; mesure Lighthouse incomplète sur ce poste.
+
 ### Lot 0 — Socle (2026-10-26)
 #### Ajouté
 - Projet Laravel 12 (verrou `config.platform.php = 8.2.0`), préfixe `kh_`, locale `fr` et traductions `lang/fr`, drivers `database` (file, cache, sessions), sessions de 8 h.

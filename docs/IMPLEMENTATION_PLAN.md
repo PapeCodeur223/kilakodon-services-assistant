@@ -142,7 +142,7 @@ Choix de la formule LWS (avec ou sans SSH), workflow GitHub Actions, préproduct
 | Lot | Statut | PR | Validé par | Date |
 |---|---|---|---|---|
 | 0 | validé | branche `lot-0-socle` | Direction Kilakodon | 2026-10-26 |
-| 1 | à faire | | | |
+| 1 | en revue | branche `lot-1-site-public` | | |
 | 2 | à faire | | | |
 | 3 | à faire | | | |
 | 4 | à faire | | | |
