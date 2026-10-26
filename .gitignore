@@ -24,3 +24,6 @@ Homestead.yaml
 Thumbs.db
 /.venv
 /.vscode
+/public/css/filament
+/public/js/filament
+/public/fonts/filament
