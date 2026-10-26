@@ -45,4 +45,18 @@
 
 | Date | Lot | Constat | Interprétation retenue |
 |---|---|---|---|
-| | | | |
+| 2026-10-26 | 0 | Poste local : PHP 8.4 (Herd Lite, sans `intl`, requis par Filament) et PHP 8.1 (XAMPP, trop ancien pour Laravel 12) | PHP 8.2.35 officiel installé dans `C:\php\8.2` (validé par l'équipe), utilisé en chemin explicite ; XAMPP inchangé. Le site se lance avec `php artisan serve` (Apache XAMPP reste en 8.1) |
+| 2026-10-26 | 0 | MariaDB locale 10.4 (XAMPP) alors que TRD §1 vise 10.6+ | Accepté en local (Laravel 12 supporte 10.3+) ; à aligner sur la version LWS au lot 7. Aucune fonctionnalité 10.6+ utilisée |
+| 2026-10-26 | 0 | Tests : base SQLite par défaut de Laravel | Tests sur MariaDB (`kilakodon_hub_testing`) pour rester fidèle à la production (FULLTEXT au lot 4) ; suite plus lente (~7 min) |
+| 2026-10-26 | 0 | UX §3.4 importe Fraunces `wght`, mais demande `"SOFT" 50, "opsz" 72` (axes absents de ce fichier) ; le fichier `full` pèse 121 Ko | Import de `opsz.css` + `opsz-italic.css` (67 Ko) : taille optique respectée, axe SOFT abandonné. Repasser à `full.css` si la direction tient à SOFT |
+| 2026-10-26 | 0 | `--color-*: initial` dans `@theme` | La palette Tailwind par défaut est retirée : seules les couleurs-tokens existent (impossible d'écrire `bg-blue-500`). Ajout de `success-50` et `warning-50` (fonds des badges) dérivés des tokens |
+| 2026-10-26 | 0 | TRD §11 : CSP `self` + nonce. Filament/Alpine exigent `unsafe-eval` et des scripts en ligne | CSP stricte (nonce, sans `unsafe-eval`) sur les pages publiques ; CSP assouplie limitée à `/admin`, `/livewire/*`, `/filament/*`. À réévaluer pour le diagnostic (Livewire) au lot 2 |
+| 2026-10-26 | 0 | Filament 4 : « MFA obligatoire » s'applique à tous les utilisateurs | Middleware `RequireAdminMultiFactor` : obligatoire pour `admin`, facultative (profil) pour `sales`/`editor` |
+| 2026-10-26 | 0 | UX §2 : favicon « à partir de la sphère seule » ; or le mot « Kilakodon » chevauche la sphère dans le fichier source | Favicons générés depuis le logo complet recadré (aucun pixel modifié). Une version « sphère seule » doit être fournie par la direction si souhaitée |
+| 2026-10-26 | 0 | Icône WhatsApp absente de Lucide | Glyphe de marque copié depuis Simple Icons (CC0) dans `resources/svg/brands/whatsapp.svg`, rendu par `x-kh.icon name="brand:whatsapp"` ; aucune dépendance |
+| 2026-10-26 | 0 | Utilisateurs : PRD parle de « désactivation » | Pas de suppression d'utilisateur depuis l'admin (politique `delete` refusée pour soi-même, action absente) ; un admin ne peut ni changer son rôle ni se désactiver (contrôle serveur) |
+| 2026-10-26 | 0 | Navigation (header/footer) requise au lot 0, contenus créés au lot 1 | Liste statique `config/kh_navigation.php` (libellés de CONTENT §3–4) ; les liens mènent à la 404 stylée jusqu'au lot 1, puis seront lus en base. « Gérer mes données » pointe provisoirement vers `/confidentialite` (formulaire au lot 6) |
+| 2026-10-26 | 0 | Accueil : page complète prévue au lot 1 | Accueil provisoire limité au hero de CONTENT §2 |
+| 2026-10-26 | 0 | `git fsmonitor` (activé globalement dans Git for Windows) bloque Composer indéfiniment | `core.fsmonitor=false` dans la config locale du dépôt uniquement |
+| 2026-10-26 | 0 | `kh:content-audit` cité dans la checklist de fin de lot | Commande prévue au lot 1 : non exécutée au lot 0 |
+| 2026-10-26 | 0 | IA : Q-009 | Paramètres seedés avec `ai.enabled=false` et budget 0 tant que la direction n'a pas fixé le budget |

@@ -278,5 +278,9 @@ Règle : aucun chiffre de marché sans source citée ; pas de données clients.
 
 ### États
 - 404 : « Cette page n'existe pas (ou plus). » + liens Accueil, Solutions, Diagnostic.
+- 500 : « Un problème technique nous empêche d'afficher *cette page*. » — « Notre équipe en est informée. Réessayez dans quelques minutes ou écrivez-nous directement sur WhatsApp. »
+- 503 : « Le site est en *maintenance*. » — « Nous revenons très vite. En attendant, vous pouvez nous écrire sur WhatsApp. »
+- 403 : « Cette page ne vous est *pas accessible*. » — « Si vous pensez qu'il s'agit d'une erreur, contactez-nous. »
+- 419 : « Votre session a *expiré*. » — « Pour votre sécurité, la page a expiré. Revenez en arrière, rechargez-la et réessayez. »
 - Lien de brief expiré : « Ce lien a expiré. Pour votre sécurité, les liens privés sont valables 30 jours. Contactez-nous avec votre référence pour en recevoir un nouveau. »
 - Assistant indisponible : voir `UX_UI_DESIGN.md` §4.3.
