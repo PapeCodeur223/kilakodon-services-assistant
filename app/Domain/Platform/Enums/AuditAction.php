@@ -14,10 +14,16 @@ enum AuditAction: string
     case ContactMerged = 'contact_merged';
     case Exported = 'exported';
     case Anonymized = 'anonymized';
+    case StatusChanged = 'status_changed';
+    case RevisionRestored = 'revision_restored';
+    case AuthorizationAttested = 'authorization_attested';
 
     public function label(): string
     {
         return match ($this) {
+            self::StatusChanged => 'Changement de statut',
+            self::RevisionRestored => 'Révision restaurée',
+            self::AuthorizationAttested => 'Autorisation client attestée',
             self::Login => 'Connexion',
             self::Created => 'Création',
             self::Updated => 'Modification',
