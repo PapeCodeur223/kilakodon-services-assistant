@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Middleware\CaptureUtm;
 use App\Http\Middleware\EnsureEnvironment;
+use App\Http\Middleware\LegacyRedirects;
 use App\Http\Middleware\SecurityHeaders;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -13,8 +15,11 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        // Avant le routage : les anciennes URL n'ont pas de route.
+        $middleware->prepend(LegacyRedirects::class);
         // Global : couvre aussi /admin (Filament) et les pages d'erreur.
         $middleware->append(SecurityHeaders::class);
+        $middleware->web(append: [CaptureUtm::class]);
         $middleware->alias([
             'env' => EnsureEnvironment::class,
         ]);

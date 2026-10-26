@@ -89,8 +89,12 @@
 
     <x-kh.section id="cartes" title="Cartes" lead="Cartes neutres sans ombre au repos ; survol (si lien) : -4 px, ombre douce, fond blanc.">
         <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-            @foreach (array_slice(config('kh_navigation.solutions'), 0, 3) as $i => $item)
-                <x-kh.card :href="url('/solutions/'.$item['slug'])" :icon="$item['icon']" :title="$item['title']" data-reveal style="--i: {{ $i }}">
+            @foreach ([
+                ['icon' => 'layout-dashboard', 'title' => 'ERP & CRM sur mesure', 'tagline' => 'Toute votre entreprise dans un seul outil : ventes, clients, équipes, finances.'],
+                ['icon' => 'package', 'title' => 'Stocks, facturation & caisse', 'tagline' => 'Sachez exactement ce que vous avez, ce que vous vendez et ce que vous encaissez.'],
+                ['icon' => 'app-window', 'title' => 'Applications web métiers', 'tagline' => 'L\'outil exact dont votre métier a besoin, accessible depuis n\'importe quel navigateur.'],
+            ] as $i => $item)
+                <x-kh.card :href="route('solutions.index')" :icon="$item['icon']" :title="$item['title']" data-reveal style="--i: {{ $i }}">
                     {{ $item['tagline'] }}
                     <x-slot:footer><span class="font-medium text-ink">En savoir plus <span aria-hidden="true">→</span></span></x-slot:footer>
                 </x-kh.card>

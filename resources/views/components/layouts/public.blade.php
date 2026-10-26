@@ -1,14 +1,13 @@
 @props([
     'title' => null,
-    'description' => 'ERP, CRM, gestion de stock et caisse, applications web et mobiles conçus à Bamako pour les entreprises du Mali et d\'Afrique de l\'Ouest. Diagnostic gratuit en 3 minutes.',
+    'description' => null,
+    'canonical' => null,
+    'image' => null,
+    'type' => 'website',
     'noindex' => false,
+    'schemas' => [],
     'chrome' => 'full',
 ])
-@php
-    $pageTitle = $title
-        ? \App\View\Support\Accent::plain($title).' — Kilakodon Services'
-        : 'Kilakodon Services — Logiciels de gestion sur mesure à Bamako';
-@endphp
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -16,11 +15,7 @@
     {{-- La classe .js active les états initiaux des animations : sans JS, tout reste visible. --}}
     <script nonce="{{ \Illuminate\Support\Facades\Vite::cspNonce() }}">document.documentElement.classList.add('js')</script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ $pageTitle }}</title>
-    <meta name="description" content="{{ $description }}">
-    @if ($noindex)
-        <meta name="robots" content="noindex, nofollow">
-    @endif
+    <x-kh.seo :title="$title" :description="$description" :canonical="$canonical" :image="$image" :type="$type" :noindex="$noindex" :schemas="$schemas" />
     <meta name="theme-color" content="white">
     <link rel="icon" href="{{ asset('favicon.ico') }}" sizes="any">
     <link rel="icon" href="{{ asset('images/brand/favicon-32.png') }}" type="image/png" sizes="32x32">
@@ -32,6 +27,15 @@
 </head>
 <body class="min-h-dvh bg-canvas text-ink">
     <a href="#contenu" class="kh-skip-link rounded-full bg-kh-blue-700 px-4 py-2 font-medium text-white">Aller au contenu</a>
+
+    @if (\App\Domain\Content\Support\ContentPreview::enabled())
+        <div class="bg-warning-50 text-warning-600">
+            <p class="kh-container flex items-center gap-2 py-2 text-small">
+                <x-kh.icon name="info" :size="18" />
+                Prévisualisation équipe : les brouillons et les éléments « [À VALIDER] » sont visibles. Le public ne voit que les contenus publiés.
+            </p>
+        </div>
+    @endif
 
     @if ($chrome === 'full')
         <x-kh.header />

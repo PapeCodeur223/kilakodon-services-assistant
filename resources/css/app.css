@@ -88,6 +88,9 @@
     color: var(--color-kh-red-600);
   }
 
+  /* Sur fond bleu nuit, le rouge du logo (texte ≥ 24 px uniquement) garde un contraste suffisant. */
+  .bg-kh-blue-950 h2 em { color: var(--color-kh-red-500); }
+
   :focus-visible {
     outline: 3px solid var(--color-kh-blue-500);
     outline-offset: 2px;
@@ -190,6 +193,34 @@
   .kh-card-link .kh-card-icon { transition: transform .2s var(--ease-out-soft); }
   .kh-card-link:hover .kh-card-icon { transform: translateX(2px); }
 
+  /* Contenu Markdown (articles, pages) : rythme éditorial, 68 caractères de large. */
+  .kh-markdown > * + * { margin-top: 1.1em; }
+  .kh-markdown h2 {
+    margin-top: 2em;
+    font-size: var(--text-h3);
+    line-height: var(--text-h3--line-height);
+    color: var(--color-ink);
+    scroll-margin-top: 96px;
+  }
+  .kh-markdown h3 { margin-top: 1.6em; font-size: 1.25rem; font-weight: 600; }
+  .kh-markdown h2 + *, .kh-markdown h3 + * { margin-top: .6em; }
+  .kh-markdown ul { list-style: disc; padding-inline-start: 1.25em; }
+  .kh-markdown ol { list-style: decimal; padding-inline-start: 1.4em; }
+  .kh-markdown li + li { margin-top: .4em; }
+  .kh-markdown li::marker { color: var(--color-kh-blue-500); }
+  .kh-markdown strong { font-weight: 600; color: var(--color-ink); }
+  .kh-markdown a { color: var(--color-kh-blue-700); text-decoration: underline; text-underline-offset: 3px; }
+  .kh-markdown blockquote {
+    border-inline-start: 3px solid var(--color-kh-blue-200);
+    padding: .75em 1em;
+    background: var(--color-kh-blue-50);
+    border-radius: 0 var(--radius-input) var(--radius-input) 0;
+    color: var(--color-kh-blue-900);
+  }
+
+  /* Ligne de la méthode : se dessine de gauche à droite à l'entrée dans l'écran. */
+  .kh-method-line { transform-origin: left; }
+
   /* FAQ : icône + qui tourne à 45° à l'ouverture. */
   .kh-faq > summary .kh-faq-plus { transition: transform .2s var(--ease-out-soft); }
   .kh-faq[open] > summary .kh-faq-plus { transform: rotate(45deg); }
@@ -239,6 +270,9 @@
   .kh-float.is-paused { animation-play-state: paused; }
 
   .kh-menu-panel { animation: kh-menu-in .25s var(--ease-out-soft) both; }
+
+  .js .kh-method-line { transform: scaleX(0); transition: transform .9s var(--ease-out-soft); }
+  .js .is-in .kh-method-line, .js .kh-method-line.is-in { transform: scaleX(1); }
 }
 
 @keyframes kh-accent-in {

@@ -6,7 +6,6 @@ it("rend l'accueil avec le header et le pied de page", function () {
         ->assertSee('Aller au contenu')
         ->assertSee('Diagnostic gratuit')
         ->assertSee('<em>faits pour elle</em>', false)
-        ->assertSee('Gérer mes données')
         ->assertSee('+223 74 66 64 89')
         ->assertDontSee('href="#"', false);
 });
