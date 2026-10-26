@@ -2,12 +2,9 @@
 
 namespace App\Domain\Content\Models;
 
-use App\Domain\Content\Concerns\HasRevisions;
-use App\Domain\Content\Concerns\Publishable;
 use App\Domain\Content\Enums\ArticleCategory;
 use App\Domain\Content\Enums\ContentStatus;
 use App\Domain\Platform\Models\User;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 
@@ -28,11 +25,8 @@ use Illuminate\Support\Carbon;
  * @property string|null $cover_path
  * @property-read User|null $author
  */
-class Article extends Model
+class Article extends ContentModel
 {
-    use HasRevisions;
-    use Publishable;
-
     protected $fillable = [
         'slug', 'seo_title', 'seo_description', 'og_image_path', 'sort',
         'title', 'excerpt', 'body', 'category', 'author_id', 'cover_path',

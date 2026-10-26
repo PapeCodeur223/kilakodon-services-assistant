@@ -2,12 +2,9 @@
 
 namespace App\Domain\Content\Models;
 
-use App\Domain\Content\Concerns\HasRevisions;
-use App\Domain\Content\Concerns\Publishable;
 use App\Domain\Content\Enums\AuthorizationStatus;
 use App\Domain\Content\Enums\ClientDisplay;
 use App\Domain\Content\Enums\ContentStatus;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Carbon;
@@ -43,11 +40,8 @@ use LogicException;
  * @property string|null $cover_path
  * @property-read Sector|null $sector
  */
-class CaseStudy extends Model
+class CaseStudy extends ContentModel
 {
-    use HasRevisions;
-    use Publishable;
-
     protected $fillable = [
         'slug', 'seo_title', 'seo_description', 'og_image_path', 'sort',
         'title', 'client_display', 'client_name', 'client_descriptor', 'sector_id',

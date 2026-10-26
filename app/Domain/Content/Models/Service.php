@@ -2,10 +2,7 @@
 
 namespace App\Domain\Content\Models;
 
-use App\Domain\Content\Concerns\HasRevisions;
-use App\Domain\Content\Concerns\Publishable;
 use App\Domain\Content\Enums\ContentStatus;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Carbon;
 
@@ -34,11 +31,8 @@ use Illuminate\Support\Carbon;
  * @property string|null $price_hint
  * @property list<array{q: string, a: string}>|null $faq
  */
-class Service extends Model
+class Service extends ContentModel
 {
-    use HasRevisions;
-    use Publishable;
-
     protected $fillable = [
         'slug', 'seo_title', 'seo_description', 'og_image_path', 'sort',
         'module_code', 'title', 'tagline', 'icon', 'problem', 'audience', 'benefits', 'features',

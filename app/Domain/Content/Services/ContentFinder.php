@@ -2,10 +2,9 @@
 
 namespace App\Domain\Content\Services;
 
-use App\Domain\Content\Concerns\Publishable;
+use App\Domain\Content\Models\ContentModel;
 use App\Domain\Content\Support\ContentPreview;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 
 /**
  * Point d'entrée unique des pages publiques vers les contenus :
@@ -14,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
 final class ContentFinder
 {
     /**
-     * @template T of Model
+     * @template T of ContentModel
      *
      * @param  class-string<T>  $model
      * @return Builder<T>
@@ -24,16 +23,16 @@ final class ContentFinder
         /** @var Builder<T> $query */
         $query = $model::query();
 
-        return $query->visible(ContentPreview::enabled())->orderBy('sort');
+        return $query->scopes(['visible' => [ContentPreview::enabled()]])->orderBy('sort');
     }
 
     /**
-     * @template T of Model
+     * @template T of ContentModel
      *
      * @param  class-string<T>  $model
-     * @return T&Publishable
+     * @return T
      */
-    public function bySlug(string $model, string $slug): Model
+    public function bySlug(string $model, string $slug): ContentModel
     {
         return $this->query($model)->where('slug', $slug)->firstOrFail();
     }

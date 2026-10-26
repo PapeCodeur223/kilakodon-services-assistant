@@ -2,15 +2,14 @@
 
 namespace Database\Seeders;
 
-use App\Domain\Content\Concerns\Publishable;
 use App\Domain\Content\Enums\ContentStatus;
 use App\Domain\Content\Models\Article;
+use App\Domain\Content\Models\ContentModel;
 use App\Domain\Content\Models\Faq;
 use App\Domain\Content\Models\Page;
 use App\Domain\Content\Models\Sector;
 use App\Domain\Content\Models\Service;
 use App\Domain\Content\Support\PublishGuard;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Seeder;
 
 /**
@@ -33,6 +32,7 @@ class ContentSeeder extends Seeder
             }
 
             foreach ($this->data('sectors') as $i => $row) {
+                /** @var list<string> $services */
                 $services = $row['services'];
                 unset($row['services']);
                 $sector = $this->upsert(Sector::class, ['code' => $row['code']], [...$row, 'sort' => $i]);
@@ -59,16 +59,16 @@ class ContentSeeder extends Seeder
     }
 
     /**
-     * @template T of Model
+     * @template T of ContentModel
      *
      * @param  class-string<T>  $model
      * @param  array<string, mixed>  $key
      * @param  array<string, mixed>  $attributes
      * @return T
      */
-    private function upsert(string $model, array $key, array $attributes, bool $alwaysDraft = false): Model
+    private function upsert(string $model, array $key, array $attributes, bool $alwaysDraft = false): ContentModel
     {
-        /** @var T&Publishable $content */
+        /** @var T $content */
         $content = $model::query()->firstOrNew($key);
 
         if ($content->exists) {

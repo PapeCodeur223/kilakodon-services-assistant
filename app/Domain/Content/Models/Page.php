@@ -2,11 +2,8 @@
 
 namespace App\Domain\Content\Models;
 
-use App\Domain\Content\Concerns\HasRevisions;
-use App\Domain\Content\Concerns\Publishable;
 use App\Domain\Content\Enums\ContentStatus;
 use App\Domain\Content\Enums\PageTemplate;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
 /**
@@ -23,11 +20,8 @@ use Illuminate\Support\Carbon;
  * @property string $body
  * @property PageTemplate $template
  */
-class Page extends Model
+class Page extends ContentModel
 {
-    use HasRevisions;
-    use Publishable;
-
     protected $fillable = ['slug', 'seo_title', 'seo_description', 'og_image_path', 'sort', 'title', 'body', 'template'];
 
     protected function casts(): array

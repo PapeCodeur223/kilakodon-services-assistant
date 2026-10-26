@@ -2,8 +2,8 @@
 
 namespace App\Policies;
 
-use App\Domain\Content\Concerns\Publishable;
 use App\Domain\Content\Enums\ContentStatus;
+use App\Domain\Content\Models\ContentModel;
 use App\Domain\Platform\Enums\UserRole;
 use App\Domain\Platform\Models\User;
 use Illuminate\Database\Eloquent\Model;
@@ -31,7 +31,7 @@ class ContentPolicy
     }
 
     /**
-     * @param  Model&Publishable  $content
+     * @param  ContentModel  $content
      */
     public function update(User $user, Model $content): bool
     {

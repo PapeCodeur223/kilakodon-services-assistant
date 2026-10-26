@@ -2,18 +2,17 @@
 
 namespace App\Domain\Content\Actions;
 
-use App\Domain\Content\Concerns\Publishable;
 use App\Domain\Content\Enums\AuthorizationStatus;
 use App\Domain\Content\Enums\ContentStatus;
 use App\Domain\Content\Exceptions\ContentTransitionException;
 use App\Domain\Content\Models\CaseStudy;
+use App\Domain\Content\Models\ContentModel;
 use App\Domain\Content\Services\SitemapBuilder;
 use App\Domain\Content\Support\PublishGuard;
 use App\Domain\Platform\Actions\RecordAudit;
 use App\Domain\Platform\Enums\AuditAction;
 use App\Domain\Platform\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
@@ -26,12 +25,10 @@ class PublishContent
     public function __construct(private readonly RecordAudit $recordAudit) {}
 
     /**
-     * @param  Model&Publishable  $content
-     *
      * @throws AuthorizationException
      * @throws ContentTransitionException
      */
-    public function handle(Model $content, User $by): Model
+    public function handle(ContentModel $content, User $by): ContentModel
     {
         if ($by->cannot('publish', $content)) {
             throw new AuthorizationException('Seul un administrateur peut publier.');
@@ -50,7 +47,7 @@ class PublishContent
             throw new ContentTransitionException('Publication impossible : l’autorisation écrite du client n’est pas accordée.');
         }
 
-        return DB::transaction(function () use ($content, $by): Model {
+        return DB::transaction(function () use ($content, $by): ContentModel {
             $from = $content->status;
 
             PublishGuard::allow(function () use ($content): void {

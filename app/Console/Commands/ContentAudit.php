@@ -43,8 +43,10 @@ class ContentAudit extends Command
                 $query->published();
             }
 
-            foreach ($query->get() as $content) {
-                /** @var Service|Sector|CaseStudy|Article|Faq|Page $content */
+            /** @var iterable<Service|Sector|CaseStudy|Article|Faq|Page> $contents */
+            $contents = $query->get();
+
+            foreach ($contents as $content) {
                 foreach ($content->pendingValidationFields() as $field) {
                     $rows[] = [$label, $this->name($content), $content->status->label(), $field];
                 }

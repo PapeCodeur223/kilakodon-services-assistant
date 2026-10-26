@@ -2,26 +2,22 @@
 
 namespace App\Domain\Content\Models;
 
-use App\Domain\Content\Concerns\HasRevisions;
-use App\Domain\Content\Concerns\Publishable;
 use App\Domain\Content\Enums\ContentStatus;
 use App\Domain\Content\Enums\FaqCategory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 /**
  * @property int $id
  * @property ContentStatus $status
+ * @property Carbon|null $published_at
  * @property string $question
  * @property string $answer
  * @property FaqCategory $category
  * @property bool $on_home
  * @property int $sort
  */
-class Faq extends Model
+class Faq extends ContentModel
 {
-    use HasRevisions;
-    use Publishable;
-
     protected $fillable = ['question', 'answer', 'category', 'on_home', 'sort'];
 
     protected function casts(): array

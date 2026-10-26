@@ -4,9 +4,9 @@ namespace App\Filament\Concerns;
 
 use App\Domain\Content\Actions\ChangeContentStatus;
 use App\Domain\Content\Actions\PublishContent;
-use App\Domain\Content\Concerns\Publishable;
 use App\Domain\Content\Enums\ContentStatus;
 use App\Domain\Content\Exceptions\ContentTransitionException;
+use App\Domain\Content\Models\ContentModel;
 use App\Domain\Platform\Models\User;
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
@@ -17,7 +17,6 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
 /**
@@ -45,11 +44,11 @@ trait ManagesContent
     {
         return TextColumn::make('pending')
             ->label('À valider')
-            ->state(fn (Model $record): int => count(static::pending($record)))
+            ->state(fn (ContentModel $record): int => count(static::pending($record)))
             ->badge()
             ->color(fn (int $state): string => $state > 0 ? 'warning' : 'success')
             ->formatStateUsing(fn (int $state): string => $state > 0 ? $state.' champ(s)' : 'Complet')
-            ->tooltip(fn (Model $record): ?string => static::pending($record) !== [] ? implode(', ', static::pending($record)) : null);
+            ->tooltip(fn (ContentModel $record): ?string => static::pending($record) !== [] ? implode(', ', static::pending($record)) : null);
     }
 
     public static function statusFilter(): SelectFilter
@@ -88,20 +87,20 @@ trait ManagesContent
                 ->label('Aperçu')
                 ->icon(Heroicon::OutlinedEye)
                 ->color('gray')
-                ->url(fn (Model $record): string => static::publicUrlOf($record), shouldOpenInNewTab: true),
+                ->url(fn (ContentModel $record): string => static::publicUrlOf($record), shouldOpenInNewTab: true),
             Action::make('submitForReview')
                 ->label('Soumettre à relecture')
                 ->icon(Heroicon::OutlinedPaperAirplane)
-                ->visible(fn (Model $record): bool => static::statusOf($record) === ContentStatus::Draft)
-                ->action(fn (Model $record) => static::transition($record, ContentStatus::Review)),
+                ->visible(fn (ContentModel $record): bool => static::statusOf($record) === ContentStatus::Draft)
+                ->action(fn (ContentModel $record) => static::transition($record, ContentStatus::Review)),
             Action::make('publish')
                 ->label('Publier')
                 ->icon(Heroicon::OutlinedCheckBadge)
                 ->color('success')
                 ->requiresConfirmation()
                 ->modalDescription('Le contenu sera visible du public et indexable.')
-                ->visible(fn (Model $record): bool => static::statusOf($record) !== ContentStatus::Published && static::currentUser()?->can('publish', $record) === true)
-                ->action(function (Model $record): void {
+                ->visible(fn (ContentModel $record): bool => static::statusOf($record) !== ContentStatus::Published && static::currentUser()?->can('publish', $record) === true)
+                ->action(function (ContentModel $record): void {
                     static::run(fn () => app(PublishContent::class)->handle($record, static::currentUserOrFail()), 'Contenu publié');
                 }),
             ActionGroup::make([
@@ -109,20 +108,20 @@ trait ManagesContent
                     ->label('Repasser en brouillon')
                     ->icon(Heroicon::OutlinedPencilSquare)
                     ->requiresConfirmation()
-                    ->visible(fn (Model $record): bool => static::statusOf($record) !== ContentStatus::Draft)
-                    ->action(fn (Model $record) => static::transition($record, ContentStatus::Draft)),
+                    ->visible(fn (ContentModel $record): bool => static::statusOf($record) !== ContentStatus::Draft)
+                    ->action(fn (ContentModel $record) => static::transition($record, ContentStatus::Draft)),
                 Action::make('archive')
                     ->label('Archiver')
                     ->icon(Heroicon::OutlinedArchiveBox)
                     ->color('gray')
                     ->requiresConfirmation()
-                    ->visible(fn (Model $record): bool => static::statusOf($record) !== ContentStatus::Archived && static::currentUser()?->isAdmin() === true)
-                    ->action(fn (Model $record) => static::transition($record, ContentStatus::Archived)),
+                    ->visible(fn (ContentModel $record): bool => static::statusOf($record) !== ContentStatus::Archived && static::currentUser()?->isAdmin() === true)
+                    ->action(fn (ContentModel $record) => static::transition($record, ContentStatus::Archived)),
             ])->label('Statut')->icon(Heroicon::OutlinedEllipsisVertical),
         ];
     }
 
-    protected static function transition(Model $record, ContentStatus $to): void
+    protected static function transition(ContentModel $record, ContentStatus $to): void
     {
         static::run(fn () => app(ChangeContentStatus::class)->handle($record, $to, static::currentUserOrFail()), 'Statut : '.$to->label());
     }
@@ -145,21 +144,18 @@ trait ManagesContent
     /**
      * @return list<string>
      */
-    protected static function pending(Model $record): array
+    protected static function pending(ContentModel $record): array
     {
-        /** @var Model&Publishable $record */
         return $record->pendingValidationFields();
     }
 
-    protected static function statusOf(Model $record): ContentStatus
+    protected static function statusOf(ContentModel $record): ContentStatus
     {
-        /** @var Model&Publishable $record */
         return $record->status;
     }
 
-    protected static function publicUrlOf(Model $record): string
+    protected static function publicUrlOf(ContentModel $record): string
     {
-        /** @var Model&Publishable $record */
         return $record->publicUrl();
     }
 

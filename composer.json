@@ -72,6 +72,7 @@
             "Illuminate\\Foundation\\ComposerScripts::prePackageUninstall"
         ],
         "kh:check": [
+            "Composer\\Config::disableProcessTimeout",
             "@php vendor/bin/pint --test",
             "@php vendor/bin/phpstan analyse --memory-limit=1G --no-progress",
             "@php vendor/bin/pest"

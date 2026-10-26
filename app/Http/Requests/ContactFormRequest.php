@@ -57,7 +57,9 @@ class ContactFormRequest extends FormRequest
 
     public function toContactRequest(): ContactRequest
     {
-        $utm = collect($this->session()->get('kh.utm', []))
+        /** @var array<string, mixed> $stored */
+        $stored = (array) $this->session()->get('kh.utm', []);
+        $utm = collect($stored)
             ->only(['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'])
             ->map(fn ($value): string => mb_substr((string) $value, 0, 100))
             ->all();

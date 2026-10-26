@@ -3,6 +3,7 @@
 namespace App\Filament\RelationManagers;
 
 use App\Domain\Content\Actions\RestoreRevision;
+use App\Domain\Content\Models\ContentModel;
 use App\Domain\Content\Models\ContentRevision;
 use App\Domain\Platform\Models\User;
 use Filament\Actions\Action;
@@ -60,7 +61,11 @@ class RevisionsRelationManager extends RelationManager
                     ->visible(fn (): bool => $this->currentUser()?->can('update', $this->getOwnerRecord()) === true)
                     ->action(function (ContentRevision $record): void {
                         try {
-                            app(RestoreRevision::class)->handle($this->getOwnerRecord(), $record, $this->currentUser() ?? throw new AuthorizationException);
+                            $owner = $this->getOwnerRecord();
+                            if (! $owner instanceof ContentModel) {
+                                throw new AuthorizationException('Ce contenu ne gère pas de versions.');
+                            }
+                            app(RestoreRevision::class)->handle($owner, $record, $this->currentUser() ?? throw new AuthorizationException);
                             Notification::make()->success()->title('Version '.$record->version.' restaurée')->send();
                             $this->redirect(request()->header('Referer') ?? url()->previous());
                         } catch (AuthorizationException $e) {

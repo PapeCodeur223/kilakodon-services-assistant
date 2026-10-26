@@ -2,14 +2,12 @@
 
 namespace App\Domain\Content\Actions;
 
-use App\Domain\Content\Concerns\HasRevisions;
-use App\Domain\Content\Concerns\Publishable;
+use App\Domain\Content\Models\ContentModel;
 use App\Domain\Content\Models\ContentRevision;
 use App\Domain\Platform\Actions\RecordAudit;
 use App\Domain\Platform\Enums\AuditAction;
 use App\Domain\Platform\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use InvalidArgumentException;
 
@@ -22,11 +20,9 @@ class RestoreRevision
     public function __construct(private readonly RecordAudit $recordAudit) {}
 
     /**
-     * @param  Model&Publishable&HasRevisions  $content
-     *
      * @throws AuthorizationException
      */
-    public function handle(Model $content, ContentRevision $revision, User $by): Model
+    public function handle(ContentModel $content, ContentRevision $revision, User $by): ContentModel
     {
         if ($revision->revisionable_type !== $content->getMorphClass() || (int) $revision->revisionable_id !== (int) $content->getKey()) {
             throw new InvalidArgumentException('Cette révision appartient à un autre contenu.');
@@ -36,7 +32,7 @@ class RestoreRevision
             throw new AuthorizationException('Vous ne pouvez pas modifier ce contenu.');
         }
 
-        return DB::transaction(function () use ($content, $revision, $by): Model {
+        return DB::transaction(function () use ($content, $revision, $by): ContentModel {
             $data = array_intersect_key($revision->data, array_flip($content->revisionFields()));
             $content->forceFill($data)->save();
 

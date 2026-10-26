@@ -2,15 +2,14 @@
 
 namespace App\Domain\Content\Actions;
 
-use App\Domain\Content\Concerns\Publishable;
 use App\Domain\Content\Enums\ContentStatus;
 use App\Domain\Content\Exceptions\ContentTransitionException;
+use App\Domain\Content\Models\ContentModel;
 use App\Domain\Content\Services\SitemapBuilder;
 use App\Domain\Platform\Actions\RecordAudit;
 use App\Domain\Platform\Enums\AuditAction;
 use App\Domain\Platform\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
@@ -35,12 +34,10 @@ class ChangeContentStatus
     public function __construct(private readonly RecordAudit $recordAudit) {}
 
     /**
-     * @param  Model&Publishable  $content
-     *
      * @throws AuthorizationException
      * @throws ContentTransitionException
      */
-    public function handle(Model $content, ContentStatus $to, User $by): Model
+    public function handle(ContentModel $content, ContentStatus $to, User $by): ContentModel
     {
         $from = $content->status;
         $key = $from->value.'>'.$to->value;
@@ -54,7 +51,7 @@ class ChangeContentStatus
             throw new AuthorizationException('Action réservée à un administrateur.');
         }
 
-        return DB::transaction(function () use ($content, $from, $to, $by): Model {
+        return DB::transaction(function () use ($content, $from, $to, $by): ContentModel {
             $content->status = $to;
             $content->save();
 

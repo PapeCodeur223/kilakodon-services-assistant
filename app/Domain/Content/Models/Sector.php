@@ -2,10 +2,7 @@
 
 namespace App\Domain\Content\Models;
 
-use App\Domain\Content\Concerns\HasRevisions;
-use App\Domain\Content\Concerns\Publishable;
 use App\Domain\Content\Enums\ContentStatus;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
@@ -30,11 +27,8 @@ use Illuminate\Support\Carbon;
  * @property list<array{title: string, text?: string}> $outcomes
  * @property string|null $demo_slug
  */
-class Sector extends Model
+class Sector extends ContentModel
 {
-    use HasRevisions;
-    use Publishable;
-
     protected $fillable = [
         'slug', 'seo_title', 'seo_description', 'og_image_path', 'sort',
         'code', 'name', 'icon', 'headline', 'intro', 'pain_points', 'outcomes', 'demo_slug',
