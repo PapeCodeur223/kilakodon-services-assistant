@@ -23,6 +23,8 @@
     @isset($head)
         {{ $head }}
     @endisset
+    {{-- Préchargement de la police d'affichage (Fraunces normale uniquement, UX §3.2). --}}
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="{{ \Illuminate\Support\Facades\Vite::asset('node_modules/@fontsource-variable/fraunces/files/fraunces-latin-opsz-normal.woff2') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="min-h-dvh bg-canvas text-ink">

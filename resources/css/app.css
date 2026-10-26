@@ -261,13 +261,21 @@
 
   .js .kh-halftone[data-animate].is-in circle { transform: scale(1); }
 
-  /* Artefacts flottants : entrée en cascade puis flottement lent, en pause hors écran. */
+  /* Artefacts : entrée en cascade (une fois) partout. Le flottement continu est réservé au desktop
+     (UX §5.1 : carrousel sur mobile) — il coûtait ~60 recalculs de style par seconde sur mobile. */
   .kh-float {
-    animation: kh-artifact-in .6s var(--ease-out-soft) calc(var(--i, 0) * 120ms) both,
-      kh-float var(--float-duration, 7s) ease-in-out calc(.6s + var(--i, 0) * 120ms) infinite;
+    animation: kh-artifact-in .6s var(--ease-out-soft) calc(var(--i, 0) * 120ms) both;
   }
 
-  .kh-float.is-paused { animation-play-state: paused; }
+  @media (width >= 64rem) {
+    .kh-float {
+      will-change: transform;
+      animation: kh-artifact-in .6s var(--ease-out-soft) calc(var(--i, 0) * 120ms) both,
+        kh-float var(--float-duration, 7s) ease-in-out calc(.6s + var(--i, 0) * 120ms) infinite;
+    }
+
+    .kh-float.is-paused { animation-play-state: paused; }
+  }
 
   .kh-menu-panel { animation: kh-menu-in .25s var(--ease-out-soft) both; }
 
