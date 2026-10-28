@@ -39,7 +39,7 @@
                         <x-kh.icon name="download" :size="18" /> Télécharger le PDF
                     </x-kh.button>
                     <x-kh.button variant="whatsapp" :href="WhatsAppLink::forBrief($brief->reference)">Continuer sur WhatsApp</x-kh.button>
-                    <x-kh.button variant="ghost" :href="WhatsAppLink::for('brief', 'Bonjour Kilakodon, je souhaite un rendez-vous pour discuter de mon brief '.$brief->reference.'.')" :arrow="false">
+                    <x-kh.button variant="ghost" :href="route('appointment', ['brief' => $token])" :arrow="false">
                         <x-kh.icon name="calendar-check" :size="18" /> Demander un rendez-vous
                     </x-kh.button>
                 </div>

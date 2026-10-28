@@ -8,6 +8,13 @@ return [
     // Fuseau d'affichage ; les dates restent stockées en UTC.
     'display_timezone' => env('KH_DISPLAY_TIMEZONE', 'Africa/Bamako'),
 
+    // Heures ouvrées pour l'alerte « lead non traité » (lundi = 1). [À VALIDER] avec les horaires réels (Q-002).
+    'business_hours' => [
+        'days' => [1, 2, 3, 4, 5, 6],
+        'start' => 8,
+        'end' => 18,
+    ],
+
     // Paramètres par défaut (seedés, puis modifiables dans « Paramètres »).
     // Une information non confirmée par Kilakodon reste marquée [À VALIDER].
     'settings' => [

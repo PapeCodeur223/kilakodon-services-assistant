@@ -1,5 +1,190 @@
 @import '../../../../vendor/filament/filament/resources/css/theme.css';
 @import '@fontsource-variable/inter';
+@import '@fontsource-variable/plus-jakarta-sans';
 
 @source '../../../../app/Filament/**/*';
 @source '../../../../resources/views/filament/**/*';
+
+/*
+ * Habillage Kilakodon de l'administration (D-013, demande de la direction du 2026-10-28) :
+ * titres Plus Jakarta Sans, barre latérale bleu nuit, cartes arrondies, écran de connexion de marque.
+ * Couleurs : variables de la palette Filament générée depuis le bleu #282A89 (AdminPanelProvider).
+ * Animations : transform/opacity uniquement, désactivées si « réduire les animations ».
+ */
+
+:root {
+    --kh-night: oklch(0.21 0.08 277);
+    --kh-night-2: oklch(0.26 0.1 277);
+    --kh-red: oklch(0.59 0.22 29);
+    --kh-display: 'Plus Jakarta Sans Variable', 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+}
+
+/* ---------- Typographie ---------- */
+.fi-header-heading,
+.fi-simple-header-heading,
+.fi-section-header-heading,
+.fi-modal-heading,
+.fi-wi-stats-overview-stat-value,
+.fi-ta-header-heading {
+    font-family: var(--kh-display);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+}
+
+.fi-header-heading {
+    font-size: clamp(1.6rem, 1.3rem + 1vw, 2.1rem);
+}
+
+/* ---------- Fond de page ---------- */
+.fi-body {
+    background-color: var(--gray-50);
+    background-image: radial-gradient(60rem 30rem at 100% -10%, color-mix(in oklab, var(--primary-500) 7%, transparent), transparent 70%);
+    background-attachment: fixed;
+}
+
+/* ---------- Barre latérale bleu nuit ---------- */
+.fi-sidebar {
+    background: linear-gradient(180deg, var(--kh-night-2), var(--kh-night)) !important;
+    border-inline-end: 0 !important;
+}
+
+.fi-sidebar-header {
+    background: transparent !important;
+    box-shadow: none !important;
+    border-color: rgb(255 255 255 / 0.08) !important;
+}
+
+/* Le logo d'origine reste sur fond blanc (jamais recoloré). */
+.fi-sidebar-header .fi-logo,
+.fi-sidebar-header-logo-ctn img {
+    background: white;
+    border-radius: 0.75rem;
+    padding: 0.3rem 0.55rem;
+    box-shadow: 0 6px 18px -8px rgb(0 0 0 / 0.5);
+}
+
+.fi-sidebar-group-label {
+    color: rgb(255 255 255 / 0.45) !important;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.fi-sidebar-group-collapse-btn,
+.fi-sidebar-group-btn .fi-icon {
+    color: rgb(255 255 255 / 0.4) !important;
+}
+
+.fi-sidebar-item-btn {
+    border-radius: 0.8rem;
+    transition: background-color 0.15s ease, transform 0.15s ease;
+}
+
+.fi-sidebar-item-btn .fi-sidebar-item-label,
+.fi-sidebar-item-btn .fi-sidebar-item-icon {
+    color: rgb(255 255 255 / 0.78) !important;
+}
+
+.fi-sidebar-item-btn:hover {
+    background-color: rgb(255 255 255 / 0.07) !important;
+}
+
+.fi-sidebar-item.fi-active > .fi-sidebar-item-btn {
+    background: linear-gradient(90deg, color-mix(in oklab, var(--primary-400) 38%, transparent), rgb(255 255 255 / 0.06)) !important;
+    box-shadow: inset 3px 0 0 var(--kh-red);
+}
+
+.fi-sidebar-item.fi-active > .fi-sidebar-item-btn .fi-sidebar-item-label,
+.fi-sidebar-item.fi-active > .fi-sidebar-item-btn .fi-sidebar-item-icon {
+    color: white !important;
+}
+
+.fi-sidebar-item-grouped-border-part {
+    background-color: rgb(255 255 255 / 0.18) !important;
+}
+
+/* ---------- Barre supérieure ---------- */
+.fi-topbar > nav,
+.fi-topbar {
+    background-color: rgb(255 255 255 / 0.82) !important;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 1px 0 var(--gray-200) !important;
+}
+
+/* ---------- Cartes, sections, tableaux ---------- */
+.fi-section,
+.fi-ta-ctn,
+.fi-wi-stats-overview-stat,
+.fi-fo-tabs,
+.fi-in-tabs {
+    border-radius: 1.25rem !important;
+    box-shadow: 0 0 0 1px color-mix(in oklab, var(--primary-700) 7%, transparent), 0 10px 30px -18px color-mix(in oklab, var(--primary-900) 35%, transparent) !important;
+}
+
+.fi-wi-stats-overview-stat {
+    position: relative;
+    overflow: hidden;
+}
+
+.fi-wi-stats-overview-stat::after {
+    content: '';
+    position: absolute;
+    inset: auto -30% -60% auto;
+    width: 9rem;
+    height: 9rem;
+    border-radius: 9999px;
+    background: color-mix(in oklab, var(--primary-500) 8%, transparent);
+    pointer-events: none;
+}
+
+.fi-btn {
+    border-radius: 9999px;
+}
+
+/* ---------- Écran de connexion ---------- */
+.fi-simple-layout {
+    background:
+        radial-gradient(50rem 30rem at 15% 10%, color-mix(in oklab, var(--primary-400) 35%, transparent), transparent 65%),
+        radial-gradient(40rem 25rem at 90% 90%, color-mix(in oklab, var(--kh-red) 18%, transparent), transparent 70%),
+        linear-gradient(160deg, var(--kh-night-2), var(--kh-night));
+}
+
+.fi-simple-main {
+    border-radius: 1.5rem !important;
+    box-shadow: 0 30px 80px -30px rgb(0 0 0 / 0.6) !important;
+}
+
+/* ---------- Kanban des leads ---------- */
+.kh-kanban-col {
+    background-color: color-mix(in oklab, var(--gray-100) 70%, white);
+    border-radius: 1.25rem;
+}
+
+.kh-kanban-card {
+    transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+}
+
+.kh-kanban-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 30px -18px color-mix(in oklab, var(--primary-900) 55%, transparent);
+}
+
+.kh-kanban-card[data-dragging='true'] {
+    opacity: 0.45;
+}
+
+.kh-kanban-col[data-over='true'] {
+    box-shadow: inset 0 0 0 2px var(--primary-500);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .fi-sidebar-item-btn,
+    .kh-kanban-card {
+        transition: none;
+    }
+
+    .kh-kanban-card:hover {
+        transform: none;
+    }
+}

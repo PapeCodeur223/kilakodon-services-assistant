@@ -12,21 +12,26 @@ use App\Domain\Content\Models\Faq;
 use App\Domain\Content\Models\Page;
 use App\Domain\Content\Models\Sector;
 use App\Domain\Content\Models\Service;
+use App\Domain\Crm\Models\Appointment;
+use App\Domain\Crm\Models\Company;
 use App\Domain\Crm\Models\Contact;
 use App\Domain\Crm\Models\Lead;
 use App\Domain\Diagnostic\Models\DiagnosticSession;
 use App\Domain\Diagnostic\Models\DiagnosticTemplate;
 use App\Domain\Platform\Listeners\RecordSuccessfulLogin;
 use App\Domain\Platform\Models\AuditLog;
+use App\Domain\Platform\Models\OutboundMessage;
 use App\Domain\Platform\Models\Setting;
 use App\Domain\Platform\Models\User;
 use App\Domain\Platform\Services\Settings;
 use App\Policies\AuditLogPolicy;
 use App\Policies\BriefPolicy;
 use App\Policies\ContentPolicy;
+use App\Policies\CrmRecordPolicy;
 use App\Policies\DiagnosticSessionPolicy;
 use App\Policies\DiagnosticTemplatePolicy;
 use App\Policies\LeadPolicy;
+use App\Policies\OutboundMessagePolicy;
 use App\Policies\UserPolicy;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Cache\RateLimiting\Limit;
@@ -73,6 +78,8 @@ class AppServiceProvider extends ServiceProvider
             'diagnostic_template' => DiagnosticTemplate::class,
             'diagnostic_session' => DiagnosticSession::class,
             'brief' => Brief::class,
+            'appointment' => Appointment::class,
+            'company' => Company::class,
         ]);
 
         // Mots de passe : 12 caractères minimum (TRD §11).
@@ -86,6 +93,10 @@ class AppServiceProvider extends ServiceProvider
             Gate::policy($content, ContentPolicy::class);
         }
         Gate::policy(Lead::class, LeadPolicy::class);
+        foreach ([Contact::class, Company::class, Appointment::class] as $record) {
+            Gate::policy($record, CrmRecordPolicy::class);
+        }
+        Gate::policy(OutboundMessage::class, OutboundMessagePolicy::class);
         Gate::policy(DiagnosticTemplate::class, DiagnosticTemplatePolicy::class);
         Gate::policy(DiagnosticSession::class, DiagnosticSessionPolicy::class);
         Gate::policy(Brief::class, BriefPolicy::class);

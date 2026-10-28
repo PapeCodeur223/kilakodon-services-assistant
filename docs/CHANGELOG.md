@@ -2,6 +2,22 @@
 
 ## [Non publié]
 
+### Lot 3 — CRM, rendez-vous et notifications (2026-10-29)
+#### Ajouté
+- Tables `lead_stage_history`, `activities`, `appointments`, `privacy_requests` ; enums `ActivityType`, `AppointmentStatus`, `AppointmentChannel`, `SlotPeriod`, `LostReason`, `PrivacyRequestType|Status` ; carte des transitions de `LeadStage`.
+- Actions : `ChangeLeadStage` (transitions, motif obligatoire pour perdu et en pause, historique, activité, audit), `AssignLead`, `LogActivity` (+ tâche faite), `RequestAppointment` (idempotent, rattachement au lead du brief), `ConfirmAppointment` (+ annuler, réalisé, absent), `MergeContacts` (journalisé), `RecordConsent`, `AlertUnattendedLeads` (`kh:leads-unattended`, toutes les heures de 8 h à 18 h).
+- File d'envoi : `QueueOutboundMessage`, job `SendOutboundMessage` (idempotent, `failed` puis `abandoned`), `ResendOutboundMessage` ; modèles e-mail Markdown à l'identité Kilakodon (nouveau lead, accusés contact, brief et RDV, RDV confirmé, leads en attente).
+- Filament : leads (liste « À traiter », **Kanban** glisser-déposer avec modale de motif, fiche complète : suivi, contact et doublons, qualification, brief et réponses du diagnostic, activités, rendez-vous, historique), contacts (doublons, fusion), entreprises, rendez-vous (confirmer, reprogrammer, annuler, réalisé, absent), « Envois » (renvoyer) ; widgets du tableau de bord (indicateurs, leads à traiter, RDV à confirmer).
+- Page publique `/rendez-vous` (sans JavaScript requis, honeypot, 5 envois/h/IP) ; lien depuis le brief et le pied de page ; sitemap.
+- Habillage « pro » de l'administration (thème Filament aux couleurs et typographies Kilakodon, écran de connexion de marque).
+
+#### Modifié
+- Les e-mails mis en file depuis les lots 1 et 2 partent désormais réellement (driver `log` en local).
+- `RecordConsents` s'appuie sur `RecordConsent` ; `LeadPolicy` ouvre la mise à jour au commercial.
+
+#### Écarts notés dans DECISIONS.md
+- Transitions d'étapes, « à traiter », heures ouvrées [À VALIDER], confirmation humaine des RDV, modèles d'e-mail ajoutés, thème de l'admin, fusion manuelle, `privacy_requests` traité au lot 6.
+
 ### Lot 2 — Diagnostic et brief (2026-10-28)
 #### Ajouté
 - Moteur pur PHP (`app/Domain/Diagnostic/Engine`) : `ConditionEvaluator` (opérateurs TRD §6, blocs imbriqués, trace des questions déterminantes), `VisibilityResolver` (questions et options visibles, nettoyage des réponses devenues non pertinentes), `RuleEngine`, `MaturityScorer`, `PainCompleter`, DTO `DiagnosticOutcome`. Tests : cas T1–T10 de DIAGNOSTIC_SPEC §6, un test positif et un négatif par règle (32 règles), opérateurs, barème de maturité.

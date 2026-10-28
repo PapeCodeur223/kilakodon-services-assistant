@@ -1,5 +1,8 @@
 <?php
 
+use App\Domain\Crm\Enums\LeadType;
+use App\Domain\Crm\Models\Contact;
+use App\Domain\Crm\Models\Lead;
 use App\Domain\Diagnostic\Actions\CompleteDiagnostic;
 use App\Domain\Diagnostic\Actions\SaveDiagnosticAnswers;
 use App\Domain\Diagnostic\Actions\StartDiagnosticSession;
@@ -84,4 +87,33 @@ function completedDiagnostic(array $overrides = [], array $start = []): array
     app(CompleteDiagnostic::class)->handle($started['session']);
 
     return ['session' => $started['session']->refresh(), 'token' => $started['token']];
+}
+
+/**
+ * Lead minimal avec son contact (tests CRM).
+ *
+ * @param  array<string, mixed>  $overrides
+ */
+function makeLead(array $overrides = [], array $contact = []): Lead
+{
+    $contact = Contact::query()->create(array_merge([
+        'full_name' => 'Fatoumata Keïta',
+        'phone_e164' => '+22370'.random_int(100000, 999999),
+        'email' => 'fatoumata'.random_int(1, 99999).'@example.test',
+    ], $contact));
+
+    $lead = Lead::query()->create(array_merge([
+        'contact_id' => $contact->id,
+        'type' => LeadType::Contact,
+        'source' => 'organic',
+        'message' => 'Besoin d\'un logiciel de caisse.',
+        'idempotency_key' => hash('sha256', (string) random_int(1, PHP_INT_MAX)),
+    ], array_diff_key($overrides, ['stage' => 1, 'first_response_at' => 1, 'created_at' => 1])));
+
+    $forced = array_intersect_key($overrides, ['stage' => 1, 'first_response_at' => 1, 'created_at' => 1]);
+    if ($forced !== []) {
+        $lead->forceFill($forced)->save();
+    }
+
+    return $lead->refresh();
 }

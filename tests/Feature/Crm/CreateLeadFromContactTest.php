@@ -75,14 +75,14 @@ it('enregistre le consentement marketing seulement s’il est donné', function 
         ->and(Consent::query()->where('purpose', ConsentPurpose::Marketing->value)->sole()->granted)->toBeTrue();
 });
 
-it('met en file les e-mails sans les envoyer : un échec d’envoi ne perd pas la demande', function () {
+it('passe les e-mails par la file d’envoi, sans coordonnées dans la notification interne', function () {
     app(Settings::class)->set('notify.lead_recipients', ['equipe@example.test']);
 
     $lead = app(CreateLeadFromContact::class)->handle(contactRequest());
 
     $messages = OutboundMessage::query()->orderBy('template')->get();
     expect($messages->pluck('template')->all())->toBe(['lead_ack', 'lead_new_internal'])
-        ->and($messages->every(fn ($m) => $m->status === OutboundStatus::Queued))->toBeTrue()
+        ->and($messages->every(fn ($m) => $m->status === OutboundStatus::Sent))->toBeTrue()
         ->and($messages->firstWhere('template', 'lead_ack')->to)->toBe('aminata@example.test')
         ->and($messages->firstWhere('template', 'lead_new_internal')->payload)->not->toHaveKey('phone')
         ->and($lead->exists)->toBeTrue();

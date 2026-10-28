@@ -73,13 +73,13 @@ Tâches :
 **Docs :** PRD §6.6–6.7, BACKEND_SCHEMA §5, CONTENT §11.
 
 Tâches :
-- [ ] Compléter `contacts`, `companies`, `leads`, `lead_stage_history`, `activities`, `appointments`, `consents`, `privacy_requests`.
-- [ ] Actions : `ChangeLeadStage` (transitions autorisées, motif obligatoire pour `lost` et `on_hold`), `AssignLead`, `LogActivity`, `RequestAppointment`, `ConfirmAppointment`, `MergeContacts` (journalisé), `RecordConsent`.
-- [ ] Filament : Leads en liste et en **Kanban** (par étape, glisser-déposer → `ChangeLeadStage` avec modale de motif si besoin), fiche lead complète (brief, diagnostic, conversation, activités, bouton WhatsApp), Contacts avec suggestion de doublons, RDV avec actions confirmer, annuler et réaliser.
-- [ ] Page publique `/rendez-vous` et formulaire.
-- [ ] Notifications : `outbound_messages` + job `SendOutboundMessage` + modèles e-mail (CONTENT §11) ; écran Filament « Envois » avec bouton « Renvoyer ».
-- [ ] Scheduler : `kh:leads-unattended`.
-- [ ] Widgets du tableau de bord : leads à traiter, RDV demandés.
+- [x] Compléter `contacts`, `companies`, `leads`, `lead_stage_history`, `activities`, `appointments`, `consents`, `privacy_requests`.
+- [x] Actions : `ChangeLeadStage` (transitions autorisées, motif obligatoire pour `lost` et `on_hold`), `AssignLead`, `LogActivity`, `RequestAppointment`, `ConfirmAppointment`, `MergeContacts` (journalisé), `RecordConsent`.
+- [x] Filament : Leads en liste et en **Kanban** (par étape, glisser-déposer → `ChangeLeadStage` avec modale de motif si besoin), fiche lead complète (brief, diagnostic, conversation, activités, bouton WhatsApp), Contacts avec suggestion de doublons, RDV avec actions confirmer, annuler et réaliser.
+- [x] Page publique `/rendez-vous` et formulaire.
+- [x] Notifications : `outbound_messages` + job `SendOutboundMessage` + modèles e-mail (CONTENT §11) ; écran Filament « Envois » avec bouton « Renvoyer ».
+- [x] Scheduler : `kh:leads-unattended`.
+- [x] Widgets du tableau de bord : leads à traiter, RDV demandés.
 
 **Critères d'acceptation :** CRM-01..04, CRM-08, RDV-01, COM-01 ; test : un échec SMTP laisse le lead intact et l'envoi en `failed` relançable ; un `sales` ne modifie pas les paramètres.
 
@@ -144,7 +144,7 @@ Choix de la formule LWS (avec ou sans SSH), workflow GitHub Actions, préproduct
 | 0 | validé | branche `lot-0-socle` | Direction Kilakodon | 2026-10-26 |
 | 1 | validé | branche `lot-1-site-public` | Direction Kilakodon | 2026-10-28 |
 | 2 | validé | branche `lot-2-diagnostic` | Direction Kilakodon | 2026-10-28 |
-| 3 | à faire | | | |
+| 3 | en revue | branche `lot-3-crm` | | |
 | 4 | à faire | | | |
 | 5 | à faire | | | |
 | 6 | à faire | | | |
