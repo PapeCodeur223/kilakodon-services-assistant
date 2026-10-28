@@ -5,7 +5,6 @@
  * Format des conditions et des effets : TRD §6. Source unique du DiagnosticTemplateV1Seeder
  * et des tests du moteur (les tests vérifient donc les règles réellement seedées).
  */
-
 $q = fn (string $question, string $op, mixed $value = null): array => array_filter(
     ['q' => $question, 'op' => $op, 'v' => $value],
     fn (mixed $v): bool => $v !== null,
