@@ -18,6 +18,7 @@
             @checked(old($name) === '1')
             @if ($required) required aria-required="true" @endif
             @if ($error) aria-invalid="true" aria-describedby="{{ $id }}-error" @endif
+            {{ $attributes->whereStartsWith('wire:') }}
             class="mt-0.5 size-5 shrink-0 rounded border-line accent-kh-blue-700 focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-kh-blue-500"
         >
         <span>{{ $slot }} @if ($required)<span class="text-kh-red-600" aria-hidden="true">*</span>@endif</span>

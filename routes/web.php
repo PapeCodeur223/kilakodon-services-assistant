@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\Public\ArticleController;
+use App\Http\Controllers\Public\BriefController;
 use App\Http\Controllers\Public\CaseStudyController;
 use App\Http\Controllers\Public\ContactController;
+use App\Http\Controllers\Public\DiagnosticController;
 use App\Http\Controllers\Public\HomeController;
 use App\Http\Controllers\Public\PageController;
 use App\Http\Controllers\Public\SectorController;
@@ -25,6 +27,14 @@ Route::get('/contact', [ContactController::class, 'show'])->name('contact');
 Route::post('/contact', [ContactController::class, 'store'])
     ->middleware([ProtectAgainstSpam::class, 'throttle:contact'])
     ->name('contact.store');
+
+// Diagnostic (Livewire) et brief privé — liens à token limités en débit.
+Route::get('/diagnostic', [DiagnosticController::class, 'start'])->name('diagnostic.start');
+Route::middleware('throttle:public-token')->group(function (): void {
+    Route::get('/diagnostic/reprendre/{token}', [DiagnosticController::class, 'resume'])->name('diagnostic.resume');
+    Route::get('/brief/{token}', [BriefController::class, 'show'])->name('brief.show');
+    Route::get('/brief/{token}/pdf', [BriefController::class, 'pdf'])->name('brief.pdf');
+});
 
 // Pages éditoriales (table `pages`).
 Route::get('/methode', [PageController::class, 'show'])->defaults('slug', 'methode')->name('pages.method');
