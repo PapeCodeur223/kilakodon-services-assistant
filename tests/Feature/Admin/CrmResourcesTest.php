@@ -137,3 +137,11 @@ it('affiche les widgets du tableau de bord au commercial', function () {
         ->assertSee('Leads à traiter')
         ->assertSee('Rendez-vous à confirmer');
 });
+
+it('n\'appelle aucun service externe pour les avatars de l\'admin', function () {
+    $this->actingAs(User::factory()->sales()->create(['name' => 'Commercial Démo']))->get('/admin')
+        ->assertOk()
+        ->assertDontSee('ui-avatars.com')
+        ->assertSee('data:image/svg+xml;base64,', false)
+        ->assertSee('Aller au contenu');
+});

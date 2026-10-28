@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Support\InitialsAvatarProvider;
 use App\Http\Middleware\RequireAdminMultiFactor;
 use Filament\Auth\MultiFactor\App\AppAuthentication;
 use Filament\FontProviders\LocalFontProvider;
@@ -40,6 +41,7 @@ class AdminPanelProvider extends PanelProvider
             ->brandLogo(fn () => asset('images/brand/logo-kilakodon-2x.png'))
             ->brandLogoHeight('2.75rem')
             ->favicon(asset('favicon.ico'))
+            ->defaultAvatarProvider(InitialsAvatarProvider::class)
             // Palette Kilakodon (UX §5.8) : primaire bleu de marque, danger rouge fonctionnel.
             ->colors([
                 'primary' => Color::generateV3Palette('#282A89'),

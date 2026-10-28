@@ -65,6 +65,8 @@ class AppointmentResource extends Resource
 
         return $table
             ->defaultSort('created_at', 'desc')
+            ->emptyStateHeading('Aucun rendez-vous pour le moment')
+            ->emptyStateDescription('Les demandes envoyées depuis le site apparaissent ici, à confirmer par l\'équipe.')
             ->modifyQueryUsing(fn (Builder $query) => $query->with(['lead.contact']))
             ->columns([
                 TextColumn::make('status')->label('Statut')->badge()
