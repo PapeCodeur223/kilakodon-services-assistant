@@ -6,9 +6,11 @@ use App\Domain\Brief\Actions\ValidateBrief;
 use App\Domain\Brief\Data\BriefCorrections;
 use App\Domain\Brief\Enums\BriefStatus;
 use App\Domain\Brief\Enums\SummarySource;
+use App\Domain\Brief\Exceptions\BriefRequestException;
 use App\Domain\Brief\Models\Brief;
 use App\Domain\Brief\Models\BriefVersion;
 use App\Domain\Brief\Services\BriefAccess;
+use App\Domain\Crm\Actions\CreateLeadFromBrief;
 use App\Domain\Crm\Data\ProspectDetails;
 use App\Domain\Crm\Enums\ConsentPurpose;
 use App\Domain\Crm\Enums\ConsentSource;
@@ -17,6 +19,7 @@ use App\Domain\Crm\Enums\LeadType;
 use App\Domain\Crm\Models\Consent;
 use App\Domain\Crm\Models\Contact;
 use App\Domain\Crm\Models\Lead;
+use App\Domain\Diagnostic\Actions\SaveDiagnosticAnswers;
 use App\Domain\Diagnostic\Enums\SessionStatus;
 use App\Domain\Platform\Models\OutboundMessage;
 use App\Domain\Platform\Models\User;
@@ -85,18 +88,44 @@ it('crée contact, consentements séparés, brief v1 et lead en une fois (P1)', 
     ]);
 });
 
-it('est idempotent : une nouvelle soumission renvoie le même brief et le même lead, avec un nouveau lien', function () {
+it('refuse une seconde demande pour le même diagnostic, sans toucher au contact ni au lien', function () {
     ['session' => $session, 'brief' => $brief, 'token' => $first] = requestBrief();
-    $again = app(RequestBrief::class)->handle($session->refresh(), prospect(['fullName' => 'Moussa B. Traoré']));
 
-    expect($again['brief']->id)->toBe($brief->id)
-        ->and($again['token'])->not->toBe($first)
-        ->and(Brief::query()->count())->toBe(1)
+    expect(fn () => app(RequestBrief::class)->handle($session->refresh(), prospect(['fullName' => 'Usurpateur', 'phone' => '97 46 28 39'])))
+        ->toThrow(BriefRequestException::class, $brief->reference);
+
+    expect(Brief::query()->count())->toBe(1)
         ->and(Lead::query()->count())->toBe(1)
         ->and(Contact::query()->count())->toBe(1)
-        ->and(Contact::query()->sole()->full_name)->toBe('Moussa B. Traoré')
-        ->and(app(BriefAccess::class)->find($first))->toBeNull()
-        ->and(app(BriefAccess::class)->find($again['token'])?->id)->toBe($brief->id);
+        ->and(Contact::query()->sole()->full_name)->toBe('Moussa Traoré')
+        ->and(app(BriefAccess::class)->find($first)?->id)->toBe($brief->id);
+});
+
+it('ne permet pas d\'annuler une révocation en redemandant le brief depuis le lien de reprise (BRF-04)', function () {
+    ['session' => $session, 'brief' => $brief, 'token' => $token] = requestBrief();
+    app(RevokeBriefAccess::class)->handle($brief);
+
+    expect(fn () => app(RequestBrief::class)->handle($session->refresh(), prospect()))->toThrow(BriefRequestException::class);
+
+    $brief->refresh();
+    expect($brief->isRevoked())->toBeTrue()
+        ->and($brief->access_token_hash)->toBe(hash('sha256', $token));
+});
+
+it('refuse un brief sur une restitution périmée (réponses modifiées après le calcul)', function () {
+    ['session' => $session] = completedDiagnostic(['sector' => 'retail', 'pains' => ['stock_gaps']]);
+    app(SaveDiagnosticAnswers::class)->handle($session, [...$session->answerMap(), 'sector' => 'school'], 1);
+
+    expect(fn () => app(RequestBrief::class)->handle($session->refresh(), prospect()))->toThrow(BriefRequestException::class)
+        ->and(Brief::query()->count())->toBe(0)
+        ->and(Contact::query()->count())->toBe(0);
+});
+
+it('garantit un lead unique par brief, même appelé deux fois', function () {
+    ['brief' => $brief, 'lead' => $lead] = requestBrief();
+
+    expect(app(CreateLeadFromBrief::class)->handle($brief)->id)->toBe($lead->id)
+        ->and(Lead::query()->count())->toBe(1);
 });
 
 it('suggère un doublon au même numéro sans jamais fusionner', function () {

@@ -9,6 +9,9 @@ use InvalidArgumentException;
  */
 final readonly class TemplateDefinition
 {
+    /** Clés et valeurs d'options : elles servent d'identifiants dans le HTML et les expressions Livewire. */
+    public const SAFE_KEY = '/^[a-z0-9_]{1,48}$/';
+
     /** @var array<string, QuestionDefinition> */
     public array $questions;
 
@@ -39,8 +42,8 @@ final readonly class TemplateDefinition
     {
         return new self(
             (int) $data['version'],
-            array_values(array_map(fn (array $row, int $i): QuestionDefinition => QuestionDefinition::fromArray($row, $i), $data['questions'], array_keys($data['questions']))),
-            array_values(array_map(fn (array $row): RuleDefinition => RuleDefinition::fromArray($row), $data['rules'])),
+            array_map(fn (array $row, int $i): QuestionDefinition => QuestionDefinition::fromArray($row, $i), $data['questions'], array_keys($data['questions'])),
+            array_map(fn (array $row): RuleDefinition => RuleDefinition::fromArray($row), $data['rules']),
         );
     }
 
@@ -89,6 +92,14 @@ final readonly class TemplateDefinition
         }
 
         foreach ($this->questions as $question) {
+            if (preg_match(self::SAFE_KEY, $question->key) !== 1) {
+                $errors[] = "Question « {$question->key} » : clé invalide (minuscules, chiffres et _ uniquement).";
+            }
+            foreach ($question->options as $option) {
+                if (preg_match(self::SAFE_KEY, $option['value']) !== 1) {
+                    $errors[] = "Option « {$question->key}.{$option['value']} » : valeur invalide (minuscules, chiffres et _ uniquement).";
+                }
+            }
             if (! in_array($question->type, [QuestionDefinition::SINGLE, QuestionDefinition::MULTI, QuestionDefinition::TEXT, QuestionDefinition::NUMBER], true)) {
                 $errors[] = "Question « {$question->key} » : type « {$question->type} » inconnu.";
             }

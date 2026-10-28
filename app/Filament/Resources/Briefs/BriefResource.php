@@ -72,16 +72,16 @@ class BriefResource extends Resource
                 }),
             ]),
             Section::make('Déclaré par le prospect')->columnSpanFull()->schema([
-                TextEntry::make('declared')->hiddenLabel()->getStateUsing(fn (Brief $record): string => collect($record->latestVersion->declared['answers'] ?? [])
+                TextEntry::make('declared')->hiddenLabel()->getStateUsing(fn (Brief $record): string => collect((array) ($record->latestVersion->declared['answers'] ?? []))
                     ->map(fn (array $a): string => $a['question'].' — '.$a['answer'])->implode("\n"))->listWithLineBreaks()->extraAttributes(['class' => 'whitespace-pre-line']),
                 TextEntry::make('context_note')->label('Précisions')->getStateUsing(fn (Brief $record): ?string => $record->latestVersion->declared['context_note'] ?? null)->placeholder('—'),
                 TextEntry::make('comment')->label('Message du prospect')->getStateUsing(fn (Brief $record): ?string => $record->latestVersion?->prospect_comment)->placeholder('—'),
             ]),
             Section::make('Recommandé par Kilakodon (règles)')->columnSpanFull()->columns(2)->schema([
                 TextEntry::make('maturity')->label('Maturité')->getStateUsing(fn (Brief $record): string => ($record->latestVersion->recommended['maturity']['label'] ?? '—').' (niveau '.($record->latestVersion->recommended['maturity']['level'] ?? '?').')'),
-                TextEntry::make('modules')->label('Modules')->getStateUsing(fn (Brief $record): string => collect($record->latestVersion->recommended['recommendations'] ?? [])->pluck('label')->implode(' · ') ?: 'Aucun — échange à prévoir'),
-                TextEntry::make('pains')->label('Priorités')->getStateUsing(fn (Brief $record): string => collect($record->latestVersion->recommended['pains'] ?? [])->pluck('label')->implode(' · ') ?: '—'),
-                TextEntry::make('clarifications')->label('À clarifier')->getStateUsing(fn (Brief $record): string => collect($record->latestVersion->recommended['clarifications'] ?? [])->pluck('label')->implode(' · ') ?: '—'),
+                TextEntry::make('modules')->label('Modules')->getStateUsing(fn (Brief $record): string => collect((array) ($record->latestVersion->recommended['recommendations'] ?? []))->pluck('label')->implode(' · ') ?: 'Aucun — échange à prévoir'),
+                TextEntry::make('pains')->label('Priorités')->getStateUsing(fn (Brief $record): string => collect((array) ($record->latestVersion->recommended['pains'] ?? []))->pluck('label')->implode(' · ') ?: '—'),
+                TextEntry::make('clarifications')->label('À clarifier')->getStateUsing(fn (Brief $record): string => collect((array) ($record->latestVersion->recommended['clarifications'] ?? []))->pluck('label')->implode(' · ') ?: '—'),
             ]),
             Section::make('Résumé')->columnSpanFull()->schema([
                 TextEntry::make('summary_source')->label('Source')->getStateUsing(fn (Brief $record): string => $record->latestVersion?->summary_source->label() ?? '—'),

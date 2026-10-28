@@ -5,6 +5,7 @@ namespace App\Domain\Brief\Actions;
 use App\Domain\Brief\Enums\BriefStatus;
 use App\Domain\Brief\Enums\SummarySource;
 use App\Domain\Brief\Enums\VersionAuthor;
+use App\Domain\Brief\Exceptions\BriefRequestException;
 use App\Domain\Brief\Models\Brief;
 use App\Domain\Brief\Services\BriefContent;
 use App\Domain\Brief\Support\ReferenceGenerator;
@@ -18,7 +19,7 @@ use InvalidArgumentException;
 
 /**
  * Brief issu d'un diagnostic terminé : référence KLK, version 1 (brouillon à relire) et lien privé
- * de 30 jours. Si le brief existe déjà (nouvelle soumission), son lien est renouvelé.
+ * de 30 jours. Un second brief pour le même diagnostic est refusé.
  */
 class CreateBriefFromDiagnostic
 {
@@ -38,15 +39,9 @@ class CreateBriefFromDiagnostic
         $result = $session->result ?? throw new InvalidArgumentException('Le diagnostic n\'est pas terminé.');
         $token = PublicToken::generate();
 
+        // Un diagnostic = un brief : jamais de nouveau lien (cela annulerait une révocation).
         if ($session->brief !== null) {
-            $session->brief->forceFill([
-                'contact_id' => $contact->id,
-                'access_token_hash' => $token['hash'],
-                'access_expires_at' => now()->addDays(Brief::ACCESS_DAYS),
-                'access_revoked_at' => null,
-            ])->save();
-
-            return ['brief' => $session->brief, 'token' => $token['token']];
+            throw BriefRequestException::alreadyRequested($session->brief->reference);
         }
 
         $template = $session->template->toDefinition();

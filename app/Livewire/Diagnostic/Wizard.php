@@ -3,6 +3,7 @@
 namespace App\Livewire\Diagnostic;
 
 use App\Domain\Brief\Actions\RequestBrief;
+use App\Domain\Brief\Exceptions\BriefRequestException;
 use App\Domain\Content\Models\Page;
 use App\Domain\Content\Services\ContentFinder;
 use App\Domain\Crm\Data\ProspectDetails;
@@ -21,8 +22,10 @@ use App\Domain\Diagnostic\Models\DiagnosticSession;
 use App\Domain\Diagnostic\Models\DiagnosticTemplate;
 use App\Domain\Diagnostic\Services\DiagnosticSummaryWriter;
 use App\Domain\Platform\Services\Settings;
+use App\Domain\Platform\Support\IpHasher;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\RateLimiter;
+use InvalidArgumentException;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
 use Spatie\Honeypot\Http\Livewire\Concerns\HoneypotData;
@@ -65,9 +68,15 @@ class Wizard extends Component
     /** @var array<string, mixed> */
     public array $answers = [];
 
+    #[Locked]
     public int $step = 1;
 
+    #[Locked]
     public string $screen = self::SCREEN_QUESTIONS;
+
+    /** Référence du brief déjà demandé pour cette session (le diagnostic ne peut plus être modifié). */
+    #[Locked]
+    public ?string $briefReference = null;
 
     public bool $showResumeLink = false;
 
@@ -101,6 +110,7 @@ class Wizard extends Component
             $this->templateId = $session->template_id;
             $this->answers = $session->answerMap();
             $this->step = $session->current_step;
+            $this->briefReference = $session->brief()->value('reference');
             $this->screen = in_array($session->status, [SessionStatus::Completed, SessionStatus::Converted], true) && $session->result()->exists()
                 ? self::SCREEN_RESULT
                 : self::SCREEN_QUESTIONS;
@@ -184,7 +194,7 @@ class Wizard extends Component
             return;
         }
 
-        if (! $this->ensureSession()) {
+        if ($this->isLocked() || ! $this->ensureSession()) {
             return;
         }
 
@@ -192,13 +202,19 @@ class Wizard extends Component
         $isLast = $this->step >= max($steps);
         $nextStep = $isLast ? $this->step : $this->step + 1;
 
-        $this->answers = app(SaveDiagnosticAnswers::class)->handle($this->session(), $this->answers, $nextStep);
+        try {
+            $this->answers = app(SaveDiagnosticAnswers::class)->handle($this->session() ?? abort(404), $this->answers, $nextStep);
 
-        if ($isLast) {
-            app(CompleteDiagnostic::class)->handle($this->session());
-            $this->screen = self::SCREEN_RESULT;
-        } else {
-            $this->step = $nextStep;
+            if ($isLast) {
+                app(CompleteDiagnostic::class)->handle($this->session() ?? abort(404));
+                $this->screen = self::SCREEN_RESULT;
+            } else {
+                $this->step = $nextStep;
+            }
+        } catch (InvalidArgumentException) {
+            $this->addError('session', self::EXPIRED_MESSAGE);
+
+            return;
         }
 
         $this->dispatch('kh-step-changed');
@@ -206,6 +222,10 @@ class Wizard extends Component
 
     public function back(): void
     {
+        if ($this->isLocked()) {
+            return;
+        }
+
         $this->missing = [];
 
         if ($this->screen === self::SCREEN_RESULT) {
@@ -220,6 +240,10 @@ class Wizard extends Component
 
     public function editAnswers(): void
     {
+        if ($this->isLocked()) {
+            return;
+        }
+
         $this->screen = self::SCREEN_QUESTIONS;
         $this->step = 1;
         $this->showBriefForm = false;
@@ -230,16 +254,24 @@ class Wizard extends Component
     {
         $this->updatedAnswers();
 
-        if (! $this->ensureSession()) {
+        if ($this->isLocked() || ! $this->ensureSession()) {
             return;
         }
 
-        app(SaveDiagnosticAnswers::class)->handle($this->session(), $this->answers, $this->step);
-        $this->showResumeLink = true;
+        try {
+            app(SaveDiagnosticAnswers::class)->handle($this->session() ?? abort(404), $this->answers, $this->step, savedForLater: true);
+            $this->showResumeLink = true;
+        } catch (InvalidArgumentException) {
+            $this->addError('session', self::EXPIRED_MESSAGE);
+        }
     }
 
     public function openBriefForm(): void
     {
+        if ($this->isLocked() || $this->screen !== self::SCREEN_RESULT) {
+            return;
+        }
+
         $this->showBriefForm = true;
         $this->dispatch('kh-brief-form-opened');
     }
@@ -266,7 +298,7 @@ class Wizard extends Component
             'consentProcessing.accepted' => 'Votre accord est nécessaire pour que nous puissions traiter votre demande.',
         ]);
 
-        $key = 'brief-request:'.request()->ip();
+        $key = 'brief-request:'.app(IpHasher::class)->hash((string) request()->ip());
         if (RateLimiter::tooManyAttempts($key, self::BRIEFS_PER_HOUR)) {
             $this->addError('fullName', 'Trop de demandes depuis cette connexion. Réessayez dans une heure ou écrivez-nous sur WhatsApp.');
 
@@ -277,14 +309,20 @@ class Wizard extends Component
         $session = $this->session();
         abort_if($session === null || $session->result()->doesntExist(), 404);
 
-        $result = app(RequestBrief::class)->handle($session, new ProspectDetails(
-            fullName: $this->fullName,
-            phone: $this->phone,
-            email: $this->email !== '' ? $this->email : null,
-            company: $this->company !== '' ? $this->company : null,
-            marketingOptIn: $this->consentMarketing,
-            ip: request()->ip(),
-        ));
+        try {
+            $result = app(RequestBrief::class)->handle($session, new ProspectDetails(
+                fullName: $this->fullName,
+                phone: $this->phone,
+                email: $this->email !== '' ? $this->email : null,
+                company: $this->company !== '' ? $this->company : null,
+                marketingOptIn: $this->consentMarketing,
+                ip: request()->ip(),
+            ));
+        } catch (BriefRequestException $e) {
+            $this->addError('fullName', $e->getMessage());
+
+            return;
+        }
 
         $this->redirectRoute('brief.show', ['token' => $result['token']]);
     }
@@ -309,6 +347,8 @@ class Wizard extends Component
             'questionsByKey' => $template->questions,
         ]);
     }
+
+    public const EXPIRED_MESSAGE = 'Ce diagnostic ne peut plus être modifié (lien expiré ou brief déjà demandé). Recommencez un diagnostic ou écrivez-nous sur WhatsApp.';
 
     public const STEP_TITLES = [
         1 => 'Votre activité',
@@ -344,13 +384,21 @@ class Wizard extends Component
         return array_values(array_unique($missing));
     }
 
+    /**
+     * Brief déjà demandé : la restitution reste consultable, plus rien n'est modifiable.
+     */
+    private function isLocked(): bool
+    {
+        return $this->briefReference !== null;
+    }
+
     private function ensureSession(): bool
     {
         if ($this->sessionId !== null) {
             return true;
         }
 
-        $key = 'diagnostic-start:'.request()->ip();
+        $key = 'diagnostic-start:'.app(IpHasher::class)->hash((string) request()->ip());
         if (RateLimiter::tooManyAttempts($key, self::SESSIONS_PER_DAY)) {
             $this->addError('session', 'Trop de diagnostics ont été démarrés depuis cette connexion aujourd\'hui. Réessayez demain ou écrivez-nous sur WhatsApp.');
 

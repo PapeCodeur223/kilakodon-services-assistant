@@ -58,6 +58,17 @@ class DiagnosticTemplate extends Model
             if ($original !== TemplateStatus::Draft && $changed !== []) {
                 throw TemplateLockedException::make();
             }
+
+            // Cycle de vie à sens unique : brouillon → actif → retiré (jamais de retour en brouillon).
+            $next = $template->status;
+            $allowed = match ($original) {
+                TemplateStatus::Draft => [TemplateStatus::Draft, TemplateStatus::Active],
+                TemplateStatus::Active => [TemplateStatus::Active, TemplateStatus::Retired],
+                default => [TemplateStatus::Retired],
+            };
+            if ($template->isDirty('status') && ! in_array($next, $allowed, true)) {
+                throw TemplateLockedException::make();
+            }
         });
 
         static::deleting(function (self $template): void {
@@ -111,6 +122,9 @@ class DiagnosticTemplate extends Model
         );
     }
 
+    /**
+     * @return list<string>
+     */
     protected function auditExcluded(): array
     {
         return ['created_at', 'updated_at'];

@@ -19,10 +19,13 @@ trait BelongsToTemplate
     public static function bootBelongsToTemplate(): void
     {
         $guard = function (self $model): void {
-            $template = DiagnosticTemplate::query()->find($model->template_id ?? $model->getOriginal('template_id'));
+            // Le template d'origine et le nouveau (déplacement d'une question) doivent être des brouillons.
+            $ids = array_filter(array_unique([$model->getAttribute('template_id'), $model->getOriginal('template_id')]));
 
-            if ($template?->isLocked()) {
-                throw TemplateLockedException::make();
+            foreach (DiagnosticTemplate::query()->whereKey($ids)->get() as $template) {
+                if ($template->isLocked()) {
+                    throw TemplateLockedException::make();
+                }
             }
         };
 

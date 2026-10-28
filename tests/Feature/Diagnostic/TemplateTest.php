@@ -85,3 +85,22 @@ it('réserve les questionnaires à l\'administrateur', function (string $role, b
     'sales' => ['sales', false],
     'editor' => ['editor', false],
 ]);
+
+it('interdit tout retour en arrière dans le cycle de vie d\'un questionnaire', function () {
+    $template = seedDiagnosticTemplate();
+
+    expect(fn () => $template->update(['status' => TemplateStatus::Draft]))->toThrow(TemplateLockedException::class);
+
+    $template->update(['status' => TemplateStatus::Retired]);
+    expect(fn () => $template->update(['status' => TemplateStatus::Active]))->toThrow(TemplateLockedException::class);
+});
+
+it('refuse à l\'activation une valeur d\'option qui pourrait casser une expression Livewire', function () {
+    $template = app(CreateDiagnosticTemplate::class)->handle([
+        'name' => 'Injection', 'version' => 7,
+        'questions' => [['key' => 'sector', 'step' => 1, 'type' => 'single', 'label' => 'Secteur', 'options' => [['value' => "retail'); alert(1); ('", 'label' => 'Commerce']]]],
+        'rules' => [],
+    ]);
+
+    expect(fn () => app(ActivateDiagnosticTemplate::class)->handle($template))->toThrow(ValidationException::class);
+});

@@ -42,7 +42,7 @@ class CreateLeadFromBrief
                     'company_id' => $contact->company_id,
                     'brief_id' => $brief->id,
                     'type' => LeadType::Diagnostic,
-                    'source' => mb_substr($session?->utm['utm_source'] ?? $session?->entry ?? 'diagnostic', 0, 64),
+                    'source' => mb_substr($session?->utm['utm_source'] ?? $session->entry ?? 'diagnostic', 0, 64),
                     'message' => "Brief {$brief->reference} — ".$brief->latestVersion?->summary,
                     'maturity_level' => $recommended['maturity']['level'] ?? null,
                     'budget_band' => $answer('budget_band'),

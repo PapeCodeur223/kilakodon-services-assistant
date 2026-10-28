@@ -70,11 +70,11 @@ final class RuleEngine
         return [
             'recommendations' => $recommendations,
             'pains' => $this->selectPains($pains),
-            'clarifications' => array_values(array_map(
+            'clarifications' => array_map(
                 fn (string $key, array $ruleKeys): array => ['key' => $key, 'label' => Catalog::CLARIFICATIONS[$key] ?? $key, 'rule_keys' => $ruleKeys],
                 array_keys($clarifications),
                 $clarifications,
-            )),
+            ),
         ];
     }
 
@@ -101,13 +101,13 @@ final class RuleEngine
 
         $selected = array_slice($selected, 0, Catalog::MAX_RECOMMENDATIONS, true);
 
-        return [array_values(array_map(fn (string $module, array $m): array => [
+        return [array_map(fn (string $module, array $m): array => [
             'module' => $module,
             'weight' => $m['weight'],
             'label' => Catalog::moduleLabel($module),
             'solution' => Catalog::MODULES[$module]['solution'] ?? '',
             'reasons' => $m['reasons'],
-        ], array_keys($selected), $selected)), $scopeUnclear];
+        ], array_keys($selected), $selected), $scopeUnclear];
     }
 
     /**
@@ -123,6 +123,6 @@ final class RuleEngine
 
         $pains = array_slice($pains, 0, Catalog::MAX_PAINS, true);
 
-        return array_values(array_map(fn (string $key, array $p): array => PainCompleter::pain($key, $p['rule_keys'], 'rule'), array_keys($pains), $pains));
+        return array_map(fn (string $key, array $p): array => PainCompleter::pain($key, $p['rule_keys'], 'rule'), array_keys($pains), $pains);
     }
 }

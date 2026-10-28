@@ -114,14 +114,22 @@
         </section>
     @endif
 
+    @if ($briefReference === null)
     <div class="mt-8">
         <button type="button" wire:click="editAnswers" class="inline-flex min-h-11 items-center gap-2 text-small font-semibold text-kh-blue-700 underline-offset-4 hover:underline focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-kh-blue-500">
             <x-kh.icon name="pencil" :size="18" /> Modifier mes réponses
         </button>
     </div>
+    @endif
 
     {{-- Bloc de conversion collant --}}
     <div class="sticky bottom-0 z-20 -mx-4 mt-10 border-t border-line bg-white/95 px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-4 backdrop-blur sm:mx-0 sm:rounded-card sm:border sm:p-6 sm:shadow-pop">
+        @if ($briefReference !== null)
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <p class="text-small text-ink">Votre brief <strong>{{ $briefReference }}</strong> a déjà été demandé. Retrouvez-le avec le lien privé reçu, ou contactez-nous avec cette référence.</p>
+                <x-kh.button variant="whatsapp" :href="\App\Domain\Platform\Support\WhatsAppLink::for('brief', 'Bonjour Kilakodon, je vous contacte au sujet de mon brief '.$briefReference.'.')" />
+            </div>
+        @else
         <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <p class="hidden text-small text-slate sm:block">Recevez ce diagnostic sous forme de brief, à relire et à partager.</p>
             <div class="flex flex-col gap-3 sm:flex-row">
@@ -129,6 +137,7 @@
                 <x-kh.button variant="whatsapp" :href="$whatsapp" />
             </div>
         </div>
+        @endif
     </div>
 
     {{-- Formulaire de coordonnées : feuille modale (UX §5.4) --}}

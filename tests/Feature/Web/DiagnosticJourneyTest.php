@@ -5,6 +5,7 @@ use App\Domain\Brief\Models\Brief;
 use App\Domain\Brief\Services\BriefAccess;
 use App\Domain\Crm\Data\ProspectDetails;
 use App\Domain\Crm\Models\Lead;
+use App\Domain\Diagnostic\Enums\SessionStatus;
 use App\Domain\Diagnostic\Models\DiagnosticSession;
 use App\Domain\Platform\Support\PublicToken;
 use App\Livewire\Brief\Show;
@@ -190,4 +191,37 @@ it('n\'expose jamais les données d\'un brief dans le HTML d\'un autre token', f
     $this->get(route('brief.show', ['token' => PublicToken::generate()['token']]))
         ->assertNotFound()
         ->assertDontSee('Awa Diarra');
+});
+
+it('rouvre une session déjà convertie en lecture seule, sans erreur ni nouveau brief (M3)', function () {
+    ['session' => $session, 'token' => $token] = completedDiagnostic(['sector' => 'retail', 'pains' => ['stock_gaps']]);
+    ['brief' => $brief] = app(RequestBrief::class)
+        ->handle($session, new ProspectDetails('Awa Diarra', '74 66 64 89'));
+
+    $this->get(route('diagnostic.resume', ['token' => $token]))
+        ->assertOk()
+        ->assertSee('a déjà été demandé')
+        ->assertSee($brief->reference)
+        ->assertDontSee('Modifier mes réponses');
+
+    Livewire::test(Wizard::class, ['session' => $session->refresh(), 'token' => $token])
+        ->assertSet('briefReference', $brief->reference)
+        ->call('editAnswers')
+        ->assertSet('screen', 'result')
+        ->call('openBriefForm')
+        ->assertSet('showBriefForm', false)
+        ->call('next')
+        ->assertOk();
+
+    expect(Brief::query()->count())->toBe(1);
+});
+
+it('marque la session « enregistrée » quand le visiteur la garde pour plus tard', function () {
+    Livewire::test(Wizard::class)
+        ->set('answers.sector', 'retail')
+        ->call('saveForLater')
+        ->assertSet('showResumeLink', true)
+        ->assertSee('Vos réponses sont enregistrées.');
+
+    expect(DiagnosticSession::query()->sole()->status)->toBe(SessionStatus::Saved);
 });

@@ -27,9 +27,16 @@ class GenerateDiagnosticSummary implements ShouldQueue
             return;
         }
 
+        $computedAt = $result->computed_at;
         $response = $writer->ai($result->toOutcome());
 
         if ($response === null) {
+            return;
+        }
+
+        // Résultat recalculé pendant l'appel au modèle : ce résumé ne lui correspond plus.
+        $result->refresh();
+        if (! $result->computed_at->equalTo($computedAt) || $result->ai_summary !== null) {
             return;
         }
 

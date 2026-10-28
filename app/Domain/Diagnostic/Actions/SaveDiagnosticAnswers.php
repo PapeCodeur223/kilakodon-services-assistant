@@ -20,7 +20,7 @@ class SaveDiagnosticAnswers
      * @param  array<string, mixed>  $answers  état complet des réponses côté visiteur
      * @return array<string, mixed> réponses retenues
      */
-    public function handle(DiagnosticSession $session, array $answers, int $currentStep): array
+    public function handle(DiagnosticSession $session, array $answers, int $currentStep, bool $savedForLater = false): array
     {
         if ($session->isExpired() || $session->status === SessionStatus::Converted) {
             throw new InvalidArgumentException('Cette session de diagnostic ne peut plus être modifiée.');
@@ -31,7 +31,7 @@ class SaveDiagnosticAnswers
         $steps = $template->steps();
         $currentStep = max(min($currentStep, max($steps)), min($steps));
 
-        DB::transaction(function () use ($session, $answers, $currentStep): void {
+        DB::transaction(function () use ($session, $answers, $currentStep, $savedForLater): void {
             $session->answers()->whereNotIn('question_key', array_keys($answers) ?: [''])->delete();
 
             $existing = $session->answers()->pluck('value', 'question_key')->all();
@@ -44,7 +44,7 @@ class SaveDiagnosticAnswers
             $session->forceFill([
                 'current_step' => $currentStep,
                 // Une modification après la restitution impose un nouveau calcul.
-                'status' => SessionStatus::InProgress,
+                'status' => $savedForLater ? SessionStatus::Saved : SessionStatus::InProgress,
             ])->save();
         });
 
