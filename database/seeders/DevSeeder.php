@@ -33,7 +33,23 @@ class DevSeeder extends Seeder
             );
         }
 
+        $this->restoreAdminMultiFactor();
         $this->seedLeads(User::query()->where('email', 'sales@kilakodon.test')->value('id'));
+    }
+
+    /**
+     * Après un `migrate:fresh`, l'admin de développement retrouve le secret MFA déjà enregistré dans
+     * l'application d'authentification (KH_DEV_ADMIN_MFA_SECRET, .env local uniquement) : pas de
+     * nouvelle configuration à chaque réinitialisation de la base.
+     */
+    private function restoreAdminMultiFactor(): void
+    {
+        $secret = config('kh.dev_admin_mfa_secret');
+        $admin = User::query()->where('email', 'admin@kilakodon.test')->first();
+
+        if (is_string($secret) && $secret !== '' && $admin !== null && $admin->getAppAuthenticationSecret() === null) {
+            $admin->saveAppAuthenticationSecret($secret);
+        }
     }
 
     /**

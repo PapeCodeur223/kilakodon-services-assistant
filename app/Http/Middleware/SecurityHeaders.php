@@ -53,9 +53,15 @@ class SecurityHeaders
         $isAdmin = $request->is('admin', 'admin/*', 'livewire/*', 'filament/*');
         $devServer = $this->viteDevServer();
 
-        $script = $isAdmin
-            ? ["'self'", "'unsafe-inline'", "'unsafe-eval'"]
-            : ["'self'", "'nonce-{$nonce}'"];
+        // Parcours Livewire publics (diagnostic, brief) : Alpine évalue les expressions wire:* et x-*
+        // ('unsafe-eval') ; les scripts en ligne restent soumis au nonce. Décision D-014 (Q-018).
+        $isLivewirePage = $request->is('diagnostic', 'diagnostic/*', 'brief/*');
+
+        $script = match (true) {
+            $isAdmin => ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+            $isLivewirePage => ["'self'", "'nonce-{$nonce}'", "'unsafe-eval'"],
+            default => ["'self'", "'nonce-{$nonce}'"],
+        };
         $style = ["'self'", "'unsafe-inline'"];
         $connect = ["'self'"];
         $img = ["'self'", 'data:', 'blob:'];

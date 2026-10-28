@@ -26,3 +26,13 @@ it("n'exécute pas le DevSeeder hors environnement local", function () {
 
     expect(User::query()->count())->toBe(0);
 });
+
+it('restaure le secret MFA de l\'admin de développement après une réinitialisation', function () {
+    config(['kh.dev_admin_mfa_secret' => 'JBSWY3DPEHPK3PXP']);
+
+    $this->seed(DevSeeder::class);
+
+    $admin = User::query()->where('email', 'admin@kilakodon.test')->sole();
+    expect($admin->getAppAuthenticationSecret())->toBe('JBSWY3DPEHPK3PXP')
+        ->and($admin->getRawOriginal('app_authentication_secret'))->not->toBe('JBSWY3DPEHPK3PXP');
+});

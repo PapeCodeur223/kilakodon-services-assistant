@@ -22,7 +22,7 @@
 - Colonnes `TIMESTAMP NOT NULL` réécrites par MariaDB à chaque mise à jour (`analytics_events.occurred_at`, migration corrective).
 
 #### Écarts notés dans DECISIONS.md
-- Q-018 (CSP des pages Livewire publiques, **bloquant pour l'usage réel**), Q-019 (tranches de budget) ; départage des priorités ; lead créé à l'envoi des coordonnées ; doublons suggérés sans fusion ; PDF à la demande ; rendez-vous via WhatsApp jusqu'au lot 3 ; animations CSS dans les vues Livewire.
+- D-014 (CSP : `'unsafe-eval'` limité au diagnostic et au brief, résout Q-018), Q-019 (tranches de budget) ; secret MFA de l'admin de développement restauré après `migrate:fresh` ; départage des priorités ; lead créé à l'envoi des coordonnées ; doublons suggérés sans fusion ; PDF à la demande ; rendez-vous via WhatsApp jusqu'au lot 3 ; animations CSS dans les vues Livewire.
 
 ### Lot 1 — Site public, contenus et SEO (2026-10-26)
 #### Ajouté

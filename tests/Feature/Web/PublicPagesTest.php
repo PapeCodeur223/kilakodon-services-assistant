@@ -49,6 +49,19 @@ it('ajoute les en-têtes de sécurité sur les pages publiques', function () {
         ->and($response->headers->get('Permissions-Policy'))->toContain('camera=()');
 });
 
+it('limite \'unsafe-eval\' aux parcours Livewire du diagnostic et du brief, nonce conservé (D-014)', function () {
+    seedDiagnosticTemplate();
+
+    $csp = (string) $this->get('/diagnostic')->headers->get('Content-Security-Policy');
+    expect($csp)->toContain("script-src 'self' 'nonce-")
+        ->toContain("'unsafe-eval'")
+        ->not->toContain("'unsafe-inline' 'unsafe-eval'");
+
+    foreach (['/', '/contact', '/solutions', '/diagnostics', '/briefing'] as $path) {
+        expect((string) $this->get($path)->headers->get('Content-Security-Policy'))->not->toContain('unsafe-eval');
+    }
+});
+
 it('applique aussi les en-têtes de sécurité au back-office', function () {
     $this->get('/admin/login')
         ->assertOk()
