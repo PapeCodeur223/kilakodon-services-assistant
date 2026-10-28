@@ -104,6 +104,9 @@ it('parcours P1 complet : diagnostic → restitution → coordonnées → brief 
     // Le visiteur voit sa restitution sans avoir laissé de coordonnées (PRD §7.4).
     expect(Lead::query()->count())->toBe(0);
 
+    // Honeypot : un envoi plus rapide que le délai minimal est rejeté comme un robot.
+    $this->travel(5)->seconds();
+
     $component->call('openBriefForm')
         ->assertSee('Recevoir mon brief')
         ->set('fullName', 'Awa Diarra')
@@ -224,4 +227,18 @@ it('marque la session « enregistrée » quand le visiteur la garde pour plus ta
         ->assertSee('Vos réponses sont enregistrées.');
 
     expect(DiagnosticSession::query()->sole()->status)->toBe(SessionStatus::Saved);
+});
+
+it('rejette silencieusement une demande de brief envoyée trop vite (robot)', function () {
+    ['session' => $session, 'token' => $token] = completedDiagnostic();
+
+    Livewire::test(Wizard::class, ['session' => $session, 'token' => $token])
+        ->call('openBriefForm')
+        ->set('fullName', 'Robot')
+        ->set('phone', '74 66 64 89')
+        ->set('consentProcessing', true)
+        ->call('requestBrief');
+
+    expect(Brief::query()->count())->toBe(0)
+        ->and(Lead::query()->count())->toBe(0);
 });
