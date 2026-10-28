@@ -56,14 +56,14 @@ Tâches :
 **Docs :** PRD §6.2–6.3, DIAGNOSTIC_SPEC.md, TRD §6, BACKEND_SCHEMA §4–5, UX §5.4–5.5.
 
 Tâches :
-- [ ] Moteur pur PHP : `ConditionEvaluator`, `VisibilityResolver`, `RuleEngine`, `MaturityScorer`, `PainCompleter`, DTO `DiagnosticOutcome` — **tous les tests de DIAGNOSTIC_SPEC §6** + tests positif et négatif par règle.
-- [ ] Migrations : templates, questions, règles, sessions, réponses, résultats ; `DiagnosticTemplateV1Seeder` ; Action `ActivateDiagnosticTemplate` (immutabilité).
-- [ ] Composant Livewire `Diagnostic\Wizard` : étapes, questions visibles, retour arrière, « Je ne sais pas », pré-remplissage `?secteur=`, enregistrement à chaque étape, lien de reprise, transitions et accessibilité (UX §5.4, §9).
-- [ ] Écran de restitution (« Pourquoi ? » dépliable), résumé gabarit + job `GenerateDiagnosticSummary` (IA via `LlmClient`, repli gabarit).
-- [ ] Formulaire de coordonnées et consentements → Actions `UpsertContact` (normalisation E.164, suggestion de doublon), `CreateBriefFromDiagnostic` (référence via `ReferenceGenerator`, version 1, token d'accès) et `CreateLeadFromBrief` (idempotent).
-- [ ] Page brief Livewire : correction, validation (nouvelle version figée), états expiré et révoqué ; PDF dompdf ; boutons WhatsApp et RDV.
-- [ ] Filament : éditeur de templates, questions et règles (lecture seule si `active`, bouton « Dupliquer en nouvelle version »), liste des sessions et des briefs.
-- [ ] Purge `kh:diagnostic-purge`.
+- [x] Moteur pur PHP : `ConditionEvaluator`, `VisibilityResolver`, `RuleEngine`, `MaturityScorer`, `PainCompleter`, DTO `DiagnosticOutcome` — **tous les tests de DIAGNOSTIC_SPEC §6** + tests positif et négatif par règle.
+- [x] Migrations : templates, questions, règles, sessions, réponses, résultats ; `DiagnosticTemplateV1Seeder` ; Action `ActivateDiagnosticTemplate` (immutabilité).
+- [x] Composant Livewire `Diagnostic\Wizard` : étapes, questions visibles, retour arrière, « Je ne sais pas », pré-remplissage `?secteur=`, enregistrement à chaque étape, lien de reprise, transitions et accessibilité (UX §5.4, §9).
+- [x] Écran de restitution (« Pourquoi ? » dépliable), résumé gabarit + job `GenerateDiagnosticSummary` (IA via `LlmClient`, repli gabarit).
+- [x] Formulaire de coordonnées et consentements → Actions `UpsertContact` (normalisation E.164, suggestion de doublon), `CreateBriefFromDiagnostic` (référence via `ReferenceGenerator`, version 1, token d'accès) et `CreateLeadFromBrief` (idempotent).
+- [x] Page brief Livewire : correction, validation (nouvelle version figée), états expiré et révoqué ; PDF dompdf ; boutons WhatsApp et RDV.
+- [x] Filament : éditeur de templates, questions et règles (lecture seule si `active`, bouton « Dupliquer en nouvelle version »), liste des sessions et des briefs.
+- [x] Purge `kh:diagnostic-purge`.
 
 **Critères d'acceptation :** DIA-01..04, BRF-01..04 ; parcours P1 complet testé (Pest feature) ; test de concurrence `ReferenceGenerator` (20 générations parallèles simulées → 20 références distinctes).
 
@@ -143,7 +143,7 @@ Choix de la formule LWS (avec ou sans SSH), workflow GitHub Actions, préproduct
 |---|---|---|---|---|
 | 0 | validé | branche `lot-0-socle` | Direction Kilakodon | 2026-10-26 |
 | 1 | validé | branche `lot-1-site-public` | Direction Kilakodon | 2026-10-28 |
-| 2 | à faire | | | |
+| 2 | validé | branche `lot-2-diagnostic` | Direction Kilakodon | 2026-10-28 |
 | 3 | à faire | | | |
 | 4 | à faire | | | |
 | 5 | à faire | | | |

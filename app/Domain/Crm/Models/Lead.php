@@ -2,6 +2,7 @@
 
 namespace App\Domain\Crm\Models;
 
+use App\Domain\Brief\Models\Brief;
 use App\Domain\Crm\Enums\LeadStage;
 use App\Domain\Crm\Enums\LeadType;
 use App\Domain\Platform\Models\User;
@@ -27,7 +28,12 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property-read Contact $contact
  * @property-read Company|null $company
+ * @property int|null $maturity_level
+ * @property string|null $budget_band
+ * @property string|null $timeline
+ * @property string|null $decision_role
  * @property-read User|null $owner
+ * @property-read Brief|null $brief
  */
 class Lead extends Model
 {
@@ -52,6 +58,7 @@ class Lead extends Model
             'next_action_at' => 'datetime',
             'first_response_at' => 'datetime',
             'estimated_amount_xof' => 'integer',
+            'maturity_level' => 'integer',
         ];
     }
 
@@ -77,5 +84,13 @@ class Lead extends Model
     public function owner(): BelongsTo
     {
         return $this->belongsTo(User::class, 'owner_id');
+    }
+
+    /**
+     * @return BelongsTo<Brief, $this>
+     */
+    public function brief(): BelongsTo
+    {
+        return $this->belongsTo(Brief::class);
     }
 }

@@ -2,6 +2,28 @@
 
 ## [Non publié]
 
+### Lot 2 — Diagnostic et brief (2026-10-28)
+#### Ajouté
+- Moteur pur PHP (`app/Domain/Diagnostic/Engine`) : `ConditionEvaluator` (opérateurs TRD §6, blocs imbriqués, trace des questions déterminantes), `VisibilityResolver` (questions et options visibles, nettoyage des réponses devenues non pertinentes), `RuleEngine`, `MaturityScorer`, `PainCompleter`, DTO `DiagnosticOutcome`. Tests : cas T1–T10 de DIAGNOSTIC_SPEC §6, un test positif et un négatif par règle (32 règles), opérateurs, barème de maturité.
+- Tables `diagnostic_templates|questions|rules|sessions|answers|results`, `briefs`, `brief_versions` (+ clé étrangère `leads.brief_id`) ; `DiagnosticTemplateV1Seeder` (questionnaire v1 activé) ; immuabilité des templates actifs ou retirés (questions et règles comprises).
+- Actions : `ActivateDiagnosticTemplate` (validation de cohérence, un seul actif), `DuplicateDiagnosticTemplate`, `StartDiagnosticSession` (token haché, 30 jours, pré-remplissage `?secteur=`), `SaveDiagnosticAnswers`, `CompleteDiagnostic`, `PurgeDiagnosticSessions` (`kh:diagnostic-purge`, 02:00), `UpsertContact` (E.164, doublons suggérés), `RecordConsents`, `QueueLeadNotifications`, `CreateBriefFromDiagnostic`, `CreateLeadFromBrief` (idempotent), `RequestBrief`, `ValidateBrief` (version figée), `RevokeBriefAccess`.
+- `ReferenceGenerator` (`KLK-AAAA-NNNN`) : test de 20 processus réellement parallèles → 20 références distinctes ; compteurs créés chaque jour (`kh:sequences-prepare`).
+- Résumé : gabarit Blade et reformulation IA du seul DTO (`GenerateDiagnosticSummary`, `LlmClient` + `FakeLlmClient`, sortie validée, repli gabarit).
+- Livewire `Diagnostic\Wizard` (étapes, « Je ne sais pas », choix exclusifs, 4 priorités max, enregistrement à chaque étape, lien de reprise, 20 sessions/jour/IP, focus et annonces `aria-live`) ; restitution avec « Pourquoi ? » ; formulaire de coordonnées (consentements séparés non cochés, honeypot, 5 demandes/h/IP).
+- Livewire `Brief\Show` (document, correction, validation, états expiré et révoqué) ; PDF dompdf « document non contractuel » ; pages à token limitées à 30 requêtes/min/IP.
+- Filament : questionnaires (lecture seule si actifs, « Activer », « Dupliquer en nouvelle version »), sessions, briefs (versions figées, révocation du lien) ; lien lead → brief.
+- Test de schéma : aucune colonne `ON UPDATE CURRENT_TIMESTAMP`.
+
+#### Modifié
+- `CreateLeadFromContact` réutilise `RecordConsents` et `QueueLeadNotifications`.
+- `x-kh.checkbox` transmet les attributs `wire:*` ; nouvelles icônes Lucide (arrow-left, circle-help, download, link, copy, save, lightbulb, pencil) ; composant `x-kh.focus-header`.
+
+#### Corrigé
+- Colonnes `TIMESTAMP NOT NULL` réécrites par MariaDB à chaque mise à jour (`analytics_events.occurred_at`, migration corrective).
+
+#### Écarts notés dans DECISIONS.md
+- D-014 (CSP : `'unsafe-eval'` limité au diagnostic et au brief, résout Q-018), Q-019 (tranches de budget) ; secret MFA de l'admin de développement restauré après `migrate:fresh` ; départage des priorités ; lead créé à l'envoi des coordonnées ; doublons suggérés sans fusion ; PDF à la demande ; rendez-vous via WhatsApp jusqu'au lot 3 ; animations CSS dans les vues Livewire.
+
 ### Lot 1 — Site public, contenus et SEO (2026-10-26)
 #### Ajouté
 - Contenus : tables `services`, `sectors`, `case_studies`, `articles`, `faqs`, `pages`, `content_revisions` ; traits `Publishable` (verrou de publication) et `HasRevisions` ; actions `PublishContent` (admin, refus si [À VALIDER] ou réalisation non autorisée), `ChangeContentStatus`, `RestoreRevision`, `AttestCaseStudyAuthorization` ; politique `ContentPolicy`.

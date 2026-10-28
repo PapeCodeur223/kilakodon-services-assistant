@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Leads;
 use App\Domain\Crm\Enums\LeadStage;
 use App\Domain\Crm\Enums\LeadType;
 use App\Domain\Crm\Models\Lead;
+use App\Filament\Resources\Briefs\BriefResource;
 use App\Filament\Resources\Leads\Pages\ListLeads;
 use App\Filament\Resources\Leads\Pages\ViewLead;
 use BackedEnum;
@@ -42,7 +43,7 @@ class LeadResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->with(['contact', 'owner']);
+        return parent::getEloquentQuery()->with(['contact', 'owner', 'brief']);
     }
 
     public static function infolist(Schema $schema): Schema
@@ -54,6 +55,8 @@ class LeadResource extends Resource
                 TextEntry::make('source')->label('Source'),
                 TextEntry::make('created_at')->label('Reçu le')->dateTime('d/m/Y H:i', timezone: config('kh.display_timezone')),
                 TextEntry::make('owner.name')->label('Responsable')->placeholder('Non attribué'),
+                TextEntry::make('brief.reference')->label('Brief')->placeholder('—')
+                    ->url(fn (Lead $record): ?string => $record->brief !== null ? BriefResource::getUrl('view', ['record' => $record->brief]) : null),
                 TextEntry::make('message')->label('Message')->columnSpanFull()->prose(),
             ]),
             Section::make('Contact')->columnSpanFull()->columns(3)->schema([

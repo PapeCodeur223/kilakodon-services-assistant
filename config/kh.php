@@ -2,6 +2,9 @@
 
 return [
 
+    // Développement local : secret MFA de admin@kilakodon.test restauré par le DevSeeder (jamais en production).
+    'dev_admin_mfa_secret' => env('KH_DEV_ADMIN_MFA_SECRET'),
+
     // Fuseau d'affichage ; les dates restent stockées en UTC.
     'display_timezone' => env('KH_DISPLAY_TIMEZONE', 'Africa/Bamako'),
 

@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Domain\Assistant\Llm\FakeLlmClient;
+use App\Domain\Assistant\Llm\LlmClient;
+use App\Domain\Assistant\Llm\UnavailableLlmClient;
+use App\Domain\Brief\Models\Brief;
 use App\Domain\Content\Models\Article;
 use App\Domain\Content\Models\CaseStudy;
 use App\Domain\Content\Models\Faq;
@@ -10,13 +14,18 @@ use App\Domain\Content\Models\Sector;
 use App\Domain\Content\Models\Service;
 use App\Domain\Crm\Models\Contact;
 use App\Domain\Crm\Models\Lead;
+use App\Domain\Diagnostic\Models\DiagnosticSession;
+use App\Domain\Diagnostic\Models\DiagnosticTemplate;
 use App\Domain\Platform\Listeners\RecordSuccessfulLogin;
 use App\Domain\Platform\Models\AuditLog;
 use App\Domain\Platform\Models\Setting;
 use App\Domain\Platform\Models\User;
 use App\Domain\Platform\Services\Settings;
 use App\Policies\AuditLogPolicy;
+use App\Policies\BriefPolicy;
 use App\Policies\ContentPolicy;
+use App\Policies\DiagnosticSessionPolicy;
+use App\Policies\DiagnosticTemplatePolicy;
 use App\Policies\LeadPolicy;
 use App\Policies\UserPolicy;
 use Illuminate\Auth\Events\Login;
@@ -35,6 +44,12 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->singleton(Settings::class);
+
+        // AI_DRIVER=fake : réponses déterministes ; le client Anthropic arrive au lot 4 (repli en attendant).
+        $this->app->bind(LlmClient::class, fn (): LlmClient => match (config('assistant.driver')) {
+            'fake' => new FakeLlmClient,
+            default => new UnavailableLlmClient,
+        });
     }
 
     public function boot(): void
@@ -55,6 +70,9 @@ class AppServiceProvider extends ServiceProvider
             'page' => Page::class,
             'contact' => Contact::class,
             'lead' => Lead::class,
+            'diagnostic_template' => DiagnosticTemplate::class,
+            'diagnostic_session' => DiagnosticSession::class,
+            'brief' => Brief::class,
         ]);
 
         // Mots de passe : 12 caractères minimum (TRD §11).
@@ -68,10 +86,15 @@ class AppServiceProvider extends ServiceProvider
             Gate::policy($content, ContentPolicy::class);
         }
         Gate::policy(Lead::class, LeadPolicy::class);
+        Gate::policy(DiagnosticTemplate::class, DiagnosticTemplatePolicy::class);
+        Gate::policy(DiagnosticSession::class, DiagnosticSessionPolicy::class);
+        Gate::policy(Brief::class, BriefPolicy::class);
 
         Event::listen(Login::class, RecordSuccessfulLogin::class);
 
         // Formulaires publics : 5 envois par heure et par IP (TRD §11).
         RateLimiter::for('contact', fn (Request $request) => Limit::perHour(5)->by((string) $request->ip()));
+        // Pages publiques à token (brief, reprise) : freine l'énumération.
+        RateLimiter::for('public-token', fn (Request $request) => Limit::perMinute(30)->by((string) $request->ip()));
     }
 }
