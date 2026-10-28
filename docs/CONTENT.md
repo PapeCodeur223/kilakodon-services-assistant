@@ -301,3 +301,14 @@ Règle : aucun chiffre de marché sans source citée ; pas de données clients.
 - 419 : « Votre session a *expiré*. » — « Pour votre sécurité, la page a expiré. Revenez en arrière, rechargez-la et réessayez. »
 - Lien de brief expiré : « Ce lien a expiré. Pour votre sécurité, les liens privés sont valables 30 jours. Contactez-nous avec votre référence pour en recevoir un nouveau. »
 - Assistant indisponible : voir `UX_UI_DESIGN.md` §4.3.
+
+## 12. Ajouts du 2026-10-28 (refonte visuelle, source : kilakodon-services.com)
+- Eyebrow du hero : `ÉCOSYSTÈME LOGICIEL & ERP — BAMAKO` ; réassurance en 3 puces : 3 minutes · Sans inscription · Résultat immédiat.
+- Bandeau des savoir-faire : ERP & CRM sur mesure · Gestion de stock · Caisse & facturation · Applications web métiers · Applications mobiles · Mode hors-ligne · Tableaux de bord · Multi-sites & multi-dépôts · PC, tablette & cloud · Audit & modernisation · Migration de vos fichiers Excel · Design d'interfaces.
+- Réalités locales (ajout) : **PC, tablette et cloud** — Pilotez votre activité à distance, depuis le bureau comme depuis votre téléphone.
+- Section « Logiciels éprouvés » — H2 : **Des logiciels *déjà en service*, adaptés à votre structure** ; chapeau : En plus du sur-mesure, nous proposons des suites de gestion prêtes à l'emploi, que nous adaptons à chaque client.
+  - **Gestion de lycée privé** — Élèves, enseignants, classes, inscriptions, scolarité, paiements, notes, absences, finances et administration.
+  - **Gestion boulangerie & pâtisserie** — Pour boulangeries, pâtisseries, viennoiseries, ateliers de production et points de vente.
+  - Boutons : « Voir le détail » · « Démo sur WhatsApp ». Prix non affichés (Q-004).
+- Pourquoi Kilakodon — H2 : **L'exigence technique au service de *votre croissance*** ; cartes ajoutées : **Vos données protégées** (Accès par rôle pour chaque employé, sauvegardes automatisées et traçabilité des opérations) · **Support de proximité** (Une équipe d'ingénieurs basée à Bamako pour la formation, l'assistance et la maintenance).
+- FAQ de l'accueil : « Une autre question ? Un conseiller vous répond directement. »

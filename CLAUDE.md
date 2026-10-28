@@ -72,5 +72,5 @@ php artisan kh:ai-eval --driver=fake # corpus IA (anthropic en manuel uniquement
 ## Identité
 - Logo : `resources/brand/logo-kilakodon.png` — **ne pas le modifier ni le recolorer**.
 - Bleu `#282A89` (structure, actions) ; rouge `#F91C0C` (logo, décor, texte ≥ 24 px) / `#D4170A` (rouge fonctionnel AA) — rare.
-- Affichage : Fraunces 400 (un mot en italique rouge par titre clé). Texte : Inter.
+- Affichage : Plus Jakarta Sans 800 (un fragment rouge surligné par titre clé) — décision D-013, qui remplace Fraunces. Texte : Inter.
 - Contact : WhatsApp +223 74 66 64 89 (principal), +223 97 46 28 39 ; kilakodon@gmail.com ; Bamako, Mali.

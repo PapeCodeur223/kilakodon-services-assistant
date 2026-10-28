@@ -15,6 +15,7 @@
 - Composants : breadcrumb, faq, markdown, textarea, select, checkbox, cta-band, page-hero, status-marker ; préchargement de Fraunces.
 
 #### Modifié
+- Refonte visuelle « agence » (D-013, retours de la direction du 2026-10-28) : police Plus Jakarta Sans grasse, hero sombre avec maquette de tableau de bord animée (données « Démo »), en-têtes de pages sombres, bandeau défilant des savoir-faire, grille « bento », section « Logiciels éprouvés » (lycée privé, boulangerie-pâtisserie), halo lumineux et élévation au survol des cartes, reflet sur les boutons, apparitions variées au défilement, parallaxe légère et barre de progression ; contenus enrichis depuis kilakodon-services.com (sans prix ni promesses invérifiables).
 - Flottement continu des artefacts réservé au desktop (performance mobile).
 - `SettingsSeeder` : IA activée avec budget de 1 USD en local uniquement (BACKEND_SCHEMA §9).
 

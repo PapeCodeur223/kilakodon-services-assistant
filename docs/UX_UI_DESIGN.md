@@ -54,7 +54,7 @@ Valeurs mesurées sur le logo : bleu `#282A89`, rouge `#F91C0C`.
 ### 3.2 Typographie
 | Rôle | Police | Remarques |
 |---|---|---|
-| Affichage (H1, H2, grands chiffres) | **Fraunces** variable, graisse **400**, `font-variation-settings: "SOFT" 50, "WONK" 0, "opsz" 72` | Italique pour le mot d'accent. Ne jamais dépasser 500 |
+| Affichage (H1, H2, grands chiffres) | ~~Fraunces 400~~ → **Plus Jakarta Sans** variable, graisse **800** (H3 : 700), interlettrage serré — **décision D-013 du 2026-10-28** | Le mot d'accent est rouge et surligné (non italique). Les mentions de Fraunces ailleurs dans ce document sont remplacées par cette règle |
 | Texte et interface | **Inter** variable, graisses 400 / 450 / 500 / 600 (600 seulement pour les libellés de boutons ≤ 15 px et les données) | `font-feature-settings: "cv11", "ss01"` |
 
 Échelle fluide (mobile → desktop) :
