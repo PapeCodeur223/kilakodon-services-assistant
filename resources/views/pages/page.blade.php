@@ -8,7 +8,7 @@
     $toc = $isLegal ? Markdown::headings($page->body) : [];
     $tz = config('kh.display_timezone');
 @endphp
-<x-layouts.public
+<x-layouts.public :header-tone="$isLegal ? 'light' : 'dark'"
     :title="$page->seo_title ?: $page->title"
     :description="$page->seo_description"
     :schemas="[StructuredData::breadcrumbs($crumbs)]"

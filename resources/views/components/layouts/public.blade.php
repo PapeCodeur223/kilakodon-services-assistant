@@ -7,6 +7,7 @@
     'noindex' => false,
     'schemas' => [],
     'chrome' => 'full',
+    'headerTone' => 'dark',
 ])
 <!DOCTYPE html>
 <html lang="fr">
@@ -23,8 +24,8 @@
     @isset($head)
         {{ $head }}
     @endisset
-    {{-- Préchargement de la police d'affichage (Fraunces normale uniquement, UX §3.2). --}}
-    <link rel="preload" as="font" type="font/woff2" crossorigin href="{{ \Illuminate\Support\Facades\Vite::asset('node_modules/@fontsource-variable/fraunces/files/fraunces-latin-opsz-normal.woff2') }}">
+    {{-- Préchargement de la police d'affichage (Plus Jakarta Sans, D-013). --}}
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="{{ \Illuminate\Support\Facades\Vite::asset('node_modules/@fontsource-variable/plus-jakarta-sans/files/plus-jakarta-sans-latin-wght-normal.woff2') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="min-h-dvh bg-canvas text-ink">
@@ -40,7 +41,7 @@
     @endif
 
     @if ($chrome === 'full')
-        <x-kh.header />
+        <x-kh.header :tone="$headerTone" />
     @endif
 
     <main id="contenu" tabindex="-1" class="focus:outline-none">

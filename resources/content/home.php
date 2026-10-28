@@ -1,16 +1,24 @@
 <?php
 
-// Textes de l'accueil — source : docs/CONTENT.md §2.
-// Un élément contenant « [À VALIDER] » n'est affiché qu'en prévisualisation équipe (jamais au public)
-// et apparaît dans `php artisan kh:content-audit`.
+// Textes de l'accueil — sources : docs/CONTENT.md §2 et, pour les ajouts du 2026-10-28, le site actuel
+// kilakodon-services.com (textes rédigés par Kilakodon). Un élément contenant « [À VALIDER] » n'est
+// affiché qu'en prévisualisation équipe (jamais au public) et apparaît dans `php artisan kh:content-audit`.
 return [
     'hero' => [
-        'eyebrow' => 'Logiciels de gestion sur mesure — Bamako',
+        'eyebrow' => 'Écosystème logiciel & ERP — Bamako',
+        'title_lines' => ['Pilotez votre entreprise', 'avec des outils', '*faits pour elle*.'],
         'title' => 'Pilotez votre entreprise avec des outils *faits pour elle*.',
         'lead' => 'Stock, caisse, clients, factures, équipes : nous concevons les logiciels qui vous donnent enfin une vision claire de votre activité — même quand la connexion coupe. Commencez par un diagnostic gratuit : en 3 minutes, vous saurez ce dont votre entreprise a vraiment besoin.',
         'cta_primary' => 'Faire mon diagnostic gratuit',
         'cta_secondary' => 'Essayer le Démo Lab',
-        'reassurance' => '3 minutes · sans inscription · résultat immédiat',
+        'reassurance' => ['3 minutes', 'Sans inscription', 'Résultat immédiat'],
+    ],
+
+    // Bandeau défilant : savoir-faire (aucun nom de client, aucun chiffre).
+    'expertise' => [
+        'ERP & CRM sur mesure', 'Gestion de stock', 'Caisse & facturation', 'Applications web métiers',
+        'Applications mobiles', 'Mode hors-ligne', 'Tableaux de bord', 'Multi-sites & multi-dépôts',
+        'PC, tablette & cloud', 'Audit & modernisation', 'Migration de vos fichiers Excel', 'Design d\'interfaces',
     ],
 
     'realities' => [
@@ -18,6 +26,7 @@ return [
         'items' => [
             ['icon' => 'wifi-off', 'title' => 'Fonctionne hors-ligne', 'text' => 'La caisse continue quand Internet coupe ; tout se synchronise au retour du réseau.'],
             ['icon' => 'smartphone', 'title' => 'Mobile Money intégré', 'text' => 'Orange Money, Moov Money, Wave… selon vos besoins et les accès disponibles. [À VALIDER : opérateurs réellement intégrés]'],
+            ['icon' => 'monitor-smartphone', 'title' => 'PC, tablette et cloud', 'text' => 'Pilotez votre activité à distance, depuis le bureau comme depuis votre téléphone.'],
             ['icon' => 'banknote', 'title' => 'En FCFA, à vos règles', 'text' => 'Factures, taxes et rapports adaptés à votre activité.'],
             ['icon' => 'map-pin', 'title' => 'Une équipe à Bamako', 'text' => 'Un interlocuteur qui se déplace, forme vos équipes et répond en français.'],
         ],
@@ -36,6 +45,40 @@ return [
     'solutions' => [
         'title' => 'Six expertises, *un seul interlocuteur*',
         'lead' => 'Du logiciel de caisse à l\'ERP complet, nous construisons ce dont vous avez besoin — ni plus, ni moins.',
+        // CONTENT §3 (titres et accroches, sans [À VALIDER]). Lien vers la fiche si elle est publiée.
+        'items' => [
+            ['slug' => 'erp-crm-sur-mesure', 'icon' => 'layout-dashboard', 'title' => 'ERP & CRM sur mesure', 'tagline' => 'Toute votre entreprise dans un seul outil : ventes, clients, équipes, finances.'],
+            ['slug' => 'stocks-facturation-caisse', 'icon' => 'package', 'title' => 'Stocks, facturation & caisse', 'tagline' => 'Sachez exactement ce que vous avez, ce que vous vendez et ce que vous encaissez.'],
+            ['slug' => 'applications-web-metiers', 'icon' => 'app-window', 'title' => 'Applications web métiers', 'tagline' => 'L\'outil exact dont votre métier a besoin, accessible depuis n\'importe quel navigateur.'],
+            ['slug' => 'applications-mobiles', 'icon' => 'smartphone', 'title' => 'Applications mobiles', 'tagline' => 'Vos équipes terrain et vos clients, connectés depuis leur téléphone.'],
+            ['slug' => 'audit-modernisation', 'icon' => 'shield-check', 'title' => 'Audit & modernisation', 'tagline' => 'Faites le point sur vos outils actuels avant d\'investir dans de nouveaux.'],
+            ['slug' => 'design-identite-numerique', 'icon' => 'pen-tool', 'title' => 'Design & identité numérique', 'tagline' => 'Une image professionnelle, cohérente sur tous vos supports.'],
+        ],
+    ],
+
+    // Source : kilakodon-services.com, « Nos solutions logicielles » (prix non repris : Q-004).
+    'products' => [
+        'eyebrow' => 'Logiciels éprouvés',
+        'title' => 'Des logiciels *déjà en service*, adaptés à votre structure',
+        'lead' => 'En plus du sur-mesure, nous proposons des suites de gestion prêtes à l\'emploi, que nous adaptons à chaque client.',
+        'items' => [
+            [
+                'icon' => 'graduation-cap',
+                'name' => 'Gestion de lycée privé',
+                'text' => 'Élèves, enseignants, classes, inscriptions, scolarité, paiements, notes, absences, finances et administration.',
+                'features' => ['Inscriptions et scolarité', 'Paiements et impayés', 'Notes, bulletins et absences', 'Finances et administration'],
+                'sector' => 'ecoles-formation',
+                'whatsapp' => 'Bonjour Kilakodon, je souhaite une démonstration du logiciel de gestion de lycée privé.',
+            ],
+            [
+                'icon' => 'croissant',
+                'name' => 'Gestion boulangerie & pâtisserie',
+                'text' => 'Pour boulangeries, pâtisseries, viennoiseries, ateliers de production et points de vente.',
+                'features' => ['Production et ateliers', 'Ventes par point de vente', 'Pertes mesurées', 'Recettes consolidées'],
+                'sector' => 'boulangeries-restauration',
+                'whatsapp' => 'Bonjour Kilakodon, je souhaite une démonstration du logiciel de gestion boulangerie-pâtisserie.',
+            ],
+        ],
     ],
 
     'diagnostic' => [
@@ -68,11 +111,14 @@ return [
     ],
 
     'why' => [
+        'title' => 'L\'exigence technique au service de *votre croissance*',
         'accent' => ['title' => 'Un logiciel n\'est utile que s\'il est *utilisé*.', 'text' => 'Nous concevons des outils simples pour vos équipes, nous les formons, et nous restons joignables après la livraison.'],
         'cards' => [
-            ['title' => 'Sur mesure, pas « presque adapté »', 'text' => 'Nous partons de vos processus au lieu de vous imposer ceux d\'un logiciel générique.'],
-            ['title' => 'Vos données vous appartiennent', 'text' => 'Export possible à tout moment, documentation fournie. [À VALIDER : conditions de propriété du code et des données]'],
-            ['title' => 'Transparence', 'text' => 'Un périmètre écrit, un délai indicatif, un devis détaillé. Pas de surprise.'],
+            ['icon' => 'workflow', 'title' => 'Sur mesure, pas « presque adapté »', 'text' => 'Nous partons de vos processus au lieu de vous imposer ceux d\'un logiciel générique.'],
+            ['icon' => 'lock-keyhole', 'title' => 'Vos données protégées', 'text' => 'Accès par rôle pour chaque employé, sauvegardes automatisées et traçabilité des opérations.'],
+            ['icon' => 'database', 'title' => 'Vos données vous appartiennent', 'text' => 'Export possible à tout moment, documentation fournie. [À VALIDER : conditions de propriété du code et des données]'],
+            ['icon' => 'clipboard-list', 'title' => 'Transparence', 'text' => 'Un périmètre écrit, un délai indicatif, un devis détaillé. Pas de surprise.'],
+            ['icon' => 'headset', 'title' => 'Support de proximité', 'text' => 'Une équipe d\'ingénieurs basée à Bamako pour la formation, l\'assistance et la maintenance.'],
         ],
     ],
 

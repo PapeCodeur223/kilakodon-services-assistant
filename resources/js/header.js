@@ -5,6 +5,9 @@ export function initHeader() {
         let ticking = false;
         const update = () => {
             header.classList.toggle('is-scrolled', window.scrollY > 8);
+            // Barre de progression de lecture (transform: scaleX).
+            const max = document.documentElement.scrollHeight - window.innerHeight;
+            header.style.setProperty('--progress', max > 0 ? (window.scrollY / max).toFixed(3) : 0);
             ticking = false;
         };
         window.addEventListener('scroll', () => {

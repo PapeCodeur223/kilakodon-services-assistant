@@ -21,24 +21,27 @@
     :schemas="[StructuredData::service($service), StructuredData::faqPage($faq), StructuredData::breadcrumbs($crumbs)]"
 >
     {{-- HERO 2 colonnes : texte + artefact de la solution --}}
-    <section class="relative overflow-hidden pt-8 pb-16 lg:pt-12 lg:pb-24">
-        <x-kh.halftone :size="420" class="absolute -right-32 -top-10 hidden md:block" animate />
+    <section class="kh-dark relative -mt-[72px] overflow-hidden pt-[calc(72px+2.5rem)] pb-20 lg:pt-[calc(72px+4rem)] lg:pb-28">
+        <div class="kh-grid-bg pointer-events-none absolute inset-0" aria-hidden="true"></div>
+        <div class="pointer-events-none absolute -right-28 -top-16 hidden md:block" aria-hidden="true" data-parallax="0.12">
+            <x-kh.halftone :size="480" tone="blue-900" class="kh-spin" animate />
+        </div>
         <div class="kh-container relative">
-            <x-kh.breadcrumb :items="$crumbs" class="mb-10" />
+            <x-kh.breadcrumb :items="$crumbs" tone="dark" class="mb-10" />
             <div class="grid items-center gap-12 lg:grid-cols-[1.3fr_1fr]">
                 <div>
                     <div class="flex flex-wrap items-center gap-3">
-                        <x-kh.eyebrow data-reveal>Solution</x-kh.eyebrow>
+                        <x-kh.eyebrow tone="inverse" data-reveal>Solution</x-kh.eyebrow>
                         <x-kh.status-marker :status="$service->status" />
                     </div>
-                    <h1 class="mt-4 text-h1 text-ink" data-reveal style="--i: 1">{{ $service->title }}</h1>
-                    <p class="kh-prose mt-5 text-lead text-slate" data-reveal style="--i: 2">{{ $service->tagline }}</p>
-                    <div class="mt-8 flex flex-wrap gap-3" data-reveal style="--i: 3">
-                        <x-kh.button :href="$diagnosticUrl">Faire mon diagnostic gratuit</x-kh.button>
-                        <x-kh.button variant="whatsapp" :href="$whatsapp" />
+                    <h1 class="mt-6 text-h1 text-white" data-reveal style="--i: 1">{{ $service->title }}</h1>
+                    <p class="kh-prose mt-6 text-lead text-kh-blue-200" data-reveal style="--i: 2">{{ $service->tagline }}</p>
+                    <div class="mt-9 flex flex-wrap gap-3" data-reveal style="--i: 3">
+                        <x-kh.button size="lg" :href="$diagnosticUrl">Faire mon diagnostic gratuit</x-kh.button>
+                        <x-kh.button variant="whatsapp-inverse" size="lg" :href="$whatsapp" />
                     </div>
                 </div>
-                <x-kh.artifact :label="$service->title" :demo="false" float :i="0" class="lg:max-w-sm lg:justify-self-end">
+                <x-kh.artifact :label="$service->title" :demo="false" float :i="0" class="lg:max-w-sm lg:justify-self-end lg:p-7">
                     <span class="inline-flex size-12 items-center justify-center rounded-full bg-kh-blue-100 text-kh-blue-700"><x-kh.icon :name="$service->icon" :size="24" /></span>
                     <ul class="mt-4 space-y-2">
                         @foreach (array_slice($service->benefits ?? [], 0, 3) as $benefit)

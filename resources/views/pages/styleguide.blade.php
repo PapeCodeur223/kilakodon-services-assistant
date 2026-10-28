@@ -1,4 +1,4 @@
-<x-layouts.public title="Styleguide" :noindex="true">
+<x-layouts.public title="Styleguide" :noindex="true" header-tone="light">
     @php
         $colors = [
             'kh-blue-950', 'kh-blue-900', 'kh-blue-700', 'kh-blue-500', 'kh-blue-200', 'kh-blue-100', 'kh-blue-50',
@@ -39,12 +39,12 @@
         </ul>
     </x-kh.section>
 
-    <x-kh.section id="typographie" tone="fog" eyebrow="Fraunces 400 · Inter" title="Typographie">
+    <x-kh.section id="typographie" tone="fog" eyebrow="Plus Jakarta Sans · Inter" title="Typographie">
         <div class="space-y-8">
             <div><p class="mb-2 text-tag uppercase text-slate">display</p><p class="kh-hero-title font-display text-display">Pilotez votre entreprise avec des outils <em>faits pour elle</em>.</p></div>
             <div><p class="mb-2 text-tag uppercase text-slate">h1</p><p class="font-display text-h1">Une méthode claire, <em>du premier échange au support</em></p></div>
             <div><p class="mb-2 text-tag uppercase text-slate">h2</p><p class="font-display text-h2">Six expertises, <em>un seul interlocuteur</em></p></div>
-            <div><p class="mb-2 text-tag uppercase text-slate">h3 (Inter 500)</p><p class="text-h3 font-medium">Stocks, facturation &amp; caisse</p></div>
+            <div><p class="mb-2 text-tag uppercase text-slate">h3 (Plus Jakarta Sans 700)</p><p class="text-h3 font-medium">Stocks, facturation &amp; caisse</p></div>
             <div><p class="mb-2 text-tag uppercase text-slate">lead</p><p class="kh-prose text-lead text-slate">Du logiciel de caisse à l'ERP complet, nous construisons ce dont vous avez besoin — ni plus, ni moins.</p></div>
             <div><p class="mb-2 text-tag uppercase text-slate">body</p><p class="kh-prose text-body">Que vous teniez une boutique ou un réseau de magasins, la différence entre une bonne et une mauvaise année se joue souvent dans le stock et la caisse.</p></div>
             <div><p class="mb-2 text-tag uppercase text-slate">small</p><p class="text-small text-slate">3 minutes · sans inscription · résultat immédiat</p></div>

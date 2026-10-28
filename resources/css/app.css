@@ -1,7 +1,6 @@
 @import "tailwindcss";
 @import "@fontsource-variable/inter";
-@import "@fontsource-variable/fraunces/opsz.css";
-@import "@fontsource-variable/fraunces/opsz-italic.css";
+@import "@fontsource-variable/plus-jakarta-sans";
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
@@ -9,54 +8,59 @@
 @source '../**/*.js';
 @source '../../app/View/**/*.php';
 
-/* Tokens — docs/UX_UI_DESIGN.md §3 */
+/* Tokens — docs/UX_UI_DESIGN.md §3, révisés par la décision D-013 (direction, 2026-10-28) :
+   typographie d'affichage grasse (Plus Jakarta Sans) et identité « agence » plus expressive. */
 @theme {
   --color-*: initial;
   --color-white: #FFFFFF;
   --color-transparent: transparent;
   --color-current: currentColor;
 
+  --color-kh-blue-975: #0B0C33;
   --color-kh-blue-950: #12134A; --color-kh-blue-900: #1C1E66; --color-kh-blue-700: #282A89;
-  --color-kh-blue-500: #4A4FC0; --color-kh-blue-200: #C9CBEE; --color-kh-blue-100: #E3E4F6; --color-kh-blue-50: #F1F2FB;
-  --color-kh-red-500: #F91C0C; --color-kh-red-600: #D4170A; --color-kh-red-900: #6B0E07; --color-kh-red-50: #FEEDEB;
-  --color-ink: #17191C; --color-slate: #64687A; --color-smoke: #9A9DAA; --color-line: #E6E7EE;
-  --color-canvas: #FFFFFF; --color-fog: #FAFAFC; --color-mist: #F2F3F7;
+  --color-kh-blue-600: #3337A6;
+  --color-kh-blue-500: #4A4FC0; --color-kh-blue-300: #9DA1E3; --color-kh-blue-200: #C9CBEE; --color-kh-blue-100: #E3E4F6; --color-kh-blue-50: #F1F2FB;
+  --color-kh-red-400: #FF4A3D; --color-kh-red-500: #F91C0C; --color-kh-red-600: #D4170A; --color-kh-red-900: #6B0E07; --color-kh-red-50: #FEEDEB;
+  --color-ink: #0F1117; --color-slate: #5B5F72; --color-smoke: #9A9DAA; --color-line: #E6E7EE;
+  --color-canvas: #FFFFFF; --color-fog: #F7F8FC; --color-mist: #F0F1F7;
   --color-success-600: #147A4B; --color-warning-600: #9A5B00; --color-whatsapp: #25D366;
   --color-success-50: #E8F5EE; --color-warning-50: #FDF3E1;
 
-  --font-display: "Fraunces Variable", ui-serif, Georgia, serif;
+  --font-display: "Plus Jakarta Sans Variable", "Inter Variable", ui-sans-serif, system-ui, sans-serif;
   --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 
-  --text-display: clamp(2.75rem, 1.6rem + 4.6vw, 5.5rem);
-  --text-display--line-height: 1.08;
-  --text-display--letter-spacing: -0.025em;
-  --text-h1: clamp(2.25rem, 1.6rem + 2.6vw, 4rem);
-  --text-h1--line-height: 1.12;
-  --text-h1--letter-spacing: -0.018em;
-  --text-h2: clamp(1.875rem, 1.4rem + 1.9vw, 2.75rem);
-  --text-h2--line-height: 1.18;
-  --text-h2--letter-spacing: -0.015em;
-  --text-h3: clamp(1.5rem, 1.45rem + 0.2vw, 1.625rem);
-  --text-h3--line-height: 1.25;
-  --text-h3--letter-spacing: -0.009em;
-  --text-lead: clamp(1.125rem, 1.08rem + 0.2vw, 1.25rem);
-  --text-lead--line-height: 1.5;
+  --text-display: clamp(2.6rem, 1.4rem + 4.8vw, 5.4rem);
+  --text-display--line-height: 1.04;
+  --text-display--letter-spacing: -0.035em;
+  --text-h1: clamp(2.25rem, 1.5rem + 2.8vw, 4rem);
+  --text-h1--line-height: 1.08;
+  --text-h1--letter-spacing: -0.03em;
+  --text-h2: clamp(1.9rem, 1.35rem + 2.1vw, 3.1rem);
+  --text-h2--line-height: 1.12;
+  --text-h2--letter-spacing: -0.028em;
+  --text-h3: clamp(1.25rem, 1.18rem + 0.3vw, 1.45rem);
+  --text-h3--line-height: 1.3;
+  --text-h3--letter-spacing: -0.015em;
+  --text-lead: clamp(1.1rem, 1.04rem + 0.3vw, 1.3rem);
+  --text-lead--line-height: 1.6;
   --text-body: 1.0625rem;
-  --text-body--line-height: 1.6;
+  --text-body--line-height: 1.65;
   --text-small: 0.9375rem;
-  --text-small--line-height: 1.5;
-  --text-tag: 0.8125rem;
+  --text-small--line-height: 1.55;
+  --text-tag: 0.78rem;
   --text-tag--line-height: 1.2;
-  --text-tag--letter-spacing: 0.08em;
+  --text-tag--letter-spacing: 0.12em;
 
-  --radius-card: 24px; --radius-artifact: 20px; --radius-input: 16px; --radius-image: 12px;
-  --shadow-artifact: 0 0 0 1px rgb(40 42 137 / .06), 0 20px 25px -5px rgb(18 19 74 / .10), 0 8px 10px -6px rgb(18 19 74 / .08);
-  --shadow-pop: 0 0 0 1px rgb(40 42 137 / .06), 0 8px 40px rgb(18 19 74 / .12);
-  --shadow-hover: 0 0 0 1px rgb(40 42 137 / .08), 0 12px 32px -8px rgb(18 19 74 / .16);
+  --radius-card: 24px; --radius-artifact: 20px; --radius-input: 14px; --radius-image: 12px;
+  --shadow-artifact: 0 0 0 1px rgb(40 42 137 / .06), 0 24px 48px -12px rgb(18 19 74 / .22), 0 10px 16px -8px rgb(18 19 74 / .12);
+  --shadow-pop: 0 0 0 1px rgb(40 42 137 / .06), 0 8px 40px rgb(18 19 74 / .14);
+  --shadow-hover: 0 0 0 1px rgb(40 42 137 / .10), 0 22px 44px -14px rgb(18 19 74 / .28);
+  --shadow-glow: 0 10px 30px -8px rgb(40 42 137 / .55);
 
   --ease-out-soft: cubic-bezier(.2, .7, .2, 1);
+  --ease-spring: cubic-bezier(.34, 1.4, .64, 1);
 
-  --container-site: 1200px;
+  --container-site: 1240px;
 }
 
 @layer base {
@@ -78,18 +82,25 @@
 
   h1, h2, .font-display {
     font-family: var(--font-display);
-    font-weight: 400;
-    font-variation-settings: "SOFT" 50, "WONK" 0, "opsz" 72;
+    font-weight: 800;
   }
 
-  /* Le fragment d'accent d'un titre : Fraunces italique, rouge fonctionnel (AA). */
-  h1 em, h2 em, .font-display em {
-    font-style: italic;
+  h3 { font-family: var(--font-display); font-weight: 700; }
+
+  /* Fragment d'accent d'un titre : rouge Kilakodon, surligné comme au marqueur. */
+  h1 em, h2 em, .font-display em, .kh-accent {
+    font-style: normal;
     color: var(--color-kh-red-600);
+    background-image: linear-gradient(transparent 64%, rgb(249 28 12 / .14) 64%, rgb(249 28 12 / .14) 92%, transparent 92%);
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
   }
 
-  /* Sur fond bleu nuit, le rouge du logo (texte ≥ 24 px uniquement) garde un contraste suffisant. */
-  .bg-kh-blue-950 h2 em { color: var(--color-kh-red-500); }
+  /* Sur fond sombre : rouge du logo (≥ 24 px), surligné plus discret. */
+  .kh-dark h1 em, .kh-dark h2 em, .bg-kh-blue-950 h2 em {
+    color: var(--color-kh-red-400);
+    background-image: linear-gradient(transparent 64%, rgb(249 28 12 / .22) 64%, rgb(249 28 12 / .22) 92%, transparent 92%);
+  }
 
   :focus-visible {
     outline: 3px solid var(--color-kh-blue-500);
@@ -114,35 +125,100 @@
     .kh-container { padding-inline: 32px; }
   }
 
-  .kh-section {
-    padding-block: clamp(64px, 8vw, 128px);
-  }
+  .kh-section { padding-block: clamp(72px, 9vw, 136px); }
+  .kh-prose { max-width: 68ch; }
 
-  .kh-prose {
-    max-width: 68ch;
-  }
-
-  /* Lien d'évitement : visible uniquement au focus. */
-  .kh-skip-link {
-    position: absolute;
-    left: 16px;
-    top: -100px;
-    z-index: 100;
-  }
-
+  .kh-skip-link { position: absolute; left: 16px; top: -100px; z-index: 100; }
   .kh-skip-link:focus { top: 16px; }
 
-  /* Header : transparent au repos, voilé après 8 px de défilement (header.js). */
+  /* ---------- Surfaces sombres « agence » : halos statiques et trame (aucun calcul à l'exécution) ---------- */
+  .kh-dark {
+    color: var(--color-kh-blue-200);
+    background-color: var(--color-kh-blue-975);
+    background-image:
+      radial-gradient(60rem 30rem at 85% -10%, rgb(74 79 192 / .45), transparent 60%),
+      radial-gradient(40rem 26rem at -10% 110%, rgb(249 28 12 / .16), transparent 60%),
+      radial-gradient(50rem 30rem at 40% 120%, rgb(40 42 137 / .55), transparent 65%);
+  }
+
+  .kh-grid-bg {
+    background-image:
+      linear-gradient(rgb(255 255 255 / .05) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(255 255 255 / .05) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(ellipse 80% 70% at 50% 30%, black 30%, transparent 80%);
+    -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 30%, black 30%, transparent 80%);
+  }
+
+  .kh-grid-bg-light {
+    background-image:
+      linear-gradient(rgb(40 42 137 / .06) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(40 42 137 / .06) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, black 20%, transparent 75%);
+    -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, black 20%, transparent 75%);
+  }
+
+  .kh-glass {
+    background-color: rgb(255 255 255 / .06);
+    border: 1px solid rgb(255 255 255 / .12);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  .kh-gradient-border {
+    border: 1px solid transparent;
+    background:
+      linear-gradient(var(--color-canvas), var(--color-canvas)) padding-box,
+      linear-gradient(135deg, rgb(74 79 192 / .55), rgb(249 28 12 / .35), rgb(74 79 192 / .15)) border-box;
+  }
+
+  /* ---------- Header ---------- */
   .kh-header {
-    transition: background-color .2s ease, border-color .2s ease, backdrop-filter .2s ease;
+    transition: background-color .25s ease, border-color .25s ease, box-shadow .25s ease;
     border-bottom: 1px solid transparent;
   }
 
   .kh-header.is-scrolled {
-    background-color: rgb(255 255 255 / .85);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background-color: rgb(255 255 255 / .88);
+    backdrop-filter: blur(14px) saturate(1.4);
+    -webkit-backdrop-filter: blur(14px) saturate(1.4);
     border-bottom-color: var(--color-line);
+    box-shadow: 0 10px 30px -20px rgb(18 19 74 / .35);
+  }
+
+  /* Header posé sur un hero sombre : texte clair tant qu'on n'a pas défilé. */
+  .kh-burger { color: var(--color-ink); }
+  .kh-header[data-tone="dark"]:not(.is-scrolled) .kh-nav-link { color: rgb(255 255 255 / .86) !important; }
+  .kh-header[data-tone="dark"]:not(.is-scrolled) .kh-nav-link:hover { color: white !important; }
+  .kh-header[data-tone="dark"]:not(.is-scrolled) .kh-burger { color: white; }
+
+  .kh-nav-link { position: relative; transition: color .2s ease; }
+  .kh-nav-link::after {
+    content: "";
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    bottom: 6px;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--color-kh-red-500);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform .25s var(--ease-out-soft);
+  }
+  .kh-nav-link:hover::after, .kh-nav-link[aria-current="page"]::after, .kh-disclosure[open] > .kh-nav-link::after { transform: scaleX(1); }
+
+  /* Barre de progression de lecture (header.js) : transform uniquement. */
+  .kh-progress {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--color-kh-blue-500), var(--color-kh-red-500));
+    transform: scaleX(var(--progress, 0));
+    transform-origin: left;
   }
 
   /* Menus déroulants natifs (<details>) : fonctionnent sans JS. */
@@ -151,17 +227,23 @@
   .kh-disclosure[open] > summary .kh-chevron { transform: rotate(180deg); }
   .kh-chevron { transition: transform .2s var(--ease-out-soft); }
 
-  /* Flèche des boutons et liens : glisse de 4 px au survol. */
-  .kh-arrow { display: inline-block; transition: transform .15s var(--ease-out-soft); }
-  .group:hover .kh-arrow, .group:focus-visible .kh-arrow { transform: translateX(4px); }
-
-  /* Soulignement qui se déploie de gauche à droite au survol (pas au repos). */
-  .kh-underline {
-    background-image: linear-gradient(currentColor, currentColor);
-    background-repeat: no-repeat;
-    background-position: 0 100%;
-    background-size: 100% 1px;
+  /* ---------- Boutons : reflet au survol, flèche qui glisse ---------- */
+  .kh-btn { position: relative; overflow: hidden; isolation: isolate; }
+  .kh-btn::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(115deg, transparent 30%, rgb(255 255 255 / .35) 50%, transparent 70%);
+    transform: translateX(-120%);
+    transition: transform .7s var(--ease-out-soft);
   }
+  .kh-btn:hover::after { transform: translateX(120%); }
+  .kh-btn-primary { box-shadow: var(--shadow-glow); transition: transform .2s var(--ease-out-soft), background-color .2s ease, box-shadow .2s ease; }
+  .kh-btn-primary:hover { transform: translateY(-2px); }
+
+  .kh-arrow { display: inline-block; transition: transform .2s var(--ease-out-soft); }
+  .group:hover .kh-arrow, .group:focus-visible .kh-arrow { transform: translateX(5px); }
 
   .kh-underline-grow { position: relative; }
   .kh-underline-grow::after {
@@ -170,30 +252,44 @@
     left: 0;
     right: 0;
     bottom: -2px;
-    height: 1px;
+    height: 2px;
     background-color: currentColor;
     transform: scaleX(0);
     transform-origin: left;
-    transition: transform .2s var(--ease-out-soft);
+    transition: transform .25s var(--ease-out-soft);
   }
-
   .group:hover .kh-underline-grow::after, .group:focus-visible .kh-underline-grow::after { transform: scaleX(1); }
 
-  /* Carte cliquable : survol translateY(-4px) + ombre, l'icône se décale de 2 px. */
-  .kh-card-link {
-    transition: transform .2s var(--ease-out-soft), box-shadow .2s var(--ease-out-soft), background-color .2s var(--ease-out-soft);
+  /* ---------- Cartes : élévation, halo qui suit la souris (spotlight.js), icône animée ---------- */
+  .kh-card {
+    position: relative;
+    isolation: isolate;
+    transition: transform .3s var(--ease-out-soft), box-shadow .3s var(--ease-out-soft), border-color .3s ease, background-color .3s ease;
   }
 
-  .kh-card-link:hover, .kh-card-link:focus-within {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-hover);
-    background-color: var(--color-canvas);
+  .kh-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 0%), rgb(74 79 192 / .14), transparent 45%);
+    opacity: 0;
+    transition: opacity .3s ease;
   }
 
-  .kh-card-link .kh-card-icon { transition: transform .2s var(--ease-out-soft); }
-  .kh-card-link:hover .kh-card-icon { transform: translateX(2px); }
+  .kh-card:hover::before { opacity: 1; }
+  .kh-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-hover); border-color: var(--color-kh-blue-200); }
+  .kh-card .kh-card-icon { transition: transform .35s var(--ease-spring), background-color .3s ease, color .3s ease; }
+  .kh-card:hover .kh-card-icon { transform: scale(1.08) rotate(-6deg); background-color: var(--color-kh-blue-700); color: white; }
 
-  /* Contenu Markdown (articles, pages) : rythme éditorial, 68 caractères de large. */
+  .kh-dark .kh-card::before { background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 0%), rgb(157 161 227 / .18), transparent 45%); }
+  .kh-dark .kh-card:hover { border-color: rgb(157 161 227 / .45); box-shadow: 0 24px 50px -20px rgb(0 0 0 / .6); }
+
+  /* Ligne de liste au survol (FAQ, articles). */
+  .kh-row { transition: background-color .25s ease, padding .25s var(--ease-out-soft); }
+
+  /* ---------- Contenu Markdown ---------- */
   .kh-markdown > * + * { margin-top: 1.1em; }
   .kh-markdown h2 {
     margin-top: 2em;
@@ -202,103 +298,99 @@
     color: var(--color-ink);
     scroll-margin-top: 96px;
   }
-  .kh-markdown h3 { margin-top: 1.6em; font-size: 1.25rem; font-weight: 600; }
+  .kh-markdown h3 { margin-top: 1.6em; font-size: 1.2rem; font-weight: 700; }
   .kh-markdown h2 + *, .kh-markdown h3 + * { margin-top: .6em; }
   .kh-markdown ul { list-style: disc; padding-inline-start: 1.25em; }
   .kh-markdown ol { list-style: decimal; padding-inline-start: 1.4em; }
   .kh-markdown li + li { margin-top: .4em; }
-  .kh-markdown li::marker { color: var(--color-kh-blue-500); }
-  .kh-markdown strong { font-weight: 600; color: var(--color-ink); }
+  .kh-markdown li::marker { color: var(--color-kh-red-500); }
+  .kh-markdown strong { font-weight: 700; color: var(--color-ink); }
   .kh-markdown a { color: var(--color-kh-blue-700); text-decoration: underline; text-underline-offset: 3px; }
   .kh-markdown blockquote {
-    border-inline-start: 3px solid var(--color-kh-blue-200);
+    border-inline-start: 3px solid var(--color-kh-red-500);
     padding: .75em 1em;
     background: var(--color-kh-blue-50);
     border-radius: 0 var(--radius-input) var(--radius-input) 0;
     color: var(--color-kh-blue-900);
   }
 
-  /* Ligne de la méthode : se dessine de gauche à droite à l'entrée dans l'écran. */
   .kh-method-line { transform-origin: left; }
 
-  /* FAQ : icône + qui tourne à 45° à l'ouverture. */
-  .kh-faq > summary .kh-faq-plus { transition: transform .2s var(--ease-out-soft); }
-  .kh-faq[open] > summary .kh-faq-plus { transform: rotate(45deg); }
+  .kh-faq > summary .kh-faq-plus { transition: transform .3s var(--ease-spring), background-color .2s ease, color .2s ease; }
+  .kh-faq[open] > summary .kh-faq-plus { transform: rotate(45deg); background-color: var(--color-kh-blue-700); color: white; }
 
-  .kh-halftone circle {
-    transform-box: fill-box;
-    transform-origin: center;
-  }
+  .kh-halftone circle { transform-box: fill-box; transform-origin: center; }
+
+  /* Bandeau défilant des expertises. */
+  .kh-marquee { overflow: hidden; mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent); -webkit-mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent); }
+  .kh-marquee-track { display: flex; width: max-content; }
+
+  /* Barres du graphique de démonstration. */
+  .kh-bar { transform-origin: bottom; }
 }
 
-/* Animations — docs/UX_UI_DESIGN.md §7 : transform et opacity uniquement.
-   L'état initial n'est appliqué que si le JS est présent (.js sur <html>). */
+/* ---------- Animations : transform et opacity uniquement, désactivées si « réduire les animations ».
+   L'état initial n'est appliqué que si le JS est présent (.js sur <html>) : sans JS, tout reste visible. ---------- */
 @media (prefers-reduced-motion: no-preference) {
   .js [data-reveal] {
     opacity: 0;
-    transform: translateY(16px);
-    transition: opacity .56s var(--ease-out-soft), transform .56s var(--ease-out-soft);
-    transition-delay: calc(min(var(--i, 0), 6) * 70ms);
+    transform: translateY(28px);
+    transition: opacity .7s var(--ease-out-soft), transform .8s var(--ease-out-soft);
+    transition-delay: calc(min(var(--i, 0), 6) * 90ms);
   }
+  .js [data-reveal="left"] { transform: translateX(-36px); }
+  .js [data-reveal="right"] { transform: translateX(36px); }
+  .js [data-reveal="zoom"] { transform: scale(.94); }
+  .js [data-reveal="fade"] { transform: none; }
+  .js [data-reveal].is-in { opacity: 1; transform: none; }
 
-  .js [data-reveal].is-in {
-    opacity: 1;
-    transform: none;
-  }
+  /* Titre du hero : chaque ligne glisse depuis le bas. */
+  .kh-hero-line { display: block; overflow: hidden; padding-bottom: .08em; }
+  .kh-hero-line > span { display: inline-block; animation: kh-rise .9s var(--ease-out-soft) both; animation-delay: calc(var(--l, 0) * 120ms + 100ms); }
 
-  /* Mot en italique du titre du hero : apparaît 200 ms après le reste. */
-  .kh-hero-title em {
-    display: inline-block;
-    animation: kh-accent-in .6s var(--ease-out-soft) .2s both;
-  }
-
-  /* Sphère de points : assemblage unique à l'entrée dans l'écran. */
   .js .kh-halftone[data-animate] circle {
     transform: scale(0);
-    transition: transform .3s var(--ease-out-soft);
-    transition-delay: calc(var(--d, 0) * 300ms);
+    transition: transform .4s var(--ease-spring);
+    transition-delay: calc(var(--d, 0) * 380ms);
   }
-
   .js .kh-halftone[data-animate].is-in circle { transform: scale(1); }
 
-  /* Artefacts : entrée en cascade (une fois) partout. Le flottement continu est réservé au desktop
-     (UX §5.1 : carrousel sur mobile) — il coûtait ~60 recalculs de style par seconde sur mobile. */
-  .kh-float {
-    animation: kh-artifact-in .6s var(--ease-out-soft) calc(var(--i, 0) * 120ms) both;
-  }
+  /* Sphère du hero : rotation très lente (composité), en pause hors écran. */
+  .kh-spin { animation: kh-spin 90s linear infinite; }
+
+  /* Artefacts : entrée en cascade partout ; flottement continu sur desktop seulement. */
+  .kh-float { animation: kh-artifact-in .8s var(--ease-out-soft) calc(.5s + var(--i, 0) * 140ms) both; }
 
   @media (width >= 64rem) {
     .kh-float {
       will-change: transform;
-      animation: kh-artifact-in .6s var(--ease-out-soft) calc(var(--i, 0) * 120ms) both,
-        kh-float var(--float-duration, 7s) ease-in-out calc(.6s + var(--i, 0) * 120ms) infinite;
+      animation: kh-artifact-in .8s var(--ease-out-soft) calc(.5s + var(--i, 0) * 140ms) both,
+        kh-float var(--float-duration, 7s) ease-in-out calc(1.3s + var(--i, 0) * 140ms) infinite;
     }
-
-    .kh-float.is-paused { animation-play-state: paused; }
+    .kh-marquee-track { animation: kh-marquee 40s linear infinite; will-change: transform; }
+    .kh-marquee:hover .kh-marquee-track { animation-play-state: paused; }
   }
 
-  .kh-menu-panel { animation: kh-menu-in .25s var(--ease-out-soft) both; }
+  .is-paused, .is-paused .kh-marquee-track { animation-play-state: paused !important; }
 
-  .js .kh-method-line { transform: scaleX(0); transition: transform .9s var(--ease-out-soft); }
+  .js .kh-bar { transform: scaleY(0); transition: transform 1s var(--ease-out-soft); transition-delay: calc(var(--b, 0) * 70ms + 400ms); }
+  .js .is-in .kh-bar { transform: scaleY(1); }
+
+  .js [data-parallax] { transform: translate3d(0, var(--py, 0px), 0); }
+
+  .kh-menu-panel { animation: kh-menu-in .3s var(--ease-out-soft) both; }
+
+  .js .kh-method-line { transform: scaleX(0); transition: transform 1.2s var(--ease-out-soft) .2s; }
   .js .is-in .kh-method-line, .js .kh-method-line.is-in { transform: scaleX(1); }
+
+  /* Point pulsant des sur-titres : desktop seulement (coût de recalcul sur mobile). */
+  @media (width >= 64rem) { .kh-pulse { animation: kh-pulse 2.4s ease-out infinite; } }
 }
 
-@keyframes kh-accent-in {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: none; }
-}
-
-@keyframes kh-artifact-in {
-  from { opacity: 0; transform: scale(.96); }
-  to { opacity: 1; transform: none; }
-}
-
-@keyframes kh-float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-6px); }
-}
-
-@keyframes kh-menu-in {
-  from { opacity: 0; transform: translateY(-12px); }
-  to { opacity: 1; transform: none; }
-}
+@keyframes kh-rise { from { opacity: 0; transform: translateY(100%); } to { opacity: 1; transform: none; } }
+@keyframes kh-artifact-in { from { opacity: 0; transform: translateY(24px) scale(.96); } to { opacity: 1; transform: none; } }
+@keyframes kh-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+@keyframes kh-spin { to { transform: rotate(360deg); } }
+@keyframes kh-marquee { to { transform: translateX(-50%); } }
+@keyframes kh-menu-in { from { opacity: 0; transform: translateY(-12px); } to { opacity: 1; transform: none; } }
+@keyframes kh-pulse { 0% { opacity: .9; transform: scale(1); } 70%, 100% { opacity: 0; transform: scale(2.4); } }

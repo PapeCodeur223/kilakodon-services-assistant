@@ -8,7 +8,7 @@
     ];
     $tz = config('kh.display_timezone');
 @endphp
-<x-layouts.public
+<x-layouts.public header-tone="light"
     :title="$article->seo_title ?: $article->title"
     :description="$article->seo_description ?: $article->excerpt"
     type="article"

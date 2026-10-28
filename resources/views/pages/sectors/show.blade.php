@@ -33,7 +33,7 @@
                 <h2 class="text-h2 text-ink" data-reveal>Vos défis</h2>
                 <ul class="mt-8 space-y-4">
                     @foreach ($sector->pain_points as $pain)
-                        <li class="flex items-start gap-3 rounded-input bg-white p-4" data-reveal style="--i: {{ $loop->index }}">
+                        <li class="flex items-start gap-3 rounded-input border border-transparent bg-white p-4 transition duration-300 hover:-translate-y-0.5 hover:border-kh-blue-200 hover:shadow-[var(--shadow-hover)]" data-reveal style="--i: {{ $loop->index }}">
                             <x-kh.icon name="circle-alert" :size="20" class="mt-0.5 text-kh-red-600" />
                             <span>{{ $pain['title'] }}@if (filled($pain['text'] ?? null))<span class="block text-small text-slate">{{ $pain['text'] }}</span>@endif</span>
                         </li>
@@ -44,7 +44,7 @@
                 <h2 class="text-h2 text-ink" data-reveal>Ce que ça <em>change</em></h2>
                 <ul class="mt-8 space-y-4">
                     @foreach ($sector->outcomes as $outcome)
-                        <li class="flex items-start gap-3 rounded-input bg-white p-4" data-reveal style="--i: {{ $loop->index }}">
+                        <li class="flex items-start gap-3 rounded-input border border-transparent bg-white p-4 transition duration-300 hover:-translate-y-0.5 hover:border-kh-blue-200 hover:shadow-[var(--shadow-hover)]" data-reveal style="--i: {{ $loop->index }}">
                             <x-kh.icon name="circle-check" :size="20" class="mt-0.5 text-success-600" />
                             <span>{{ $outcome['title'] }}@if (filled($outcome['text'] ?? null))<span class="block text-small text-slate">{{ $outcome['text'] }}</span>@endif</span>
                         </li>

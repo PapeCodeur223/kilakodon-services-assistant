@@ -1,12 +1,14 @@
+@props(["tone" => "light"])
 @php
     $nav = app(\App\Domain\Content\Services\PublicNavigation::class)->all();
     $whatsapp = \App\Domain\Platform\Support\WhatsAppLink::for('header');
     $isCurrent = fn (string $path): bool => request()->is(ltrim($path, '/'), ltrim($path, '/').'/*');
 @endphp
 {{-- Header — UX §4.1. Menus en <details> natifs : utilisables sans JS ; header.js ajoute Échap et clic extérieur. --}}
-<header data-header class="kh-header sticky top-0 z-40">
+<header data-header data-tone="{{ $tone }}" class="kh-header sticky top-0 z-40">
+    <span class="kh-progress" aria-hidden="true"></span>
     <div class="kh-container flex h-[72px] items-center gap-6">
-        <a href="{{ route('home') }}" class="shrink-0 rounded-lg" aria-label="Kilakodon Services — accueil">
+        <a href="{{ route('home') }}" class="shrink-0 rounded-xl bg-white px-2 py-1 shadow-sm" aria-label="Kilakodon Services — accueil">
             <x-kh.logo />
         </a>
 
@@ -15,7 +17,7 @@
                 <li>
                     @if ($nav['solutions'] !== [])
                         <details class="kh-disclosure relative" data-disclosure>
-                            <summary class="flex min-h-11 items-center gap-1 rounded-full px-3 hover:text-kh-blue-700">
+                            <summary class="kh-nav-link flex min-h-11 items-center gap-1 rounded-full px-3 font-semibold hover:text-kh-blue-700">
                                 Solutions <x-kh.icon name="chevron-down" :size="16" class="kh-chevron" />
                             </summary>
                             <div class="kh-menu-panel absolute left-1/2 top-full mt-3 w-[640px] -translate-x-1/2 rounded-card bg-white p-3 shadow-pop">
@@ -40,13 +42,13 @@
                             </div>
                         </details>
                     @else
-                        <a href="{{ route('solutions.index') }}" class="flex min-h-11 items-center rounded-full px-3 hover:text-kh-blue-700">Solutions</a>
+                        <a href="{{ route('solutions.index') }}" class="kh-nav-link flex min-h-11 items-center rounded-full px-3 font-semibold hover:text-kh-blue-700">Solutions</a>
                     @endif
                 </li>
                 @if ($nav['sectors'] !== [])
                     <li>
                         <details class="kh-disclosure relative" data-disclosure>
-                            <summary class="flex min-h-11 items-center gap-1 rounded-full px-3 hover:text-kh-blue-700">
+                            <summary class="kh-nav-link flex min-h-11 items-center gap-1 rounded-full px-3 font-semibold hover:text-kh-blue-700">
                                 Secteurs <x-kh.icon name="chevron-down" :size="16" class="kh-chevron" />
                             </summary>
                             <div class="kh-menu-panel absolute left-1/2 top-full mt-3 w-80 -translate-x-1/2 rounded-card bg-white p-3 shadow-pop">
@@ -67,7 +69,7 @@
                 @foreach ($nav['main'] as $item)
                     <li>
                         <a href="{{ url($item['path']) }}" @if ($isCurrent($item['path'])) aria-current="page" @endif
-                           class="flex min-h-11 items-center rounded-full px-3 hover:text-kh-blue-700 aria-[current=page]:text-kh-blue-700">
+                           class="kh-nav-link flex min-h-11 items-center rounded-full px-3 font-semibold hover:text-kh-blue-700 aria-[current=page]:text-kh-blue-700">
                             {{ $item['title'] }}
                         </a>
                     </li>
@@ -76,7 +78,7 @@
         </nav>
 
         <div class="ms-auto flex items-center gap-2 lg:ms-0">
-            <a href="{{ $whatsapp }}" target="_blank" rel="noopener" class="group hidden min-h-11 items-center gap-2 rounded-full px-3 text-small font-medium hover:text-kh-blue-700 lg:inline-flex">
+            <a href="{{ $whatsapp }}" target="_blank" rel="noopener" class="kh-nav-link group hidden min-h-11 items-center gap-2 rounded-full px-3 text-small font-semibold hover:text-kh-blue-700 lg:inline-flex">
                 <x-kh.icon name="brand:whatsapp" :size="20" class="text-whatsapp" />
                 <span class="kh-underline-grow">WhatsApp</span>
             </a>
@@ -89,7 +91,7 @@
 
             {{-- Menu mobile plein écran. --}}
             <details class="kh-disclosure lg:hidden" data-disclosure data-modal>
-                <summary class="inline-flex size-11 items-center justify-center rounded-full text-ink hover:bg-mist" aria-label="Menu">
+                <summary class="kh-burger inline-flex size-11 items-center justify-center rounded-full hover:bg-white/10" aria-label="Menu">
                     <x-kh.icon name="menu" :size="24" />
                 </summary>
                 <div class="kh-menu-panel fixed inset-0 z-50 flex flex-col overflow-y-auto bg-canvas">

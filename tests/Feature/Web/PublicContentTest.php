@@ -32,7 +32,7 @@ it('rend l’accueil complet sans JavaScript requis pour le contenu', function (
     $this->get('/')
         ->assertOk()
         ->assertSee('<em>faits pour elle</em>', false)
-        ->assertSee('Conçu pour la façon dont on travaille ici')
+        ->assertSee('Conçu pour la façon dont on')
         ->assertSee('Savoir quoi construire avant de')
         ->assertSee('Combien coûte un logiciel sur mesure ?')
         ->assertSee('"@type":"FAQPage"', false)
