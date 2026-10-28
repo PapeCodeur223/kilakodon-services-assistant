@@ -231,6 +231,8 @@ it('marque la session « enregistrée » quand le visiteur la garde pour plus ta
 
 it('rejette silencieusement une demande de brief envoyée trop vite (robot)', function () {
     ['session' => $session, 'token' => $token] = completedDiagnostic();
+    // Horloge figée : l'envoi a lieu « immédiatement » après l'affichage, quelle que soit la vitesse du poste.
+    $this->freezeTime();
 
     Livewire::test(Wizard::class, ['session' => $session, 'token' => $token])
         ->call('openBriefForm')
