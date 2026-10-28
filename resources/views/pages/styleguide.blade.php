@@ -1,4 +1,4 @@
-<x-layouts.public title="Styleguide" :noindex="true">
+<x-layouts.public title="Styleguide" :noindex="true" header-tone="light">
     @php
         $colors = [
             'kh-blue-950', 'kh-blue-900', 'kh-blue-700', 'kh-blue-500', 'kh-blue-200', 'kh-blue-100', 'kh-blue-50',
@@ -39,12 +39,12 @@
         </ul>
     </x-kh.section>
 
-    <x-kh.section id="typographie" tone="fog" eyebrow="Fraunces 400 · Inter" title="Typographie">
+    <x-kh.section id="typographie" tone="fog" eyebrow="Plus Jakarta Sans · Inter" title="Typographie">
         <div class="space-y-8">
             <div><p class="mb-2 text-tag uppercase text-slate">display</p><p class="kh-hero-title font-display text-display">Pilotez votre entreprise avec des outils <em>faits pour elle</em>.</p></div>
             <div><p class="mb-2 text-tag uppercase text-slate">h1</p><p class="font-display text-h1">Une méthode claire, <em>du premier échange au support</em></p></div>
             <div><p class="mb-2 text-tag uppercase text-slate">h2</p><p class="font-display text-h2">Six expertises, <em>un seul interlocuteur</em></p></div>
-            <div><p class="mb-2 text-tag uppercase text-slate">h3 (Inter 500)</p><p class="text-h3 font-medium">Stocks, facturation &amp; caisse</p></div>
+            <div><p class="mb-2 text-tag uppercase text-slate">h3 (Plus Jakarta Sans 700)</p><p class="text-h3 font-medium">Stocks, facturation &amp; caisse</p></div>
             <div><p class="mb-2 text-tag uppercase text-slate">lead</p><p class="kh-prose text-lead text-slate">Du logiciel de caisse à l'ERP complet, nous construisons ce dont vous avez besoin — ni plus, ni moins.</p></div>
             <div><p class="mb-2 text-tag uppercase text-slate">body</p><p class="kh-prose text-body">Que vous teniez une boutique ou un réseau de magasins, la différence entre une bonne et une mauvaise année se joue souvent dans le stock et la caisse.</p></div>
             <div><p class="mb-2 text-tag uppercase text-slate">small</p><p class="text-small text-slate">3 minutes · sans inscription · résultat immédiat</p></div>
@@ -89,8 +89,12 @@
 
     <x-kh.section id="cartes" title="Cartes" lead="Cartes neutres sans ombre au repos ; survol (si lien) : -4 px, ombre douce, fond blanc.">
         <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-            @foreach (array_slice(config('kh_navigation.solutions'), 0, 3) as $i => $item)
-                <x-kh.card :href="url('/solutions/'.$item['slug'])" :icon="$item['icon']" :title="$item['title']" data-reveal style="--i: {{ $i }}">
+            @foreach ([
+                ['icon' => 'layout-dashboard', 'title' => 'ERP & CRM sur mesure', 'tagline' => 'Toute votre entreprise dans un seul outil : ventes, clients, équipes, finances.'],
+                ['icon' => 'package', 'title' => 'Stocks, facturation & caisse', 'tagline' => 'Sachez exactement ce que vous avez, ce que vous vendez et ce que vous encaissez.'],
+                ['icon' => 'app-window', 'title' => 'Applications web métiers', 'tagline' => 'L\'outil exact dont votre métier a besoin, accessible depuis n\'importe quel navigateur.'],
+            ] as $i => $item)
+                <x-kh.card :href="route('solutions.index')" :icon="$item['icon']" :title="$item['title']" data-reveal style="--i: {{ $i }}">
                     {{ $item['tagline'] }}
                     <x-slot:footer><span class="font-medium text-ink">En savoir plus <span aria-hidden="true">→</span></span></x-slot:footer>
                 </x-kh.card>

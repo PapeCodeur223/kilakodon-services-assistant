@@ -1,20 +1,26 @@
 @php
     use App\Domain\Platform\Support\WhatsAppLink;
 
-    $nav = config('kh_navigation');
+    $nav = app(\App\Domain\Content\Services\PublicNavigation::class)->all();
     $settings = app(\App\Domain\Platform\Services\Settings::class);
     $phones = array_filter([$settings->get('contact.whatsapp_primary'), $settings->get('contact.whatsapp_secondary')]);
     $email = $settings->get('contact.email');
-    $columns = [
-        'Solutions' => collect($nav['solutions'])->map(fn ($s) => ['title' => $s['title'], 'path' => '/solutions/'.$s['slug']]),
-        'Secteurs' => collect($nav['sectors'])->map(fn ($s) => ['title' => $s['title'], 'path' => '/secteurs/'.$s['slug']]),
-        'Entreprise' => $nav['company'],
-        'Légal' => $nav['legal'],
-    ];
+    $hours = $settings->get('contact.hours');
+    $toPath = fn (array $item): array => ['title' => $item['title'], 'href' => $item['url']];
+    $columns = array_filter([
+        // Fiches publiées ; sinon les 6 expertises (CONTENT §3) vers la page Solutions.
+        'Solutions' => $nav['solutions'] !== []
+            ? array_map($toPath, $nav['solutions'])
+            : array_map(fn (array $item): array => ['title' => $item['title'], 'href' => route('solutions.index')], \App\Domain\Content\Services\HomeContent::raw()['solutions']['items']),
+        'Secteurs' => array_map($toPath, $nav['sectors']),
+        'Entreprise' => array_map(fn (array $item): array => ['title' => $item['title'], 'href' => url($item['path'])], $nav['company']),
+        'Légal' => array_map(fn (array $item): array => ['title' => $item['title'], 'href' => url($item['path'])], $nav['legal']),
+    ]);
 @endphp
 {{-- Pied de page — UX §4.2. Aucun lien vers « # » : un réseau sans URL réelle n'est pas affiché. --}}
-<footer class="relative overflow-hidden bg-kh-blue-950 text-kh-blue-200">
-    <x-kh.halftone :size="360" tone="blue-900" class="absolute -right-24 -bottom-28 hidden sm:block" />
+<footer class="kh-dark relative overflow-hidden">
+    <div class="kh-grid-bg pointer-events-none absolute inset-0" aria-hidden="true"></div>
+    <x-kh.halftone :size="420" tone="blue-900" class="kh-spin absolute -right-24 -bottom-32 hidden sm:block" />
 
     <div class="kh-container relative py-16 lg:py-20">
         <div class="grid gap-12 lg:grid-cols-[1.2fr_2fr]">
@@ -22,7 +28,7 @@
                 <p class="inline-flex rounded-2xl bg-white px-4 py-3">
                     <x-kh.logo />
                 </p>
-                <p class="mt-6 max-w-xs text-small">Logiciels de gestion et solutions numériques sur mesure — Bamako, Mali</p>
+                <p class="mt-6 max-w-xs font-display text-lead font-bold text-white">Logiciels de gestion et solutions numériques sur mesure — Bamako, Mali</p>
 
                 <address class="mt-8 space-y-3 text-small not-italic">
                     <p class="flex items-start gap-3"><x-kh.icon name="map-pin" :size="18" class="mt-0.5" />{{ $settings->get('contact.city') }}</p>
@@ -38,7 +44,9 @@
                             <a class="hover:text-white" href="mailto:{{ $email }}">{{ $email }}</a>
                         </p>
                     @endif
-                    <p class="flex items-start gap-3"><x-kh.icon name="clock" :size="18" class="mt-0.5" />{{ $settings->get('contact.hours') }}</p>
+                    @if (filled($hours) && \App\Domain\Content\Support\ContentPreview::shows($hours))
+                        <p class="flex items-start gap-3"><x-kh.icon name="clock" :size="18" class="mt-0.5" />{{ $hours }}</p>
+                    @endif
                 </address>
 
                 <div class="mt-8">
@@ -49,10 +57,10 @@
             <nav aria-label="Plan du site" class="grid grid-cols-2 gap-10 sm:grid-cols-4">
                 @foreach ($columns as $heading => $links)
                     <div>
-                        <h2 class="font-sans text-small font-semibold text-white">{{ $heading }}</h2>
+                        <h2 class="font-display text-small font-bold uppercase tracking-[0.12em] text-white">{{ $heading }}</h2>
                         <ul class="mt-4 space-y-2.5 text-small">
                             @foreach ($links as $link)
-                                <li><a class="hover:text-white" href="{{ url($link['path']) }}">{{ $link['title'] }}</a></li>
+                                <li><a class="inline-block transition duration-200 hover:translate-x-1 hover:text-white" href="{{ $link['href'] }}">{{ $link['title'] }}</a></li>
                             @endforeach
                         </ul>
                     </div>

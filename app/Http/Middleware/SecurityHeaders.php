@@ -34,8 +34,18 @@ class SecurityHeaders
             $response->headers->set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
         }
 
+        // Espaces privés : jamais indexés (WEB-05).
+        if ($request->is(...self::PRIVATE_PATHS)) {
+            $response->headers->set('X-Robots-Tag', 'noindex, nofollow');
+        }
+
         return $response;
     }
+
+    private const PRIVATE_PATHS = [
+        'admin', 'admin/*', 'brief/*', 'diagnostic/reprendre/*', 'demo-lab/boutique', 'demo-lab/boutique/*',
+        '_styleguide', 'livewire/*', 'api/*',
+    ];
 
     private function contentSecurityPolicy(Request $request): string
     {

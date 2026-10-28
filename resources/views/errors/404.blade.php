@@ -1,4 +1,4 @@
-<x-layouts.public title="Page introuvable" :noindex="true">
+<x-layouts.public title="Page introuvable" :noindex="true" header-tone="light">
     <section class="kh-section relative overflow-hidden">
         <x-kh.halftone :size="420" class="absolute -right-32 top-8 hidden md:block" animate />
         <div class="kh-container relative">
