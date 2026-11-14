@@ -20,13 +20,15 @@
 | D-012 | 2026-10-25 | Aucun upload de fichiers par les visiteurs au MVP | Réduction de la surface de risque |
 | D-013 | 2026-10-28 | Identité visuelle « agence » plus expressive : police d'affichage grasse **Plus Jakarta Sans** (700–800) à la place de Fraunces 400 ; accent rouge surligné (non italique) ; hero et en-têtes de pages sombres (bleu nuit, trame, halos) ; effets de survol sur toutes les cartes et boutons ; animations au défilement (apparitions variées, parallaxe légère desktop, barre de progression) ; bandeau défilant des savoir-faire. Remplace UX §3.2, §7 (dosage) et §10 sur ces points | Demande de la direction : « design ultra pro digne d'une agence », police grasse inspirant confiance. Contraintes conservées : transform/opacity uniquement, `prefers-reduced-motion`, contenu lisible sans JS, aucune bibliothèque d'animation |
 | D-014 | 2026-10-28 | CSP des parcours Livewire publics (`/diagnostic`, `/brief/*`) : `'unsafe-eval'` autorisé sur ces seules pages, scripts en ligne toujours soumis au nonce ; le reste du site garde la CSP stricte (test) | Choix délégué par la direction après test du parcours (entreprise Famatech) : interface interactive et fluide conservée, même réglage que l'admin, risque limité par l'échappement Blade et le nonce. Résout Q-018 |
+| D-015 | 2026-11-14 | Horaires de réponse validés : **lundi–samedi, 8 h–18 h** (heure de Bamako). Ils servent à l'affichage (contact, pied de page, e-mails) et au calcul des heures ouvrées de l'alerte « lead non traité ». La mention « support 7j/7 » de l'ancien site n'est pas reprise | Validation de la direction. Résout Q-002 |
+| D-016 | 2026-11-14 | Le développement continue **en local**, sans mise en production anticipée : D-004 est confirmée (production décidée après le lot 6). Le plan de lancement progressif proposé le 2026-11-14 n'est pas retenu | Décision de la direction |
 
 ## Questions ouvertes (à trancher par Kilakodon avant la mise en production)
 
 | ID | Question | Impact | Défaut appliqué en attendant |
 |---|---|---|---|
 | Q-001 | Raison sociale, RCCM, NIF, adresse précise, directeur de publication | Mentions légales | Pages légales en `draft` |
-| Q-002 | Horaires de réponse réels ; maintient-on « support 7j/7 » ? | Contact, assistant, e-mails | « Lun–sam, 8 h–18 h » marqué [À VALIDER] |
+| ~~Q-002~~ (résolue : D-015) | Horaires de réponse réels ; maintient-on « support 7j/7 » ? | Contact, assistant, e-mails | « Lun–sam, 8 h–18 h » marqué [À VALIDER] |
 | Q-003 | Délais indicatifs par solution | Pages solutions | Fourchettes de CONTENT §3 marquées [À VALIDER] |
 | Q-004 | Affiche-t-on des prix « à partir de » ? | Pages solutions, assistant | Non : « Sur devis après diagnostic » |
 | Q-005 | Tranches de budget du diagnostic | Diagnostic | Tranches de DIAGNOSTIC_SPEC §2 |

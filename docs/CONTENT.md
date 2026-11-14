@@ -13,7 +13,7 @@
 - Ville : Bamako, Mali — adresse précise [À VALIDER]
 - Téléphones / WhatsApp : +223 74 66 64 89 (principal), +223 97 46 28 39
 - E-mail : kilakodon@gmail.com (une adresse de domaine `contact@kilakodon-services.com` est recommandée [À VALIDER])
-- Horaires de réponse : lundi–samedi, 8 h–18 h [À VALIDER] — l'ancien site annonçait « support 7j/7 » : à confirmer avant de le réafficher
+- Horaires de réponse : lundi–samedi, 8 h–18 h (validés par la direction le 2026-11-14, D-015) — la mention « support 7j/7 » de l'ancien site n'est pas reprise
 - Raison sociale, RCCM, NIF : [À VALIDER] (mentions légales)
 
 ## 1. SEO global

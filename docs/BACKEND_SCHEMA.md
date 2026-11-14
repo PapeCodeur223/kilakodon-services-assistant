@@ -501,7 +501,7 @@ Un trigger SQL n'est **pas** utilisé : le stock est mis à jour dans l'Action `
 
 | Seeder | Source |
 |---|---|
-| `SettingsSeeder` | coordonnées (TRD §14), horaires [À VALIDER], textes de consentement v1, `ai.enabled = true`, `ai.daily_budget_usd = 1` en local (0 = IA bloquée, valeur de production à décider — Q-009) |
+| `SettingsSeeder` | coordonnées (TRD §14), horaires (validés, D-015), textes de consentement v1, `ai.enabled = true`, `ai.daily_budget_usd = 1` en local (0 = IA bloquée, valeur de production à décider — Q-009) |
 | `ContentSeeder` | `docs/CONTENT.md` : solutions, secteurs, FAQ, pages, articles (en `draft` s'ils contiennent `[À VALIDER]`) |
 | `DiagnosticTemplateV1Seeder` | `docs/DIAGNOSTIC_SPEC.md` : questions, règles, template v1 `active` |
 | `KnowledgeSeeder` | génère les documents depuis les contenus publiés et les FAQ (statut `draft`, à approuver) |

@@ -8,7 +8,7 @@ return [
     // Fuseau d'affichage ; les dates restent stockées en UTC.
     'display_timezone' => env('KH_DISPLAY_TIMEZONE', 'Africa/Bamako'),
 
-    // Heures ouvrées pour l'alerte « lead non traité » (lundi = 1). [À VALIDER] avec les horaires réels (Q-002).
+    // Heures ouvrées pour l'alerte « lead non traité » (lundi = 1). Horaires validés par la direction (D-015).
     'business_hours' => [
         'days' => [1, 2, 3, 4, 5, 6],
         'start' => 8,
@@ -22,7 +22,7 @@ return [
         'contact.whatsapp_secondary' => env('KH_WHATSAPP_SECONDARY', '+22397462839'),
         'contact.email' => env('KH_CONTACT_EMAIL', 'kilakodon@gmail.com'),
         'contact.city' => 'Bamako, Mali',
-        'contact.hours' => 'Lundi–samedi, 8 h–18 h [À VALIDER]',
+        'contact.hours' => 'Lundi–samedi, 8 h–18 h',
         'notify.lead_recipients' => [env('KH_CONTACT_EMAIL', 'kilakodon@gmail.com')],
         // Q-009 : IA coupée et budget nul tant que la direction n'a pas fixé le budget.
         'ai.enabled' => false,

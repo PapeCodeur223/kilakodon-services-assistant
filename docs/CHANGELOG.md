@@ -15,8 +15,12 @@
 - Les e-mails mis en file depuis les lots 1 et 2 partent désormais réellement (driver `log` en local).
 - `RecordConsents` s'appuie sur `RecordConsent` ; `LeadPolicy` ouvre la mise à jour au commercial.
 
+#### Décisions de la direction (2026-11-14)
+- D-015 : horaires de réponse validés (lundi–samedi, 8 h–18 h) ; ils sont désormais affichés sur le site et cités dans les e-mails.
+- D-016 : poursuite du développement en local, mise en production après le lot 6.
+
 #### Écarts notés dans DECISIONS.md
-- Transitions d'étapes, « à traiter », heures ouvrées [À VALIDER], confirmation humaine des RDV, modèles d'e-mail ajoutés, thème de l'admin, fusion manuelle, `privacy_requests` traité au lot 6.
+- Transitions d'étapes, « à traiter », heures ouvrées (validées depuis, D-015), confirmation humaine des RDV, modèles d'e-mail ajoutés, thème de l'admin, fusion manuelle, `privacy_requests` traité au lot 6.
 
 ### Lot 2 — Diagnostic et brief (2026-10-28)
 #### Ajouté
