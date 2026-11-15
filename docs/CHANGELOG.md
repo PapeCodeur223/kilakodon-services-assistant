@@ -15,6 +15,11 @@
 - Les e-mails mis en file depuis les lots 1 et 2 partent désormais réellement (driver `log` en local).
 - `RecordConsents` s'appuie sur `RecordConsent` ; `LeadPolicy` ouvre la mise à jour au commercial.
 
+#### Ajouts du 2026-11-15
+- Page d'administration « À valider » (liste des informations à confirmer, lien de correction, badge dans le menu) ; `kh:content-audit` s'appuie sur le même service.
+- Bandeau « Mobile Money — Opérateurs acceptés » dans le pied de page (Orange Money, Moov Money, Wave, Sama Money) ; opérateurs validés (D-017).
+- Commande `kh:mfa-reset` pour réinitialiser la double authentification d'un utilisateur (journalisée).
+
 #### Décisions de la direction (2026-11-14)
 - D-015 : horaires de réponse validés (lundi–samedi, 8 h–18 h) ; ils sont désormais affichés sur le site et cités dans les e-mails.
 - D-016 : poursuite du développement en local, mise en production après le lot 6.

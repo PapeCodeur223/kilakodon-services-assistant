@@ -25,7 +25,7 @@ return [
         'title' => 'Conçu pour la façon dont on travaille ici',
         'items' => [
             ['icon' => 'wifi-off', 'title' => 'Fonctionne hors-ligne', 'text' => 'La caisse continue quand Internet coupe ; tout se synchronise au retour du réseau.'],
-            ['icon' => 'smartphone', 'title' => 'Mobile Money intégré', 'text' => 'Orange Money, Moov Money, Wave… selon vos besoins et les accès disponibles. [À VALIDER : opérateurs réellement intégrés]'],
+            ['icon' => 'smartphone', 'title' => 'Mobile Money intégré', 'text' => 'Orange Money, Moov Money, Wave et Sama Money : vos clients paient avec l\'opérateur de leur choix.'],
             ['icon' => 'monitor-smartphone', 'title' => 'PC, tablette et cloud', 'text' => 'Pilotez votre activité à distance, depuis le bureau comme depuis votre téléphone.'],
             ['icon' => 'banknote', 'title' => 'En FCFA, à vos règles', 'text' => 'Factures, taxes et rapports adaptés à votre activité.'],
             ['icon' => 'map-pin', 'title' => 'Une équipe à Bamako', 'text' => 'Un interlocuteur qui se déplace, forme vos équipes et répond en français.'],

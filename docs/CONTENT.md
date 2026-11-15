@@ -41,7 +41,7 @@
 ### Bande « Réalités locales »
 Titre (Inter 500) : **Conçu pour la façon dont on travaille ici**
 1. **Fonctionne hors-ligne** — La caisse continue quand Internet coupe ; tout se synchronise au retour du réseau.
-2. **Mobile Money intégré** — Orange Money, Moov Money, Wave… selon vos besoins et les accès disponibles. [À VALIDER : opérateurs réellement intégrés]
+2. **Mobile Money intégré** — Orange Money, Moov Money, Wave et Sama Money : vos clients paient avec l'opérateur de leur choix. (Opérateurs validés par la direction, D-017.)
 3. **En FCFA, à vos règles** — Factures, taxes et rapports adaptés à votre activité.
 4. **Une équipe à Bamako** — Un interlocuteur qui se déplace, forme vos équipes et répond en français.
 
@@ -122,7 +122,7 @@ CTA : `Découvrir notre méthode →`
 - Fonctionnalités : Caisse rapide (tactile ou clavier) · Alertes de stock critique · Inventaires et ajustements tracés · Facturation normalisée [À VALIDER : conformité facture normalisée selon la réglementation applicable] · Mode hors-ligne avec synchronisation · Multi-dépôts et transferts entre boutiques
 - Ce que ce n'est pas : Ce n'est pas un simple tableur amélioré : chaque mouvement est tracé et attribué. Le matériel (imprimantes, lecteurs) est conseillé et peut être fourni sur devis.
 - Délai indicatif : 3 à 6 semaines [À VALIDER]
-- FAQ : « Et si Internet coupe ? » → La caisse continue de fonctionner ; les ventes se synchronisent au retour de la connexion. · « Mobile Money est-il pris en charge ? » → Oui, l'enregistrement des paiements Mobile Money est prévu ; l'intégration directe dépend des opérateurs et de leurs conditions. [À VALIDER]
+- FAQ : « Et si Internet coupe ? » → La caisse continue de fonctionner ; les ventes se synchronisent au retour de la connexion. · « Mobile Money est-il pris en charge ? » → Oui : Orange Money, Moov Money, Wave et Sama Money sont pris en charge.
 - SEO title : `Logiciel de gestion de stock et caisse au Mali`
 
 ### 3.3 Applications web métiers
@@ -329,3 +329,6 @@ Règle : aucun chiffre de marché sans source citée ; pas de données clients.
 - E-mails (objets sans donnée personnelle) : « Votre demande de rendez-vous a bien été reçue — Kilakodon Services » (corps : « Ce rendez-vous n'est pas encore confirmé ») ; « Demande de rendez-vous — lead #{id} » (équipe) ; « Votre rendez-vous avec Kilakodon Services » (date, heure de Bamako, format, sujet) ; « {n} lead(s) en attente depuis plus de 24 h » ; accusé du brief : référence, sans lien privé.
 - WhatsApp (ajout) : rendez-vous `Bonjour Kilakodon, je souhaite convenir d'un rendez-vous.`
 - Pied de page : lien « Demander un rendez-vous ».
+
+## 15. Ajouts du 2026-11-15
+- Pied de page : bandeau « Mobile Money — Opérateurs acceptés » avec les logos officiels d'Orange Money, Moov Money, Wave et Sama Money (nom affiché en attendant le fichier officiel du logo).

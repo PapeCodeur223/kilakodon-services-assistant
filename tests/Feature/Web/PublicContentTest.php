@@ -42,8 +42,13 @@ it('rend l’accueil complet sans JavaScript requis pour le contenu', function (
 it('masque au public les éléments « [À VALIDER] » de l’accueil', function () {
     $this->get('/')
         ->assertDontSee('VALIDER')
-        ->assertDontSee('Mobile Money intégré')
         ->assertDontSee('Vos données vous appartiennent');
+});
+
+it('affiche la carte Mobile Money depuis la validation des opérateurs (D-017)', function () {
+    $this->get('/')
+        ->assertSee('Mobile Money intégré')
+        ->assertSee('Orange Money, Moov Money, Wave et Sama Money');
 });
 
 it('masque la section Réalisations tant qu’aucune n’est publiée', function () {

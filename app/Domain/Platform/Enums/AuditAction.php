@@ -21,6 +21,7 @@ enum AuditAction: string
     case TemplateDuplicated = 'template_duplicated';
     case BriefValidated = 'brief_validated';
     case BriefAccessRevoked = 'brief_access_revoked';
+    case MultiFactorReset = 'mfa_reset';
 
     public function label(): string
     {
@@ -32,6 +33,7 @@ enum AuditAction: string
             self::TemplateDuplicated => 'Questionnaire dupliqué',
             self::BriefValidated => 'Brief validé',
             self::BriefAccessRevoked => 'Lien de brief révoqué',
+            self::MultiFactorReset => 'Double authentification réinitialisée',
             self::Login => 'Connexion',
             self::Created => 'Création',
             self::Updated => 'Modification',

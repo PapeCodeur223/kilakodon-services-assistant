@@ -75,3 +75,14 @@ it("pose le nonce CSP sur le script d'amorçage", function () {
     expect($m[1] ?? null)->not->toBeNull();
     $response->assertSee('nonce="'.$m[1].'"', false);
 });
+
+it('affiche les opérateurs Mobile Money acceptés dans le pied de page (D-017)', function () {
+    $response = $this->get('/')->assertOk();
+
+    $response->assertSee('Opérateurs acceptés')
+        ->assertSee('alt="Orange Money"', false)
+        ->assertSee('alt="Wave"', false)
+        ->assertSee('Moov Money')
+        ->assertSee('Sama Money')
+        ->assertDontSee('[À VALIDER');
+});

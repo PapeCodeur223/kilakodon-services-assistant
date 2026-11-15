@@ -22,6 +22,7 @@
 | D-014 | 2026-10-28 | CSP des parcours Livewire publics (`/diagnostic`, `/brief/*`) : `'unsafe-eval'` autorisé sur ces seules pages, scripts en ligne toujours soumis au nonce ; le reste du site garde la CSP stricte (test) | Choix délégué par la direction après test du parcours (entreprise Famatech) : interface interactive et fluide conservée, même réglage que l'admin, risque limité par l'échappement Blade et le nonce. Résout Q-018 |
 | D-015 | 2026-11-14 | Horaires de réponse validés : **lundi–samedi, 8 h–18 h** (heure de Bamako). Ils servent à l'affichage (contact, pied de page, e-mails) et au calcul des heures ouvrées de l'alerte « lead non traité ». La mention « support 7j/7 » de l'ancien site n'est pas reprise | Validation de la direction. Résout Q-002 |
 | D-016 | 2026-11-14 | Le développement continue **en local**, sans mise en production anticipée : D-004 est confirmée (production décidée après le lot 6). Le plan de lancement progressif proposé le 2026-11-14 n'est pas retenu | Décision de la direction |
+| D-017 | 2026-11-15 | Opérateurs Mobile Money validés : **Orange Money, Moov Money, Wave et Sama Money**. Ils sont cités sur l'accueil et dans la FAQ « Stocks, facturation & caisse », et présentés dans un bandeau « Mobile Money — Opérateurs acceptés » du pied de page avec leurs logos | Validation de la direction. Résout Q-007 |
 
 ## Questions ouvertes (à trancher par Kilakodon avant la mise en production)
 
@@ -33,7 +34,7 @@
 | Q-004 | Affiche-t-on des prix « à partir de » ? | Pages solutions, assistant | Non : « Sur devis après diagnostic » |
 | Q-005 | Tranches de budget du diagnostic | Diagnostic | Tranches de DIAGNOSTIC_SPEC §2 |
 | Q-006 | Réalisations publiables (accord écrit des clients) | Section Réalisations | Section masquée tant qu'il n'y en a aucune |
-| Q-007 | Opérateurs Mobile Money réellement intégrables | Contenus | Formulation prudente [À VALIDER] |
+| ~~Q-007~~ (résolue : D-017) | Opérateurs Mobile Money réellement intégrables | Contenus | Formulation prudente [À VALIDER] |
 | Q-008 | Conformité « facture normalisée » | Contenu Stocks & caisse | Formulation prudente [À VALIDER] |
 | Q-009 | Budget IA mensuel et quotidien | AssistantGuard | 0 en production tant que non renseigné (IA désactivée) |
 | Q-010 | Durées de conservation (diagnostics, conversations, leads perdus) | Purges | 30 j / 90 j / non purgé |
@@ -116,3 +117,7 @@
 | 2026-10-29 | 3 | Fusion de contacts | Manuelle uniquement (CRM-01), depuis la fiche du contact conservé, parmi les doublons suggérés (même téléphone ou e-mail) ; leads, briefs, consentements et demandes de droits déplacés ; doublon marqué `merged_into_id` puis archivé ; audit `contact_merged` |
 | 2026-10-29 | 3 | `privacy_requests` | Table et modèle créés (tâche du lot) ; écran de traitement, export et anonymisation au lot 6 (PRV-02) |
 | 2026-10-29 | 3 | Notes internes du brief (BRF-01) | Ce sont les activités du lead lié, visibles uniquement dans l'admin |
+| 2026-11-15 | 3 | Logos des opérateurs Mobile Money | Logos officiels uniquement, jamais redessinés ni recolorés, sur fond blanc : Orange Money (Wikimedia Commons, domaine public), Wave (site officiel wave.com). Moov Money et Sama Money : nom affiché en attendant les fichiers officiels (site de Moov Africa Mali injoignable, domaine samamoney.com en vente). Kilakodon est responsable de l'usage des marques (kits partenaires des opérateurs recommandés). Liste et fichiers dans `config('kh.payment_operators')` |
+| 2026-11-15 | 3 | Liste des « [À VALIDER] » visible uniquement par une commande | Page d'administration « À valider » (Contenus, admin et éditeur) : mêmes points que `kh:content-audit --all`, texte exact, lien « Corriger », badge du nombre dans le menu. Service partagé `PendingValidationReport` |
+| 2026-11-15 | 3 | Perte de l'application d'authentification et des codes de secours | Commande `kh:mfa-reset {email}` (confirmation, audit `mfa_reset`) : secret et codes effacés, nouvelle configuration exigée à la connexion suivante pour un admin. À utiliser après vérification de l'identité de la personne. Utilisée en local pour le compte admin de développement (secret de `.env` vidé) |
+| 2026-11-15 | 3 | « Vos données vous appartiennent » (accueil, Q-017) | Non tranché par la direction le 2026-11-15 : la phrase reste masquée au public |

@@ -68,7 +68,25 @@
             </nav>
         </div>
 
-        <div class="mt-14 border-t border-kh-blue-900 pt-6 text-small">
+        {{-- Opérateurs Mobile Money acceptés (D-017) : logos officiels sur fond blanc, jamais recolorés. --}}
+        <section aria-labelledby="footer-payments" class="mt-14 flex flex-col gap-4 border-t border-kh-blue-900 pt-8 lg:flex-row lg:items-center lg:gap-8">
+            <h2 id="footer-payments" class="shrink-0 font-display text-small font-bold uppercase tracking-[0.12em] text-white">
+                Mobile Money <span class="block text-tag font-medium normal-case tracking-normal text-kh-blue-200">Opérateurs acceptés</span>
+            </h2>
+            <ul class="flex flex-wrap items-center gap-3">
+                @foreach ((array) config('kh.payment_operators') as $operator)
+                    <li class="flex h-12 min-w-28 items-center justify-center rounded-xl bg-white px-4 shadow-sm">
+                        @if (! empty($operator['logo']))
+                            <img src="{{ asset($operator['logo']) }}" alt="{{ $operator['name'] }}" width="{{ $operator['width'] ?? 120 }}" height="{{ $operator['height'] ?? 40 }}" loading="lazy" class="h-7 w-auto">
+                        @else
+                            <span class="text-small font-bold text-kh-blue-900">{{ $operator['name'] }}</span>
+                        @endif
+                    </li>
+                @endforeach
+            </ul>
+        </section>
+
+        <div class="mt-8 border-t border-kh-blue-900 pt-6 text-small">
             <p>© {{ now(config('kh.display_timezone'))->year }} Kilakodon Services</p>
         </div>
     </div>

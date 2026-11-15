@@ -15,6 +15,15 @@ return [
         'end' => 18,
     ],
 
+    // Opérateurs Mobile Money validés par la direction (D-017), affichés dans le pied de page.
+    // `logo` : fichier officiel dans public/ (largeur et hauteur réelles) ; null = nom affiché en attendant le logo.
+    'payment_operators' => [
+        ['name' => 'Orange Money', 'logo' => 'images/payments/orange-money.svg', 'width' => 431, 'height' => 115],
+        ['name' => 'Moov Money', 'logo' => null],
+        ['name' => 'Wave', 'logo' => 'images/payments/wave.png', 'width' => 230, 'height' => 101],
+        ['name' => 'Sama Money', 'logo' => null],
+    ],
+
     // Paramètres par défaut (seedés, puis modifiables dans « Paramètres »).
     // Une information non confirmée par Kilakodon reste marquée [À VALIDER].
     'settings' => [
