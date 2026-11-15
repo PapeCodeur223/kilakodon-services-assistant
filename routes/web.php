@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Public\AppointmentController;
 use App\Http\Controllers\Public\ArticleController;
 use App\Http\Controllers\Public\BriefController;
 use App\Http\Controllers\Public\CaseStudyController;
@@ -27,6 +28,11 @@ Route::get('/contact', [ContactController::class, 'show'])->name('contact');
 Route::post('/contact', [ContactController::class, 'store'])
     ->middleware([ProtectAgainstSpam::class, 'throttle:contact'])
     ->name('contact.store');
+
+Route::get('/rendez-vous', [AppointmentController::class, 'show'])->name('appointment');
+Route::post('/rendez-vous', [AppointmentController::class, 'store'])
+    ->middleware([ProtectAgainstSpam::class, 'throttle:contact'])
+    ->name('appointment.store');
 
 // Diagnostic (Livewire) et brief privé — liens à token limités en débit.
 Route::get('/diagnostic', [DiagnosticController::class, 'start'])->name('diagnostic.start');

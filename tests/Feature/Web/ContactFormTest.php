@@ -1,6 +1,7 @@
 <?php
 
 use App\Domain\Crm\Models\Lead;
+use App\Domain\Platform\Services\Settings;
 use Illuminate\Support\Facades\RateLimiter;
 use Spatie\Honeypot\Honeypot;
 
@@ -50,8 +51,16 @@ it('crée un lead et affiche le message de succès', function () {
     $this->followingRedirects()->get('/contact')->assertSee('votre message est bien arrivé');
 });
 
+it('cite les horaires validés dans le message de succès (D-015)', function () {
+    $this->post('/contact', validContact())
+        ->assertSessionHas('contact.success', fn (string $m) => str_contains($m, 'Lundi–samedi, 8 h–18 h'));
+});
+
 it('ne cite pas d’horaires encore « [À VALIDER] » dans le message de succès', function () {
-    $this->post('/contact', validContact())->assertSessionHas('contact.success', fn (string $m) => ! str_contains($m, 'VALIDER'));
+    app(Settings::class)->set('contact.hours', 'Horaires [À VALIDER]');
+
+    $this->post('/contact', validContact())
+        ->assertSessionHas('contact.success', fn (string $m) => ! str_contains($m, 'VALIDER') && ! str_contains($m, 'Horaires'));
 });
 
 it('exige le consentement au traitement et un téléphone valide', function () {

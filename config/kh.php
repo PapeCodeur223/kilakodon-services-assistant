@@ -8,6 +8,23 @@ return [
     // Fuseau d'affichage ; les dates restent stockées en UTC.
     'display_timezone' => env('KH_DISPLAY_TIMEZONE', 'Africa/Bamako'),
 
+    // Heures ouvrées pour l'alerte « lead non traité » (lundi = 1). Horaires validés par la direction (D-015).
+    'business_hours' => [
+        'days' => [1, 2, 3, 4, 5, 6],
+        'start' => 8,
+        'end' => 18,
+    ],
+
+    // Opérateurs Mobile Money validés par la direction (D-017), affichés dans le pied de page.
+    // `logo` : fichier officiel dans public/ (largeur et hauteur réelles) ; null = nom affiché en attendant le logo.
+    'payment_operators' => [
+        ['name' => 'Orange Money', 'logo' => 'images/payments/orange-money.svg', 'width' => 431, 'height' => 115],
+        ['name' => 'Moov Money', 'logo' => 'images/payments/moov_money.png', 'width' => 447, 'height' => 447],
+        ['name' => 'Wave', 'logo' => 'images/payments/wave.png', 'width' => 230, 'height' => 101],
+        // Fichier fourni par Kilakodon (sama_money.png), marges blanches rognées, logo inchangé.
+        ['name' => 'Sama Money', 'logo' => 'images/payments/sama-money.png', 'width' => 412, 'height' => 149],
+    ],
+
     // Paramètres par défaut (seedés, puis modifiables dans « Paramètres »).
     // Une information non confirmée par Kilakodon reste marquée [À VALIDER].
     'settings' => [
@@ -15,7 +32,7 @@ return [
         'contact.whatsapp_secondary' => env('KH_WHATSAPP_SECONDARY', '+22397462839'),
         'contact.email' => env('KH_CONTACT_EMAIL', 'kilakodon@gmail.com'),
         'contact.city' => 'Bamako, Mali',
-        'contact.hours' => 'Lundi–samedi, 8 h–18 h [À VALIDER]',
+        'contact.hours' => 'Lundi–samedi, 8 h–18 h',
         'notify.lead_recipients' => [env('KH_CONTACT_EMAIL', 'kilakodon@gmail.com')],
         // Q-009 : IA coupée et budget nul tant que la direction n'a pas fixé le budget.
         'ai.enabled' => false,

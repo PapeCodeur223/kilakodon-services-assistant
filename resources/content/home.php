@@ -25,7 +25,7 @@ return [
         'title' => 'Conçu pour la façon dont on travaille ici',
         'items' => [
             ['icon' => 'wifi-off', 'title' => 'Fonctionne hors-ligne', 'text' => 'La caisse continue quand Internet coupe ; tout se synchronise au retour du réseau.'],
-            ['icon' => 'smartphone', 'title' => 'Mobile Money intégré', 'text' => 'Orange Money, Moov Money, Wave… selon vos besoins et les accès disponibles. [À VALIDER : opérateurs réellement intégrés]'],
+            ['icon' => 'smartphone', 'title' => 'Mobile Money intégré', 'text' => 'Orange Money, Moov Money, Wave et Sama Money : vos clients paient avec l\'opérateur de leur choix.'],
             ['icon' => 'monitor-smartphone', 'title' => 'PC, tablette et cloud', 'text' => 'Pilotez votre activité à distance, depuis le bureau comme depuis votre téléphone.'],
             ['icon' => 'banknote', 'title' => 'En FCFA, à vos règles', 'text' => 'Factures, taxes et rapports adaptés à votre activité.'],
             ['icon' => 'map-pin', 'title' => 'Une équipe à Bamako', 'text' => 'Un interlocuteur qui se déplace, forme vos équipes et répond en français.'],
@@ -116,7 +116,7 @@ return [
         'cards' => [
             ['icon' => 'workflow', 'title' => 'Sur mesure, pas « presque adapté »', 'text' => 'Nous partons de vos processus au lieu de vous imposer ceux d\'un logiciel générique.'],
             ['icon' => 'lock-keyhole', 'title' => 'Vos données protégées', 'text' => 'Accès par rôle pour chaque employé, sauvegardes automatisées et traçabilité des opérations.'],
-            ['icon' => 'database', 'title' => 'Vos données vous appartiennent', 'text' => 'Export possible à tout moment, documentation fournie. [À VALIDER : conditions de propriété du code et des données]'],
+            ['icon' => 'database', 'title' => 'Vos données vous appartiennent', 'text' => 'Export possible à tout moment, documentation fournie.'],
             ['icon' => 'clipboard-list', 'title' => 'Transparence', 'text' => 'Un périmètre écrit, un délai indicatif, un devis détaillé. Pas de surprise.'],
             ['icon' => 'headset', 'title' => 'Support de proximité', 'text' => 'Une équipe d\'ingénieurs basée à Bamako pour la formation, l\'assistance et la maintenance.'],
         ],

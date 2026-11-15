@@ -40,7 +40,9 @@ final class SitemapBuilder
             ->add(Url::create(route('home'))->setPriority(1.0))
             ->add(Url::create(route('solutions.index'))->setPriority(0.9))
             ->add(Url::create(route('articles.index'))->setPriority(0.6))
-            ->add(Url::create(route('contact'))->setPriority(0.6));
+            ->add(Url::create(route('contact'))->setPriority(0.6))
+            ->add(Url::create(route('diagnostic.start'))->setPriority(0.8))
+            ->add(Url::create(route('appointment'))->setPriority(0.5));
 
         if (CaseStudy::query()->published()->exists()) {
             $sitemap->add(Url::create(route('cases.index'))->setPriority(0.6));

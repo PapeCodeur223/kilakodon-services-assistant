@@ -18,6 +18,7 @@ return [
         ['title' => 'À propos', 'path' => '/a-propos', 'page' => 'a-propos'],
         ['title' => 'Ressources', 'path' => '/ressources'],
         ['title' => 'Contact', 'path' => '/contact'],
+        ['title' => 'Demander un rendez-vous', 'path' => '/rendez-vous'],
     ],
 
     'legal' => [

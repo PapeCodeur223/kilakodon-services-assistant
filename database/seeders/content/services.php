@@ -57,7 +57,7 @@ return [
         'duration_hint' => '3 à 6 semaines [À VALIDER]',
         'faq' => [
             ['q' => 'Et si Internet coupe ?', 'a' => 'La caisse continue de fonctionner ; les ventes se synchronisent au retour de la connexion.'],
-            ['q' => 'Mobile Money est-il pris en charge ?', 'a' => 'Oui, l\'enregistrement des paiements Mobile Money est prévu ; l\'intégration directe dépend des opérateurs et de leurs conditions. [À VALIDER]'],
+            ['q' => 'Mobile Money est-il pris en charge ?', 'a' => 'Oui : Orange Money, Moov Money, Wave et Sama Money sont pris en charge.'],
         ],
         'seo_title' => 'Logiciel de gestion de stock et caisse au Mali',
     ],

@@ -13,7 +13,7 @@
 - Ville : Bamako, Mali — adresse précise [À VALIDER]
 - Téléphones / WhatsApp : +223 74 66 64 89 (principal), +223 97 46 28 39
 - E-mail : kilakodon@gmail.com (une adresse de domaine `contact@kilakodon-services.com` est recommandée [À VALIDER])
-- Horaires de réponse : lundi–samedi, 8 h–18 h [À VALIDER] — l'ancien site annonçait « support 7j/7 » : à confirmer avant de le réafficher
+- Horaires de réponse : lundi–samedi, 8 h–18 h (validés par la direction le 2026-11-14, D-015) — la mention « support 7j/7 » de l'ancien site n'est pas reprise
 - Raison sociale, RCCM, NIF : [À VALIDER] (mentions légales)
 
 ## 1. SEO global
@@ -41,7 +41,7 @@
 ### Bande « Réalités locales »
 Titre (Inter 500) : **Conçu pour la façon dont on travaille ici**
 1. **Fonctionne hors-ligne** — La caisse continue quand Internet coupe ; tout se synchronise au retour du réseau.
-2. **Mobile Money intégré** — Orange Money, Moov Money, Wave… selon vos besoins et les accès disponibles. [À VALIDER : opérateurs réellement intégrés]
+2. **Mobile Money intégré** — Orange Money, Moov Money, Wave et Sama Money : vos clients paient avec l'opérateur de leur choix. (Opérateurs validés par la direction, D-017.)
 3. **En FCFA, à vos règles** — Factures, taxes et rapports adaptés à votre activité.
 4. **Une équipe à Bamako** — Un interlocuteur qui se déplace, forme vos équipes et répond en français.
 
@@ -122,7 +122,7 @@ CTA : `Découvrir notre méthode →`
 - Fonctionnalités : Caisse rapide (tactile ou clavier) · Alertes de stock critique · Inventaires et ajustements tracés · Facturation normalisée [À VALIDER : conformité facture normalisée selon la réglementation applicable] · Mode hors-ligne avec synchronisation · Multi-dépôts et transferts entre boutiques
 - Ce que ce n'est pas : Ce n'est pas un simple tableur amélioré : chaque mouvement est tracé et attribué. Le matériel (imprimantes, lecteurs) est conseillé et peut être fourni sur devis.
 - Délai indicatif : 3 à 6 semaines [À VALIDER]
-- FAQ : « Et si Internet coupe ? » → La caisse continue de fonctionner ; les ventes se synchronisent au retour de la connexion. · « Mobile Money est-il pris en charge ? » → Oui, l'enregistrement des paiements Mobile Money est prévu ; l'intégration directe dépend des opérateurs et de leurs conditions. [À VALIDER]
+- FAQ : « Et si Internet coupe ? » → La caisse continue de fonctionner ; les ventes se synchronisent au retour de la connexion. · « Mobile Money est-il pris en charge ? » → Oui : Orange Money, Moov Money, Wave et Sama Money sont pris en charge.
 - SEO title : `Logiciel de gestion de stock et caisse au Mali`
 
 ### 3.3 Applications web métiers
@@ -322,3 +322,15 @@ Règle : aucun chiffre de marché sans source citée ; pas de données clients.
 - Brief : « Brief de projet » ; « À relire et valider » / « Validé le … » ; « Ce que vous nous avez dit » (bouton « Corriger ») ; « Vos précisions » ; « Ce que nous recommandons » — « Calculé à partir de vos réponses, selon nos règles d'analyse. » ; « Résumé » — « Reformulez librement : c'est votre document. » ; « Un message pour notre équipe » ; « Valider mon brief ». Après validation : « Votre brief est validé. » — « Notre équipe l'a bien reçu et revient vers vous pour en discuter. Gardez la référence {référence}. » ; « Télécharger le PDF » · « Continuer sur WhatsApp » · « Demander un rendez-vous ». Pied : « Document de travail non contractuel. Lien privé valable jusqu'au {date}. »
 - WhatsApp (ajouts) : diagnostic `Bonjour Kilakodon, je viens de faire le diagnostic sur votre site. Pouvons-nous en discuter ?` ; rendez-vous `Bonjour Kilakodon, je souhaite un rendez-vous pour discuter de mon brief {reference}.` ; lien expiré `Bonjour Kilakodon, le lien de mon brief {reference} a expiré. Pouvez-vous m'en envoyer un nouveau ?`
 - SEO `/diagnostic` : title « Diagnostic gratuit de votre gestion » ; description « En 3 minutes, sans inscription : votre niveau d'équipement numérique, vos 3 priorités et les modules de gestion recommandés pour votre entreprise au Mali. »
+
+## 14. Textes ajoutés au lot 3 (rendez-vous, e-mails, admin)
+- Page `/rendez-vous` — H1 « Parlons de votre projet, *de vive voix* » ; chapeau « Proposez un ou plusieurs créneaux : un conseiller vous confirme le rendez-vous. » ; champs Motif (« Exemple : présenter notre gestion de stock, voir une démonstration… »), Format (Appel WhatsApp · Appel téléphonique · Visioconférence · Rencontre sur place), Créneaux souhaités (1 à 3, heure de Bamako ; Matin · Après-midi · Fin de journée) ; bouton « Envoyer ma demande » ; note « Votre rendez-vous n'est confirmé qu'après l'appel ou le message d'un conseiller. » ; encadré « Comment ça se passe ? » (Vous proposez vos créneaux · Un conseiller vous contacte pour en choisir un · Vous recevez la confirmation, par e-mail si vous nous avez laissé votre adresse).
+- Succès : « Demande reçue — un conseiller vous confirme le créneau. » (UX §5.7 ; jamais « RDV confirmé »).
+- E-mails (objets sans donnée personnelle) : « Votre demande de rendez-vous a bien été reçue — Kilakodon Services » (corps : « Ce rendez-vous n'est pas encore confirmé ») ; « Demande de rendez-vous — lead #{id} » (équipe) ; « Votre rendez-vous avec Kilakodon Services » (date, heure de Bamako, format, sujet) ; « {n} lead(s) en attente depuis plus de 24 h » ; accusé du brief : référence, sans lien privé.
+- WhatsApp (ajout) : rendez-vous `Bonjour Kilakodon, je souhaite convenir d'un rendez-vous.`
+- Pied de page : lien « Demander un rendez-vous ».
+
+## 15. Ajouts du 2026-11-15
+- Pied de page : bandeau « Mobile Money — Opérateurs acceptés » avec les logos officiels d'Orange Money, Moov Money, Wave et Sama Money (nom affiché en attendant le fichier officiel du logo).
+- Accueil : « Vos données vous appartiennent — Export possible à tout moment, documentation fournie. » (validé, D-018).
+- Page Méthode (gabarit dédié) : bandeau « {n} étapes » — H2 « Un livrable *validé par vous* à chaque étape » — « Vous savez toujours où en est votre projet, ce que nous attendons de vous et ce que vous recevez. » ; engagements : « Ce qui *ne change jamais*, quel que soit le projet » ; CTA « Prêt à démarrer *l'étape 1* ? » — « Le diagnostic gratuit prépare notre premier échange : en 3 minutes, vos priorités et les modules adaptés. » ; WhatsApp `Bonjour Kilakodon, j'ai lu votre méthode et j'aimerais démarrer un projet.`

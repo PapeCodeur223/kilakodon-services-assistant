@@ -18,3 +18,9 @@ Schedule::command('kh:diagnostic-purge')->dailyAt('02:00');
 Schedule::call(fn () => app(ReferenceGenerator::class)->prepare())
     ->name('kh:sequences-prepare')
     ->dailyAt('01:00');
+
+// Leads sans réponse depuis plus de 24 h ouvrées : toutes les heures, de 8 h à 18 h (Bamako).
+Schedule::command('kh:leads-unattended')
+    ->hourly()
+    ->between('8:00', '18:00')
+    ->timezone('Africa/Bamako');

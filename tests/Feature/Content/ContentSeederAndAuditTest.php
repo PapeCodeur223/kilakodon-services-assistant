@@ -7,6 +7,7 @@ use App\Domain\Content\Models\Page;
 use App\Domain\Content\Models\Sector;
 use App\Domain\Content\Models\Service;
 use App\Domain\Content\Support\PendingValidation;
+use App\Domain\Platform\Services\Settings;
 use Database\Seeders\ContentSeeder;
 use Database\Seeders\SettingsSeeder;
 
@@ -41,10 +42,12 @@ it('est idempotent et n’écrase pas une modification', function () {
 
 it('signale les [À VALIDER] restants et échoue tant qu’il en reste', function () {
     $this->seed([SettingsSeeder::class, ContentSeeder::class]);
+    // Un paramètre non confirmé doit aussi être signalé (les horaires par défaut sont validés, D-015).
+    app(Settings::class)->set('contact.hours', 'Horaires [À VALIDER]');
 
     $this->artisan('kh:content-audit')
         ->expectsOutputToContain('contact.hours')
-        ->expectsOutputToContain('resources/content/home.php')
+        ->doesntExpectOutputToContain('resources/content/home.php')
         ->assertFailed();
 });
 
