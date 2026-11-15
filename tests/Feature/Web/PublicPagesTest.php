@@ -82,7 +82,7 @@ it('affiche les opérateurs Mobile Money acceptés dans le pied de page (D-017)'
     $response->assertSee('Opérateurs acceptés')
         ->assertSee('alt="Orange Money"', false)
         ->assertSee('alt="Wave"', false)
-        ->assertSee('Moov Money')
-        ->assertSee('Sama Money')
+        ->assertSee('alt="Moov Money"', false)
+        ->assertSee('alt="Sama Money"', false)
         ->assertDontSee('[À VALIDER');
 });

@@ -28,7 +28,8 @@ it('liste les mêmes points que la commande d\'audit, avec le texte exact et un 
         ->assertSee('Délai indicatif')
         ->assertSee('Premier module en 6 à 10 semaines [À VALIDER]')
         ->assertSee(ServiceResource::getUrl('edit', ['record' => $service]), false)
-        ->assertSee('Page d&#039;accueil', false);
+        // Les textes de l'accueil sont tous validés depuis D-017 et D-018.
+        ->assertDontSee('Page d&#039;accueil', false);
 
     expect($count)->toBeGreaterThan(0);
 });

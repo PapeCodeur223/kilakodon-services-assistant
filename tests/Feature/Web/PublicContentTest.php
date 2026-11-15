@@ -39,10 +39,12 @@ it('rend l’accueil complet sans JavaScript requis pour le contenu', function (
         ->assertSee('"LocalBusiness"', false);
 });
 
-it('masque au public les éléments « [À VALIDER] » de l’accueil', function () {
-    $this->get('/')
-        ->assertDontSee('VALIDER')
-        ->assertDontSee('Vos données vous appartiennent');
+it('n’affiche jamais de mention « [À VALIDER] » sur l’accueil', function () {
+    $this->get('/')->assertDontSee('VALIDER');
+});
+
+it('affiche « Vos données vous appartiennent » depuis sa validation (D-018)', function () {
+    $this->get('/')->assertSee('Vos données vous appartiennent')->assertSee('Export possible à tout moment');
 });
 
 it('affiche la carte Mobile Money depuis la validation des opérateurs (D-017)', function () {

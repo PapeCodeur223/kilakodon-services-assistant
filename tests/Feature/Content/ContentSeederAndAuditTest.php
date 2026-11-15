@@ -47,7 +47,7 @@ it('signale les [À VALIDER] restants et échoue tant qu’il en reste', functio
 
     $this->artisan('kh:content-audit')
         ->expectsOutputToContain('contact.hours')
-        ->expectsOutputToContain('resources/content/home.php')
+        ->doesntExpectOutputToContain('resources/content/home.php')
         ->assertFailed();
 });
 

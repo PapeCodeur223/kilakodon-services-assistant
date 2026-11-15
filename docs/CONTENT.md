@@ -332,3 +332,5 @@ Règle : aucun chiffre de marché sans source citée ; pas de données clients.
 
 ## 15. Ajouts du 2026-11-15
 - Pied de page : bandeau « Mobile Money — Opérateurs acceptés » avec les logos officiels d'Orange Money, Moov Money, Wave et Sama Money (nom affiché en attendant le fichier officiel du logo).
+- Accueil : « Vos données vous appartiennent — Export possible à tout moment, documentation fournie. » (validé, D-018).
+- Page Méthode (gabarit dédié) : bandeau « {n} étapes » — H2 « Un livrable *validé par vous* à chaque étape » — « Vous savez toujours où en est votre projet, ce que nous attendons de vous et ce que vous recevez. » ; engagements : « Ce qui *ne change jamais*, quel que soit le projet » ; CTA « Prêt à démarrer *l'étape 1* ? » — « Le diagnostic gratuit prépare notre premier échange : en 3 minutes, vos priorités et les modules adaptés. » ; WhatsApp `Bonjour Kilakodon, j'ai lu votre méthode et j'aimerais démarrer un projet.`

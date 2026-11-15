@@ -19,6 +19,8 @@
 - Page d'administration « À valider » (liste des informations à confirmer, lien de correction, badge dans le menu) ; `kh:content-audit` s'appuie sur le même service.
 - Bandeau « Mobile Money — Opérateurs acceptés » dans le pied de page (Orange Money, Moov Money, Wave, Sama Money) ; opérateurs validés (D-017).
 - Commande `kh:mfa-reset` pour réinitialiser la double authentification d'un utilisateur (journalisée).
+- Logos Moov Money et Sama Money (fournis par Kilakodon) ; « Vos données vous appartiennent » validé (D-018).
+- Refonte de la page Méthode : frise d'aperçu, étapes en quinconce avec livrables, engagements, appel au diagnostic.
 
 #### Décisions de la direction (2026-11-14)
 - D-015 : horaires de réponse validés (lundi–samedi, 8 h–18 h) ; ils sont désormais affichés sur le site et cités dans les e-mails.

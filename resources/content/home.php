@@ -116,7 +116,7 @@ return [
         'cards' => [
             ['icon' => 'workflow', 'title' => 'Sur mesure, pas « presque adapté »', 'text' => 'Nous partons de vos processus au lieu de vous imposer ceux d\'un logiciel générique.'],
             ['icon' => 'lock-keyhole', 'title' => 'Vos données protégées', 'text' => 'Accès par rôle pour chaque employé, sauvegardes automatisées et traçabilité des opérations.'],
-            ['icon' => 'database', 'title' => 'Vos données vous appartiennent', 'text' => 'Export possible à tout moment, documentation fournie. [À VALIDER : conditions de propriété du code et des données]'],
+            ['icon' => 'database', 'title' => 'Vos données vous appartiennent', 'text' => 'Export possible à tout moment, documentation fournie.'],
             ['icon' => 'clipboard-list', 'title' => 'Transparence', 'text' => 'Un périmètre écrit, un délai indicatif, un devis détaillé. Pas de surprise.'],
             ['icon' => 'headset', 'title' => 'Support de proximité', 'text' => 'Une équipe d\'ingénieurs basée à Bamako pour la formation, l\'assistance et la maintenance.'],
         ],
