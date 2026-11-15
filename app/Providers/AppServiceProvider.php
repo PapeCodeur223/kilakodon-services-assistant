@@ -5,6 +5,9 @@ namespace App\Providers;
 use App\Domain\Assistant\Llm\FakeLlmClient;
 use App\Domain\Assistant\Llm\LlmClient;
 use App\Domain\Assistant\Llm\UnavailableLlmClient;
+use App\Domain\Assistant\Models\AiActionProposal;
+use App\Domain\Assistant\Models\Conversation;
+use App\Domain\Assistant\Models\KnowledgeDocument;
 use App\Domain\Brief\Models\Brief;
 use App\Domain\Content\Models\Article;
 use App\Domain\Content\Models\CaseStudy;
@@ -80,6 +83,9 @@ class AppServiceProvider extends ServiceProvider
             'brief' => Brief::class,
             'appointment' => Appointment::class,
             'company' => Company::class,
+            'knowledge_document' => KnowledgeDocument::class,
+            'conversation' => Conversation::class,
+            'ai_action_proposal' => AiActionProposal::class,
         ]);
 
         // Mots de passe : 12 caractères minimum (TRD §11).
