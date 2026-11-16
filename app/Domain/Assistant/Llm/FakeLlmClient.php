@@ -49,6 +49,12 @@ final class FakeLlmClient implements LlmClient
         if ($has('prompt', 'instruction', 'configuration', 'mode developpeur', 'administrateur', 'autres clients')) {
             return $reply('Je ne peux pas partager ma configuration ni des informations internes. Je peux en revanche vous présenter nos solutions ou vous orienter vers le diagnostic gratuit.', 'no_source', 'start_diagnostic');
         }
+        if ($has('qui vous a', 'qui t\'a', 'votre developpeur', 'ton developpeur', 'developpe par', 'cree par', 'concu par')) {
+            return $reply('Développé par Kilakodon Services.');
+        }
+        if ($has('votre nom', 'ton nom', 'qui etes-vous', 'qui es-tu', 'vous appelez', 't\'appelles')) {
+            return $reply('Je suis Kilakodon Assistant, l\'assistant de Kilakodon Services. Comment puis-je vous aider ?');
+        }
         if ($has('parler a quelqu', 'humain', 'conseiller', 'urgent', 'bloquee', 'whatsapp')) {
             return $reply('Je vous mets en relation avec un conseiller sur WhatsApp : il pourra reprendre votre demande.', 'no_source', 'handoff_whatsapp');
         }

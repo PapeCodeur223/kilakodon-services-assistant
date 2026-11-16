@@ -53,7 +53,7 @@ it('répond, enregistre les deux messages et la version du prompt', function () 
 
     $messages = Message::query()->where('conversation_id', $id)->orderBy('id')->get();
     expect($messages)->toHaveCount(2)
-        ->and($messages[1]->prompt_version)->toBe('sys-v1')
+        ->and($messages[1]->prompt_version)->toBe('sys-v2')
         ->and(Conversation::query()->findOrFail($id)->message_count)->toBe(2)
         ->and(AiUsageDaily::today()->requests)->toBe(1);
 });

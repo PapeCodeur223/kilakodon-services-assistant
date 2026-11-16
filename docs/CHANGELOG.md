@@ -2,6 +2,11 @@
 
 ## [Non publié]
 
+### Contenus validés et identité de l'assistant (2026-11-16)
+- Contenus validés par la direction exportés dans les fichiers de seed (solutions, FAQ, Méthode, À propos, pages légales) : ils seront identiques en production (D-020).
+- Assistant renommé **Kilakodon Assistant** ; prompt `sys-v2` avec section IDENTITÉ et deux cas critiques au corpus (D-019).
+- Nouveau logo Moov Money (marges rognées, affiché plus grand dans le pied de page).
+
 ### Lot 4 — Assistant IA (2026-11-16, en cours de validation)
 #### Ajouté
 - Tables de l'assistant (`knowledge_documents`, `knowledge_chunks` avec index FULLTEXT, `conversations`, `messages`, `ai_action_proposals`, `ai_feedback`, `ai_usage_daily`), modèles et enums.

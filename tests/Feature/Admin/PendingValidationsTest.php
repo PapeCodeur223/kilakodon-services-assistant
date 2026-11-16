@@ -9,7 +9,11 @@ use App\Filament\Resources\Services\ServiceResource;
 use Database\Seeders\ContentSeeder;
 use Database\Seeders\SettingsSeeder;
 
-beforeEach(fn () => $this->seed([SettingsSeeder::class, ContentSeeder::class]));
+beforeEach(function () {
+    $this->seed([SettingsSeeder::class, ContentSeeder::class]);
+    // Les contenus seedés sont validés (D-020) : on réintroduit un point à confirmer.
+    Service::query()->where('slug', 'erp-crm-sur-mesure')->update(['status' => 'draft', 'published_at' => null, 'duration_hint' => 'Premier module en 6 à 10 semaines [À VALIDER]']);
+});
 
 it('ouvre la page « À valider » à l\'admin et à l\'éditeur, pas au commercial', function () {
     $this->actingAs(User::factory()->editor()->create())->get('/admin/a-valider')->assertOk();

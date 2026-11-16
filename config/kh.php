@@ -19,7 +19,9 @@ return [
     // `logo` : fichier officiel dans public/ (largeur et hauteur réelles) ; null = nom affiché en attendant le logo.
     'payment_operators' => [
         ['name' => 'Orange Money', 'logo' => 'images/payments/orange-money.svg', 'width' => 431, 'height' => 115],
-        ['name' => 'Moov Money', 'logo' => 'images/payments/moov_money.png', 'width' => 447, 'height' => 447],
+        // Nouveau fichier fourni par Kilakodon (moov_money.png), marges blanches rognées, logo inchangé ;
+        // `large` : logo plus compact, affiché plus haut pour rester lisible.
+        ['name' => 'Moov Money', 'logo' => 'images/payments/moov-money.png', 'width' => 542, 'height' => 330, 'large' => true],
         ['name' => 'Wave', 'logo' => 'images/payments/wave.png', 'width' => 230, 'height' => 101],
         // Fichier fourni par Kilakodon (sama_money.png), marges blanches rognées, logo inchangé.
         ['name' => 'Sama Money', 'logo' => 'images/payments/sama-money.png', 'width' => 412, 'height' => 149],

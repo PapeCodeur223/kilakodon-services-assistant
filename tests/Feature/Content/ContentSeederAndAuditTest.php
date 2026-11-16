@@ -11,7 +11,7 @@ use App\Domain\Platform\Services\Settings;
 use Database\Seeders\ContentSeeder;
 use Database\Seeders\SettingsSeeder;
 
-it('seed les contenus de CONTENT.md : brouillon s’ils contiennent [À VALIDER], publiés sinon', function () {
+it('seed les contenus validés : brouillon s’ils contiennent [À VALIDER], publiés sinon', function () {
     $this->seed(ContentSeeder::class);
 
     expect(Service::query()->count())->toBe(6)
@@ -53,6 +53,8 @@ it('signale les [À VALIDER] restants et échoue tant qu’il en reste', functio
 
 it('inclut les brouillons avec --all', function () {
     $this->seed(ContentSeeder::class);
+    Service::query()->where('slug', 'stocks-facturation-caisse')
+        ->update(['status' => ContentStatus::Draft->value, 'published_at' => null, 'duration_hint' => 'À préciser [À VALIDER]']);
 
     $this->artisan('kh:content-audit --all')
         ->expectsOutputToContain('stocks-facturation-caisse')

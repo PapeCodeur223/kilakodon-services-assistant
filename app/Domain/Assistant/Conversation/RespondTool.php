@@ -20,7 +20,7 @@ final class RespondTool
 
         return [
             'name' => self::NAME,
-            'description' => 'Réponse structurée de l\'Assistant Kilakodon.',
+            'description' => 'Réponse structurée de Kilakodon Assistant.',
             'input_schema' => [
                 'type' => 'object',
                 'required' => ['answer', 'grounding', 'citations', 'suggested_action'],

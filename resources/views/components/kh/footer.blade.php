@@ -77,7 +77,7 @@
                 @foreach ((array) config('kh.payment_operators') as $operator)
                     <li class="flex h-12 min-w-28 items-center justify-center rounded-xl bg-white px-4 shadow-sm">
                         @if (! empty($operator['logo']))
-                            <img src="{{ asset($operator['logo']) }}" alt="{{ $operator['name'] }}" width="{{ $operator['width'] ?? 120 }}" height="{{ $operator['height'] ?? 40 }}" loading="lazy" class="h-8 w-auto">
+                            <img src="{{ asset($operator['logo']) }}" alt="{{ $operator['name'] }}" width="{{ $operator['width'] ?? 120 }}" height="{{ $operator['height'] ?? 40 }}" loading="lazy" @class(['w-auto', 'h-10' => ! empty($operator['large']), 'h-8' => empty($operator['large'])])>
                         @else
                             <span class="text-small font-bold text-kh-blue-900">{{ $operator['name'] }}</span>
                         @endif

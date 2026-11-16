@@ -129,7 +129,7 @@ export function createAssistant(root, launcher, config) {
         h('div', { class: 'flex items-center gap-3 border-b border-line px-4 py-3' },
             h('span', { class: 'inline-flex size-9 items-center justify-center rounded-full bg-kh-blue-50 text-kh-blue-700' }, icon('sparkles', 18)),
             h('div', { class: 'flex-1' },
-                h('p', { id: 'kh-assistant-title', class: 'flex items-center gap-2 font-semibold text-ink' }, 'Assistant Kilakodon',
+                h('p', { id: 'kh-assistant-title', class: 'flex items-center gap-2 font-semibold text-ink' }, 'Kilakodon Assistant',
                     h('span', { class: 'rounded-full bg-kh-blue-50 px-2 py-0.5 text-tag font-semibold text-kh-blue-700' }, 'IA')),
             ),
             close,
