@@ -53,7 +53,7 @@ it('répond, enregistre les deux messages et la version du prompt', function () 
 
     $messages = Message::query()->where('conversation_id', $id)->orderBy('id')->get();
     expect($messages)->toHaveCount(2)
-        ->and($messages[1]->prompt_version)->toBe('sys-v2')
+        ->and($messages[1]->prompt_version)->toBe('sys-v3')
         ->and(Conversation::query()->findOrFail($id)->message_count)->toBe(2)
         ->and(AiUsageDaily::today()->requests)->toBe(1);
 });
@@ -156,7 +156,7 @@ it('remplace une réponse en panne par le repli, sans rien inventer', function (
     Http::fake(['api.anthropic.com/*' => Http::response([], 503)]);
     $id = startConversation();
 
-    ask($id, 'Bonjour')->assertJsonPath('message.content', FallbackTexts::UNAVAILABLE)->assertJsonPath('message.error_code', 'llm_unavailable');
+    ask($id, 'Vous faites des logiciels de caisse ?')->assertJsonPath('message.content', FallbackTexts::UNAVAILABLE)->assertJsonPath('message.error_code', 'llm_unavailable');
 });
 
 it('propose un brief sans rien écrire avant la confirmation', function () {
@@ -343,4 +343,32 @@ it('ne bloque pas les autres visiteurs derrière la même IP (opérateurs mobile
 
     expect($start->handle($visitor, '10.0.0.1', '/'))->toBeInstanceOf(GuardFailure::class)
         ->and($start->handle((string) Str::uuid(), '10.0.0.1', '/'))->toBeInstanceOf(Conversation::class);
+});
+
+it('répond aux salutations sans appeler le modèle et sans coût (D-021)', function () {
+    config(['assistant.driver' => 'anthropic', 'assistant.api_key' => 'sk-test-factice', 'assistant.pricing' => ['claude-haiku-5-5' => ['input' => 1, 'output' => 5]]]);
+    app(Settings::class)->set('ai.daily_budget_usd', 5);
+    Http::fake();
+    $id = startConversation();
+
+    ask($id, 'Salut, ça va ?')->assertOk()
+        ->assertJsonPath('message.content', fn (string $text) => str_contains($text, 'Kilakodon Assistant'))
+        ->assertJsonPath('message.suggested_action', 'none');
+
+    Http::assertNothingSent();
+    $messages = Message::query()->where('conversation_id', $id)->orderBy('id')->get();
+    expect($messages)->toHaveCount(2)
+        ->and($messages[1]->model)->toBe('small-talk-v1')
+        ->and($messages[1]->prompt_version)->toBe('small-talk-v1')
+        ->and(Conversation::query()->findOrFail($id)->message_count)->toBe(2)
+        ->and(AiUsageDaily::today()->requests)->toBe(0)
+        ->and(AiUsageDaily::today()->cost_estimate_usd_micros)->toBe(0);
+});
+
+it('applique les gardes même aux salutations', function () {
+    $id = startConversation();
+    app(Settings::class)->set('ai.enabled', false);
+
+    ask($id, 'salut')->assertJsonPath('status', 'unavailable')->assertJsonPath('reason', 'disabled');
+    expect(Message::query()->where('conversation_id', $id)->count())->toBe(0);
 });

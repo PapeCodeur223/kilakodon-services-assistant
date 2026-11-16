@@ -2,6 +2,11 @@
 
 ## [Non publié]
 
+### Pages, assistant et réalisations (2026-11-16)
+- Pages **À propos** (repères, histoire et conviction, équipe, domaines d'expertise, mission), **Contact** (canaux directs, formulaire en carte, « ce qui se passe ensuite ») et **Rendez-vous** (parcours en 3 étapes, formulaire numéroté, conseils de préparation) refondues dans le style de la page Méthode ; composant `x-kh.next-steps` ; icônes Lucide ajoutées (même version 0.460.0).
+- Assistant : échanges courants à réponse fixe sans appel au modèle (`SmallTalk`, D-021), prompt `sys-v3`, 5 cas ajoutés au corpus, tests unitaires et API.
+- 10 réalisations en brouillon à relire et autoriser (D-022), seedées depuis `database/seeders/content/case-studies.php`.
+
 ### Contenus validés et identité de l'assistant (2026-11-16)
 - Contenus validés par la direction exportés dans les fichiers de seed (solutions, FAQ, Méthode, À propos, pages légales) : ils seront identiques en production (D-020).
 - Assistant renommé **Kilakodon Assistant** ; prompt `sys-v2` avec section IDENTITÉ et deux cas critiques au corpus (D-019).

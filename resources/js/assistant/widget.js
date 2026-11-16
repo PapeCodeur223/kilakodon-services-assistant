@@ -486,7 +486,7 @@ export function createAssistant(root, launcher, config) {
     }
 
     const suggestions = h('div', { class: 'space-y-2' },
-        h('p', { class: 'text-small text-slate' }, 'Bonjour ! Je réponds à partir des pages du site. Par exemple :'),
+        h('p', { class: 'text-small text-slate' }, 'Bonjour ! Je suis Kilakodon Assistant. Je réponds à partir des pages du site, par exemple :'),
         SUGGESTIONS.map((s) => h('button', {
             type: 'button',
             class: 'block w-full rounded-input border border-line bg-white px-4 py-2.5 text-start text-small text-kh-blue-700 hover:border-kh-blue-200',

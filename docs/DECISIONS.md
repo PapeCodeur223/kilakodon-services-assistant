@@ -26,6 +26,8 @@
 | D-018 | 2026-11-15 | « Vos données vous appartiennent — export possible à tout moment, documentation fournie » validé et affiché sur l'accueil | Validation de la direction. Résout Q-017 |
 | D-019 | 2026-11-16 | Nom de l'assistant : **Kilakodon Assistant**. À la question de son nom : « Je suis Kilakodon Assistant… » ; à la question de son développeur : « Développé par Kilakodon Services. » Prompt `sys-v2`. Il reconnaît être un assistant automatique et ne donne aucun détail sur le modèle ou le fournisseur | Validation de la direction |
 | D-020 | 2026-11-16 | Contenus validés dans l'administration (6 solutions, FAQ, Méthode, À propos, mentions légales, confidentialité, cookies) exportés dans `database/seeders/content/` et versionnés sur GitHub : ils font foi et seront identiques en production. Design de la page Méthode validé. Nouveau logo Moov Money fourni (marges rognées, affiché plus grand) | Validation de la direction |
+| D-021 | 2026-11-16 | Échanges courants de l'assistant (salutations FR, salam, bambara, « ça va », merci, au revoir, nom, développeur, aide) traités par des règles fixes (`SmallTalk`), sans appel au modèle ni coût, après les gardes. Le message doit être entièrement une formule connue, sinon il part au modèle (prompt `sys-v3`, section ÉCHANGES COURANTS) | Demande de la direction : « salut » ne doit plus répondre « Je n'ai pas cette information » |
+| D-022 | 2026-11-16 | 10 réalisations listées par la direction (logiciels : école, pharmacie, immobilier, BTP, boulangerie-pâtisserie, quincaillerie, mercerie, électronique, solaire ; application prepaconcours.ml) créées en brouillon, client anonymisé (prepaconcours.ml nommé). Publication après relecture, autorisation client et retrait des [À VALIDER]. Pages À propos, Contact et Rendez-vous refondues dans le style de la page Méthode | Demande de la direction |
 
 ## Questions ouvertes (à trancher par Kilakodon avant la mise en production)
 
@@ -146,3 +148,8 @@
 ### 2026-11-16 — Contenus validés et identité de l'assistant
 - Les fichiers `database/seeders/content/{services,faqs,pages}.php` ont été régénérés depuis la base locale (contenus validés par la direction). Ils priment désormais sur les brouillons correspondants de `docs/CONTENT.md` (écart noté ; CONTENT.md reste la trace historique des premiers textes). Les secteurs et les articles étaient déjà identiques.
 - Le prompt `sys-v1` est conservé pour l'historique des messages ; `sys-v2` ajoute la section IDENTITÉ (D-019). Deux cas critiques ajoutés au corpus (`identity-01`, `identity-02`).
+
+### 2026-11-16 — Réalisations : points à confirmer par la direction
+- Chaque fiche porte « [À VALIDER : client(s) et ville] » et « [À VALIDER : modules effectivement livrés] » : les descriptions reprennent ce que couvrent les pages secteur et solution validées, pas des faits propres à un client.
+- prepaconcours.ml : la formule « la première plateforme de préparation de concours en ligne » est un superlatif invérifiable (règle de rédaction) ; elle reste en [À VALIDER] tant qu'aucune source n'est fournie.
+- Électronique et solaire : rattachés au secteur « Commerce & distribution » faute de secteur dédié ; activité exacte à confirmer.

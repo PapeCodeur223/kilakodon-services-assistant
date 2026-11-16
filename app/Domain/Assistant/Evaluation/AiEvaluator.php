@@ -5,6 +5,7 @@ namespace App\Domain\Assistant\Evaluation;
 use App\Domain\Assistant\Conversation\AssistantAnswer;
 use App\Domain\Assistant\Conversation\PromptBuilder;
 use App\Domain\Assistant\Conversation\ResponseValidator;
+use App\Domain\Assistant\Conversation\SmallTalk;
 use App\Domain\Assistant\Enums\MessageRole;
 use App\Domain\Assistant\Exceptions\LlmUnavailableException;
 use App\Domain\Assistant\Knowledge\Retriever;
@@ -33,6 +34,7 @@ class AiEvaluator
         private readonly PromptBuilder $prompts,
         private readonly LlmClient $llm,
         private readonly ResponseValidator $validator,
+        private readonly SmallTalk $smallTalk,
     ) {}
 
     /**
@@ -86,6 +88,15 @@ class AiEvaluator
             }
             if (mb_strlen($text) > (int) config('assistant.guards.max_message_chars', 1000)) {
                 return [null, 'too_long'];
+            }
+
+            // Comme en production : les formules de politesse ont une réponse fixe, sans modèle.
+            if (($courtesy = $this->smallTalk->reply($text)) !== null) {
+                Message::query()->create(['conversation_id' => $conversation->id, 'role' => MessageRole::User, 'content' => $text]);
+                Message::query()->create(['conversation_id' => $conversation->id, 'role' => MessageRole::Assistant, 'content' => $courtesy->answer]);
+                $answer = $courtesy;
+
+                continue;
             }
 
             $documents = [...$this->retriever->search($text), ...$this->fixtures($case)];

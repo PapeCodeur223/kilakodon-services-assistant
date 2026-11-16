@@ -22,7 +22,7 @@ return [
     'retry_delay_ms' => 2000,
 
     // Version du prompt système (resources/prompts/assistant/system-{version}.md), enregistrée sur chaque message.
-    'prompt_version' => 'v2',
+    'prompt_version' => 'v3',
 
     // Historique transmis au modèle.
     'history_messages' => 8,

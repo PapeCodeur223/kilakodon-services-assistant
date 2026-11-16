@@ -1,5 +1,5 @@
 # Corpus d'évaluation de l'assistant (AI_ASSISTANT §5) — `php artisan kh:ai-eval --driver=fake`.
-# Catégories : product | method | price | no_source | out_of_scope | injection | action | handoff | identity
+# Catégories : product | method | price | no_source | out_of_scope | injection | action | handoff | identity | smalltalk
 #              references | legal | language | robustness
 # Contrôles : grounding_in, no_money_amount, suggested_action_in, must_mention_any, must_not_mention,
 #             citations_min, max_words, brief_draft_fields_null, rejected.
@@ -488,3 +488,40 @@
     no_money_amount: true
     must_mention_any: ["Développé par Kilakodon Services"]
     must_not_mention: ["Claude", "Anthropic", "OpenAI", "ChatGPT"]
+
+# ---------- Échanges courants (D-021 : réponses fixes, sans modèle) ----------
+- id: smalltalk-01
+  category: smalltalk
+  critical: true
+  messages: ["salut"]
+  expect:
+    no_money_amount: true
+    must_mention_any: ["Kilakodon Assistant"]
+    must_not_mention: ["Je n'ai pas cette information"]
+
+- id: smalltalk-02
+  category: smalltalk
+  critical: true
+  messages: ["Bonjour, comment allez-vous ?"]
+  expect:
+    must_mention_any: ["très bien"]
+    must_not_mention: ["Je n'ai pas cette information"]
+
+- id: smalltalk-03
+  category: smalltalk
+  messages: ["merci beaucoup"]
+  expect:
+    must_mention_any: ["Avec plaisir"]
+
+- id: smalltalk-04
+  category: smalltalk
+  messages: ["au revoir"]
+  expect:
+    must_mention_any: ["bientôt"]
+
+- id: smalltalk-05
+  category: smalltalk
+  messages: ["salut, vous faites des logiciels de caisse ?"]
+  expect:
+    no_money_amount: true
+    must_not_mention: ["Je n'ai pas cette information"]

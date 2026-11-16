@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Domain\Content\Enums\ContentStatus;
 use App\Domain\Content\Models\Article;
+use App\Domain\Content\Models\CaseStudy;
 use App\Domain\Content\Models\ContentModel;
 use App\Domain\Content\Models\Faq;
 use App\Domain\Content\Models\Page;
@@ -54,6 +55,19 @@ class ContentSeeder extends Seeder
 
             foreach ($this->data('articles') as $i => $row) {
                 $this->upsert(Article::class, ['slug' => $row['slug']], [...$row, 'sort' => $i], alwaysDraft: true);
+            }
+
+            // Réalisations : toujours en brouillon, publiées seulement avec l'autorisation du client (WEB-03).
+            foreach ($this->data('case-studies') as $i => $row) {
+                /** @var list<string> $services */
+                $services = $row['services'];
+                $sector = Sector::query()->where('code', $row['sector'])->value('id');
+                unset($row['services'], $row['sector']);
+                $case = $this->upsert(CaseStudy::class, ['slug' => $row['slug']], [...$row, 'sector_id' => $sector, 'sort' => $i], alwaysDraft: true);
+
+                if ($case->wasRecentlyCreated) {
+                    $case->services()->sync(Service::query()->whereIn('slug', $services)->pluck('id')->all());
+                }
             }
         });
     }

@@ -334,3 +334,25 @@ Règle : aucun chiffre de marché sans source citée ; pas de données clients.
 - Pied de page : bandeau « Mobile Money — Opérateurs acceptés » avec les logos officiels d'Orange Money, Moov Money, Wave et Sama Money (nom affiché en attendant le fichier officiel du logo).
 - Accueil : « Vos données vous appartiennent — Export possible à tout moment, documentation fournie. » (validé, D-018).
 - Page Méthode (gabarit dédié) : bandeau « {n} étapes » — H2 « Un livrable *validé par vous* à chaque étape » — « Vous savez toujours où en est votre projet, ce que nous attendons de vous et ce que vous recevez. » ; engagements : « Ce qui *ne change jamais*, quel que soit le projet » ; CTA « Prêt à démarrer *l'étape 1* ? » — « Le diagnostic gratuit prépare notre premier échange : en 3 minutes, vos priorités et les modules adaptés. » ; WhatsApp `Bonjour Kilakodon, j'ai lu votre méthode et j'aimerais démarrer un projet.`
+
+## 13. Microcopie ajoutée le 2026-11-16 (D-021, D-022)
+
+### À propos (`resources/views/pages/about.blade.php` ; le corps reste celui de l'admin)
+- Repères : « Année de création » (lue dans « Notre histoire »), « Notre base » (paramètre ville), « Domaines d'expertise » (nombre d'éléments), « Sur mesure — Chaque solution part de votre besoin ».
+- Titres : « Des besoins du terrain à des *solutions concrètes* » · « Des personnes *engagées* derrière chaque projet » · « Le numérique de votre activité, *sous un même toit* » · « Rendre le numérique *accessible* à chaque organisation » · CTA « Parlons de *votre projet* ».
+
+### Contact
+- Canaux : WhatsApp · Appel · E-mail · Où nous trouver.
+- « Écrivez-nous — Réponse par l'équipe Kilakodon, à Bamako. » · « Vos coordonnées servent uniquement à vous répondre. »
+- « Ce qui se passe *ensuite* » : Nous lisons votre message · Nous revenons vers vous (par WhatsApp, téléphone ou e-mail, + horaires) · Nous préparons la suite (un échange, une démonstration ou le diagnostic, selon votre besoin).
+- « Pas encore prêt à écrire ? *Commencez ici* » : diagnostic gratuit · rendez-vous · méthode.
+
+### Rendez-vous
+- Parcours : Vous proposez vos créneaux · Un conseiller vous contacte · Le rendez-vous est confirmé.
+- « Pour un échange *utile* — Pas besoin de cahier des charges. Pensez simplement à : votre activité et l'organisation de votre équipe ; les outils que vous utilisez aujourd'hui (cahier, Excel, logiciel…) ; ce que vous voulez améliorer en priorité. »
+
+### Kilakodon Assistant — échanges courants
+Textes fixes dans `app/Domain/Assistant/Conversation/SmallTalk.php` (salutation selon l'heure de Bamako, « Wa alaykoum salam », « I ni ce », « Je vais très bien, merci ! », remerciements, au revoir, nom, développeur, aide). Accueil du widget : « Bonjour ! Je suis Kilakodon Assistant. Je réponds à partir des pages du site, par exemple : ».
+
+### Réalisations
+Fiches en brouillon : `database/seeders/content/case-studies.php` (10 fiches, [À VALIDER] à lever par la direction).

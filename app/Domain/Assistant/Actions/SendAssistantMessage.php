@@ -8,6 +8,7 @@ use App\Domain\Assistant\Conversation\AssistantReply;
 use App\Domain\Assistant\Conversation\FallbackTexts;
 use App\Domain\Assistant\Conversation\PromptBuilder;
 use App\Domain\Assistant\Conversation\ResponseValidator;
+use App\Domain\Assistant\Conversation\SmallTalk;
 use App\Domain\Assistant\Enums\ConversationStatus;
 use App\Domain\Assistant\Enums\MessageRole;
 use App\Domain\Assistant\Enums\SuggestedAction;
@@ -37,6 +38,7 @@ class SendAssistantMessage
         private readonly LlmClient $llm,
         private readonly ResponseValidator $validator,
         private readonly ProposeAssistantAction $proposals,
+        private readonly SmallTalk $smallTalk,
     ) {}
 
     public function handle(Conversation $conversation, string $text): AssistantReply
@@ -47,6 +49,14 @@ class SendAssistantMessage
             $this->usage()->increment('blocked_requests');
 
             return AssistantReply::blocked($failure);
+        }
+
+        // Salutations, remerciements, identité… : réponse fixe, sans appel au modèle ni coût (D-021).
+        if (($courtesy = $this->smallTalk->reply($text)) !== null) {
+            $started = hrtime(true);
+            $this->store($conversation, ['role' => MessageRole::User, 'content' => $text]);
+
+            return $this->reply($conversation, $courtesy, null, $started, SmallTalk::ENGINE);
         }
 
         $documents = $this->retriever->search($text);
@@ -73,7 +83,7 @@ class SendAssistantMessage
         return $this->reply($conversation, $answer, $response, $started);
     }
 
-    private function reply(Conversation $conversation, AssistantAnswer $answer, ?LlmResponse $response, int|float $started): AssistantReply
+    private function reply(Conversation $conversation, AssistantAnswer $answer, ?LlmResponse $response, int|float $started, ?string $engine = null): AssistantReply
     {
         $latency = (int) round((hrtime(true) - $started) / 1_000_000);
         $tokensIn = $response->inputTokens ?? 0;
@@ -96,8 +106,8 @@ class SendAssistantMessage
             'citations' => $answer->citations !== [] ? $answer->citations : null,
             'grounding' => $answer->grounding,
             'suggested_action' => $answer->suggestedAction,
-            'model' => $response?->model,
-            'prompt_version' => $this->prompts->version(),
+            'model' => $response->model ?? $engine,
+            'prompt_version' => $engine ?? $this->prompts->version(),
             'tokens_in' => $response !== null ? $tokensIn : null,
             'tokens_out' => $response !== null ? $tokensOut : null,
             'latency_ms' => $latency,
