@@ -28,6 +28,7 @@
 | D-020 | 2026-11-16 | Contenus validés dans l'administration (6 solutions, FAQ, Méthode, À propos, mentions légales, confidentialité, cookies) exportés dans `database/seeders/content/` et versionnés sur GitHub : ils font foi et seront identiques en production. Design de la page Méthode validé. Nouveau logo Moov Money fourni (marges rognées, affiché plus grand) | Validation de la direction |
 | D-021 | 2026-11-16 | Échanges courants de l'assistant (salutations FR, salam, bambara, « ça va », merci, au revoir, nom, développeur, aide) traités par des règles fixes (`SmallTalk`), sans appel au modèle ni coût, après les gardes. Le message doit être entièrement une formule connue, sinon il part au modèle (prompt `sys-v3`, section ÉCHANGES COURANTS) | Demande de la direction : « salut » ne doit plus répondre « Je n'ai pas cette information » |
 | D-022 | 2026-11-16 | 10 réalisations listées par la direction (logiciels : école, pharmacie, immobilier, BTP, boulangerie-pâtisserie, quincaillerie, mercerie, électronique, solaire ; application prepaconcours.ml) créées en brouillon, client anonymisé (prepaconcours.ml nommé). Publication après relecture, autorisation client et retrait des [À VALIDER]. Pages À propos, Contact et Rendez-vous refondues dans le style de la page Méthode | Demande de la direction |
+| D-023 | 2026-11-16 | IA : modèle **Claude Haiku 5.5**, tarifs officiels saisis (0,10 $ / 0,50 $ par million de jetons en entrée / sortie), **budget quotidien 0,50 $** (alerte e-mail à 80 %, coupure automatique à 100 %). Clé API uniquement dans le `.env` local, ajoutée par la direction. Mises à jour de sécurité Laravel 12.72 / Symfony 7.4.23 appliquées (`composer audit` : 0 vulnérabilité) | Validation de la direction ; résout Q-009 |
 
 ## Questions ouvertes (à trancher par Kilakodon avant la mise en production)
 
@@ -41,7 +42,7 @@
 | Q-006 | Réalisations publiables (accord écrit des clients) | Section Réalisations | Section masquée tant qu'il n'y en a aucune |
 | ~~Q-007~~ (résolue : D-017) | Opérateurs Mobile Money réellement intégrables | Contenus | Formulation prudente [À VALIDER] |
 | Q-008 | Conformité « facture normalisée » | Contenu Stocks & caisse | Formulation prudente [À VALIDER] |
-| Q-009 | Budget IA mensuel et quotidien | AssistantGuard | 0 en production tant que non renseigné (IA désactivée) |
+| Q-009 | ~~Budget IA mensuel et quotidien~~ | AssistantGuard | **Tranchée le 2026-11-16 → D-023** |
 | Q-010 | Durées de conservation (diagnostics, conversations, leads perdus) | Purges | 30 j / 90 j / non purgé |
 | Q-011 | Régime de consentement pour la mesure d'audience ; validation juridique de la politique de confidentialité (loi n° 2013-015, APDP) | Bannière cookies | Mesure désactivée par défaut jusqu'à acceptation |
 | Q-012 | Sort de l'ancien espace client `/client/*` (des clients l'utilisent-ils ?) | Redirections | Redirection vers `/contact` |

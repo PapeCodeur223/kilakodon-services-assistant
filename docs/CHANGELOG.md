@@ -2,6 +2,11 @@
 
 ## [Non publié]
 
+### Réalisations, budget IA et sécurité (2026-11-16)
+- Pages **Réalisations** refondues : filtres par secteur sans JavaScript, fiche à la une, cartes avec visuel du secteur et livrables ; fiche détaillée avec repères, récit en frise (contexte, défi, intervention), livrables, solutions utilisées et autres réalisations. Composant `x-kh.case-card`.
+- IA : Claude Haiku 5.5, tarifs officiels saisis, budget quotidien 0,50 $ (D-023, Q-009 tranchée).
+- Sécurité : Laravel 12.72 et Symfony 7.4.23 (commit séparé), `composer audit` sans vulnérabilité.
+
 ### Pages, assistant et réalisations (2026-11-16)
 - Pages **À propos** (repères, histoire et conviction, équipe, domaines d'expertise, mission), **Contact** (canaux directs, formulaire en carte, « ce qui se passe ensuite ») et **Rendez-vous** (parcours en 3 étapes, formulaire numéroté, conseils de préparation) refondues dans le style de la page Méthode ; composant `x-kh.next-steps` ; icônes Lucide ajoutées (même version 0.460.0).
 - Assistant : échanges courants à réponse fixe sans appel au modèle (`SmallTalk`, D-021), prompt `sys-v3`, 5 cas ajoutés au corpus, tests unitaires et API.

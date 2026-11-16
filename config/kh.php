@@ -38,7 +38,8 @@ return [
         'notify.lead_recipients' => [env('KH_CONTACT_EMAIL', 'kilakodon@gmail.com')],
         // Q-009 : IA coupée et budget nul tant que la direction n'a pas fixé le budget.
         'ai.enabled' => false,
-        'ai.daily_budget_usd' => 0,
+        // Budget quotidien validé par la direction (D-023, Q-009) : alerte à 80 %, coupure à 100 %.
+        'ai.daily_budget_usd' => 0.5,
         'ai.max_messages_per_conversation' => 20,
         'consent.texts' => [
             'version' => 1,

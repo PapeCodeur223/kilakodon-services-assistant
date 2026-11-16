@@ -45,8 +45,11 @@ return [
 
     // Prix en dollars par million de jetons, par modèle, à renseigner depuis la page officielle des tarifs
     // (TRD §7.3). Modèle absent = « coût non configuré » : jamais de valeur inventée.
-    // Exemple : 'claude-haiku-5-5' => ['input' => …, 'output' => …],
-    'pricing' => [],
+    // Tarifs officiels Anthropic relevés le 2026-11-16 et validés par la direction (D-023) :
+    // Claude Haiku 5.5, prompts ≤ 100 000 jetons (les nôtres font environ 5 000 jetons).
+    'pricing' => [
+        'claude-haiku-5-5' => ['input' => 0.10, 'output' => 0.50],
+    ],
 
     // Mots vides français retirés des questions avant la recherche.
     'stopwords' => [
