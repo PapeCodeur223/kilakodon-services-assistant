@@ -52,7 +52,7 @@
         <tr><td class="q">Contact</td><td>{{ $declared['contact']['full_name'] }}</td></tr>
         <tr><td class="q">Entreprise</td><td>{{ $declared['contact']['company'] ?? '—' }}</td></tr>
         @foreach (collect($declared['answers'] ?? [])->groupBy('step') as $step => $answers)
-            <tr><td colspan="2" style="border: 0; padding-top: 12px;"><h3 style="margin: 0;">{{ $stepTitles[$step] ?? '' }}</h3></td></tr>
+            <tr><td colspan="2" style="border: 0; padding-top: 12px;"><h3 style="margin: 0;">{{ $stepTitles[$step] ?? 'Votre besoin' }}</h3></td></tr>
             @foreach ($answers as $answer)
                 <tr><td class="q">{{ $answer['question'] }}</td><td>{{ $answer['answer'] }}</td></tr>
             @endforeach
@@ -64,6 +64,9 @@
     @endif
 
     <h2>Ce que nous recommandons</h2>
+    @if (! isset($recommended['maturity']))
+    <p>Ce brief a été préparé avec l'assistant : nos recommandations seront établies avec vous lors du premier échange, ou dès maintenant avec le diagnostic gratuit.</p>
+    @else
     <p><span class="tag">Niveau d'équipement numérique</span><br><strong>{{ $recommended['maturity']['label'] }}</strong> (niveau {{ $recommended['maturity']['level'] }} sur 4) — {{ $recommended['maturity']['explanation'] }}</p>
 
     @if (($recommended['pains'] ?? []) !== [])
@@ -94,6 +97,7 @@
                 <li>{{ $clarification['label'] }}</li>
             @endforeach
         </ul>
+    @endif
     @endif
 
     <h2>Résumé</h2>

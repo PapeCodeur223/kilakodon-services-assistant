@@ -1,7 +1,9 @@
 <?php
 
+use App\Domain\Content\Enums\AuthorizationStatus;
 use App\Domain\Content\Enums\ContentStatus;
 use App\Domain\Content\Models\Article;
+use App\Domain\Content\Models\CaseStudy;
 use App\Domain\Content\Models\Faq;
 use App\Domain\Content\Models\Page;
 use App\Domain\Content\Models\Sector;
@@ -11,7 +13,7 @@ use App\Domain\Platform\Services\Settings;
 use Database\Seeders\ContentSeeder;
 use Database\Seeders\SettingsSeeder;
 
-it('seed les contenus de CONTENT.md : brouillon s’ils contiennent [À VALIDER], publiés sinon', function () {
+it('seed les contenus validés : brouillon s’ils contiennent [À VALIDER], publiés sinon', function () {
     $this->seed(ContentSeeder::class);
 
     expect(Service::query()->count())->toBe(6)
@@ -28,6 +30,19 @@ it('seed les contenus de CONTENT.md : brouillon s’ils contiennent [À VALIDER]
     }
 
     expect(Article::query()->where('status', '!=', ContentStatus::Draft->value)->exists())->toBeFalse();
+});
+
+it('publie une réalisation seedée seulement si l’autorisation du client est accordée', function () {
+    $this->seed(ContentSeeder::class);
+
+    $cases = CaseStudy::withoutGlobalScopes()->get();
+    expect($cases)->toHaveCount(10)
+        ->and(CaseStudy::withoutGlobalScopes()->where('slug', 'prepaconcours-ml')->value('client_descriptor'))->not->toContain('remière');
+
+    foreach ($cases as $case) {
+        $publishable = $case->authorization_status === AuthorizationStatus::Granted && $case->pendingValidationFields() === [];
+        expect($case->status)->toBe($publishable ? ContentStatus::Published : ContentStatus::Draft);
+    }
 });
 
 it('est idempotent et n’écrase pas une modification', function () {
@@ -53,6 +68,8 @@ it('signale les [À VALIDER] restants et échoue tant qu’il en reste', functio
 
 it('inclut les brouillons avec --all', function () {
     $this->seed(ContentSeeder::class);
+    Service::query()->where('slug', 'stocks-facturation-caisse')
+        ->update(['status' => ContentStatus::Draft->value, 'published_at' => null, 'duration_hint' => 'À préciser [À VALIDER]']);
 
     $this->artisan('kh:content-audit --all')
         ->expectsOutputToContain('stocks-facturation-caisse')

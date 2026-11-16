@@ -7,8 +7,8 @@ use Illuminate\Database\Seeder;
 
 /**
  * Valeurs initiales des paramètres (config/kh.php). Ne remplace jamais une valeur existante.
- * En local uniquement (BACKEND_SCHEMA §9) : assistant activé avec un budget de 1 USD,
- * le pilote `fake` n'appelant aucune API. Hors local : IA coupée tant que Q-009 n'est pas tranchée.
+ * En local uniquement (BACKEND_SCHEMA §9) : assistant activé. Budget quotidien : 0,50 USD partout (D-023).
+ * Hors local, l'IA reste coupée tant qu'un administrateur ne l'active pas dans les paramètres.
  */
 class SettingsSeeder extends Seeder
 {
@@ -19,7 +19,6 @@ class SettingsSeeder extends Seeder
 
         if (app()->isLocal()) {
             $values['ai.enabled'] = true;
-            $values['ai.daily_budget_usd'] = 1;
         }
 
         foreach ($values as $key => $value) {

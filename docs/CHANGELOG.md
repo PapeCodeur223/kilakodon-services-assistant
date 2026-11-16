@@ -2,6 +2,45 @@
 
 ## [Non publié]
 
+### Clôture du lot 4 (2026-11-16)
+- 10 réalisations publiées (autorisation client accordée) et exportées dans les seeds ; le seeder publie une réalisation seulement si l'autorisation est accordée (D-024).
+- prepaconcours.ml : mention « la première plateforme » retirée.
+- Accueil : toutes les FAQ cochées « accueil » sont affichées (12), sans limite.
+- Évaluation réelle Claude Haiku 5.5 : 62/69 cas réussis, écart sur 3 cas critiques de formulation accepté par la direction.
+
+### Réalisations, budget IA et sécurité (2026-11-16)
+- Pages **Réalisations** refondues : filtres par secteur sans JavaScript, fiche à la une, cartes avec visuel du secteur et livrables ; fiche détaillée avec repères, récit en frise (contexte, défi, intervention), livrables, solutions utilisées et autres réalisations. Composant `x-kh.case-card`.
+- IA : Claude Haiku 5.5, tarifs officiels saisis, budget quotidien 0,50 $ (D-023, Q-009 tranchée).
+- Sécurité : Laravel 12.72 et Symfony 7.4.23 (commit séparé), `composer audit` sans vulnérabilité.
+
+### Pages, assistant et réalisations (2026-11-16)
+- Pages **À propos** (repères, histoire et conviction, équipe, domaines d'expertise, mission), **Contact** (canaux directs, formulaire en carte, « ce qui se passe ensuite ») et **Rendez-vous** (parcours en 3 étapes, formulaire numéroté, conseils de préparation) refondues dans le style de la page Méthode ; composant `x-kh.next-steps` ; icônes Lucide ajoutées (même version 0.460.0).
+- Assistant : échanges courants à réponse fixe sans appel au modèle (`SmallTalk`, D-021), prompt `sys-v3`, 5 cas ajoutés au corpus, tests unitaires et API.
+- 10 réalisations en brouillon à relire et autoriser (D-022), seedées depuis `database/seeders/content/case-studies.php`.
+
+### Contenus validés et identité de l'assistant (2026-11-16)
+- Contenus validés par la direction exportés dans les fichiers de seed (solutions, FAQ, Méthode, À propos, pages légales) : ils seront identiques en production (D-020).
+- Assistant renommé **Kilakodon Assistant** ; prompt `sys-v2` avec section IDENTITÉ et deux cas critiques au corpus (D-019).
+- Nouveau logo Moov Money (marges rognées, affiché plus grand dans le pied de page).
+
+### Lot 4 — Assistant IA (2026-11-16, validé)
+#### Ajouté
+- Tables de l'assistant (`knowledge_documents`, `knowledge_chunks` avec index FULLTEXT, `conversations`, `messages`, `ai_action_proposals`, `ai_feedback`, `ai_usage_daily`), modèles et enums.
+- Base de connaissances : découpage en fragments (120–400 mots), reconstruction automatique à chaque modification d'un contenu publié (`RebuildKnowledgeForSource`), `KnowledgeSeeder`, documents manuels, approbation et retrait par un admin.
+- `Retriever` (FULLTEXT naturel, booléen, synonymes métier, repli par termes, contexte plafonné).
+- Clients `FakeLlmClient` (déterministe, sans réseau) et `AnthropicClient` (outil `respond` imposé, 25 s, une nouvelle tentative sur 429/5xx) ; `PromptBuilder` (`sys-v1`) ; `ResponseValidator` (schéma, citations limitées aux fragments fournis, filtre des montants, brouillon de brief sans champ inventé).
+- `AssistantGuard` : interrupteur (paramètre + `AI_ENABLED`), longueur, messages par conversation, conversations par visiteur et par jour, débit par IP, budget quotidien ; `kh:ai-budget-check` (alerte e-mail à 80 %, toutes les 15 min).
+- API JSON `/api/assistant/*` (ouverture, messages, propositions : modification, confirmation, annulation ; retours) ; propositions figées (payload, hash, idempotence, 30 min) exécutées par les mêmes Actions que les formulaires (`CreateBriefFromAssistant` + `CreateLeadFromBrief`, `RequestAppointment`).
+- Widget public chargé à la demande : lanceur « Une question ? », sources, 👍/👎, carte de confirmation, états indisponible et limite ; absent du site quand l'assistant est coupé.
+- Filament (groupe Assistant) : Base de connaissances, Conversations (le commercial ne voit que ses leads), Retours à revoir, Usage (jour, mois, 31 jours).
+- Corpus `tests/Ai/cases.yaml` (62 cas) et `kh:ai-eval` (pilote factice en continu, API réelle en manuel avec confirmation) avec rapport CSV.
+
+#### Modifié
+- Page privée et PDF du brief : brief sans recommandation (origine assistant) pris en charge.
+- `AppointmentRequest` : source du lead et origine du consentement paramétrables ; `BusinessHours::isOpen()`.
+
+#### Écarts notés dans DECISIONS.md
+- Assistant coupé avec l'API réelle tant que budget et tarif ne sont pas renseignés ; widget sans Alpine (CSP) ; route `revise` ; URL des retours sans identifiant seul ; brief assistant sans recommandation ; `symfony/yaml` (dev) pour le corpus.
 ### Lot 3 — CRM, rendez-vous et notifications (2026-10-29)
 #### Ajouté
 - Tables `lead_stage_history`, `activities`, `appointments`, `privacy_requests` ; enums `ActivityType`, `AppointmentStatus`, `AppointmentChannel`, `SlotPeriod`, `LostReason`, `PrivacyRequestType|Status` ; carte des transitions de `LeadStage`.

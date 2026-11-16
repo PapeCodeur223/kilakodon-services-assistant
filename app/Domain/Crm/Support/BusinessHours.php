@@ -10,6 +10,20 @@ use Illuminate\Support\Carbon;
  */
 final class BusinessHours
 {
+    /**
+     * L'équipe est-elle joignable à cet instant (jour et heure ouvrés, heure de Bamako) ?
+     */
+    public static function isOpen(?Carbon $at = null): bool
+    {
+        $config = (array) config('kh.business_hours');
+        $now = ($at ?? now())->copy()->timezone((string) config('kh.display_timezone'));
+        $days = array_map('intval', (array) ($config['days'] ?? [1, 2, 3, 4, 5, 6]));
+
+        return in_array($now->dayOfWeekIso, $days, true)
+            && $now->hour >= (int) ($config['start'] ?? 8)
+            && $now->hour < (int) ($config['end'] ?? 18);
+    }
+
     public static function between(Carbon $from, Carbon $to): float
     {
         $config = (array) config('kh.business_hours');

@@ -18,7 +18,7 @@ final class MailTemplates
 {
     public const TEMPLATES = [
         'lead_new_internal', 'lead_ack', 'brief_ack', 'appointment_ack', 'appointment_requested_internal',
-        'appointment_confirmed', 'lead_unattended',
+        'appointment_confirmed', 'lead_unattended', 'ai_budget_alert',
     ];
 
     /**
@@ -64,6 +64,11 @@ final class MailTemplates
                 'subject' => count((array) ($p['lead_ids'] ?? [])).' lead(s) en attente depuis plus de 24 h',
                 'view' => 'emails.lead-unattended',
                 'data' => [...$data, 'adminUrl' => url('/admin/leads')],
+            ],
+            'ai_budget_alert' => [
+                'subject' => 'Assistant IA : '.((int) ($p['percent'] ?? 0)).' % du budget du jour consommé',
+                'view' => 'emails.ai-budget-alert',
+                'data' => [...$data, 'adminUrl' => url('/admin')],
             ],
             default => throw new InvalidArgumentException("Modèle d'e-mail inconnu : {$message->template}"),
         };

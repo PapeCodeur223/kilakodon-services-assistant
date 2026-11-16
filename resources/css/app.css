@@ -401,3 +401,9 @@
 @keyframes kh-marquee { to { transform: translateX(-50%); } }
 @keyframes kh-menu-in { from { opacity: 0; transform: translateY(-12px); } to { opacity: 1; transform: none; } }
 @keyframes kh-pulse { 0% { opacity: .9; transform: scale(1); } 70%, 100% { opacity: 0; transform: scale(2.4); } }
+
+/* Panneau de l'assistant (UX §4.3) : apparition 220 ms, transform/opacité, seulement si le mouvement est accepté. */
+@media (prefers-reduced-motion: no-preference) {
+  .kh-assistant-panel { opacity: 0; transform: translateY(16px); transition: opacity 220ms ease-out, transform 220ms ease-out; }
+  .kh-assistant-panel.is-open { opacity: 1; transform: none; }
+}

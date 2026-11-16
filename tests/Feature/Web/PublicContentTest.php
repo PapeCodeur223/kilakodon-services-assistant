@@ -1,6 +1,8 @@
 <?php
 
 use App\Domain\Content\Actions\PublishContent;
+use App\Domain\Content\Enums\ContentStatus;
+use App\Domain\Content\Models\CaseStudy;
 use App\Domain\Content\Models\Faq;
 use App\Domain\Content\Models\Page;
 use App\Domain\Content\Models\Sector;
@@ -18,6 +20,14 @@ beforeEach(function () {
 function publish(object $content): void
 {
     app(PublishContent::class)->handle($content, User::factory()->admin()->create());
+}
+
+/**
+ * Les contenus seedés sont validés (D-020) : on repasse un contenu en brouillon pour les tests de visibilité.
+ */
+function toDraft(string $model, string $slug): void
+{
+    $model::query()->where('slug', $slug)->update(['status' => ContentStatus::Draft->value, 'published_at' => null]);
 }
 
 it('rend toutes les pages publiques principales sans lien vers « # »', function (string $path) {
@@ -54,6 +64,7 @@ it('affiche la carte Mobile Money depuis la validation des opérateurs (D-017)',
 });
 
 it('masque la section Réalisations tant qu’aucune n’est publiée', function () {
+    CaseStudy::query()->update(['status' => 'draft', 'published_at' => null]);
     $this->get('/')->assertDontSee('id="realisations"', false);
 
     publish(CaseStudyFactory::new()->authorized()->create(['title' => 'Caisse pour une chaîne de boutiques']));
@@ -62,6 +73,7 @@ it('masque la section Réalisations tant qu’aucune n’est publiée', function
 });
 
 it('renvoie 404 au public pour un brouillon et le montre à l’équipe en prévisualisation', function () {
+    toDraft(Service::class, 'stocks-facturation-caisse');
     $service = Service::query()->where('slug', 'stocks-facturation-caisse')->sole();
 
     $this->get('/solutions/stocks-facturation-caisse')->assertNotFound();
@@ -75,6 +87,8 @@ it('renvoie 404 au public pour un brouillon et le montre à l’équipe en prév
 });
 
 it('n’autorise pas la prévisualisation pour un commercial', function () {
+    toDraft(Service::class, 'stocks-facturation-caisse');
+
     $this->actingAs(User::factory()->sales()->create())
         ->get('/solutions/stocks-facturation-caisse')
         ->assertNotFound();
@@ -123,6 +137,9 @@ it('affiche les pages légales publiées avec un sommaire ancré', function () {
 });
 
 it('ne fait apparaître dans la navigation que les contenus visibles', function () {
+    toDraft(Service::class, 'stocks-facturation-caisse');
+    toDraft(Page::class, 'mentions-legales');
+
     $this->get('/')
         ->assertDontSee('/solutions/stocks-facturation-caisse', false)
         ->assertSee('/secteurs/commerce-distribution', false)
@@ -139,7 +156,12 @@ it('échappe le HTML saisi dans un contenu Markdown', function () {
         ->assertDontSee('href="javascript:', false);
 });
 
-it('ne publie que 6 FAQ au plus sur l’accueil', function () {
-    expect(Faq::query()->published()->where('on_home', true)->count())->toBeLessThanOrEqual(6)
+it('affiche sur l’accueil toutes les FAQ publiées et cochées « accueil »', function () {
+    $html = $this->get('/')->assertOk()->getContent();
+    $selected = Faq::query()->published()->where('on_home', true)->pluck('question');
+    $shown = $selected->filter(fn (string $q): bool => str_contains((string) $html, e($q)));
+
+    expect($selected->count())->toBeGreaterThan(6)
+        ->and($shown->count())->toBe($selected->count())
         ->and(Sector::query()->published()->count())->toBe(6);
 });

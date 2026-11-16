@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Public;
 use App\Domain\Content\Models\Page;
 use App\Domain\Content\Services\ContentFinder;
 use App\Http\Controllers\Controller;
+use App\View\Support\AboutContent;
 use App\View\Support\MethodContent;
 use Illuminate\Contracts\View\View;
 
@@ -20,6 +21,14 @@ class PageController extends Controller
             $method = MethodContent::parse($page->body);
             if (count($method['steps']) >= 2) {
                 return view('pages.method', ['page' => $page, 'method' => $method]);
+            }
+        }
+
+        // À propos : mise en page riche tant que le texte garde au moins deux sections « ## Titre ».
+        if ($slug === 'a-propos') {
+            $about = AboutContent::parse($page->body);
+            if (count($about['sections']) >= 2) {
+                return view('pages.about', ['page' => $page, 'about' => $about]);
             }
         }
 

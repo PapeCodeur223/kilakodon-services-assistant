@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Public\AppointmentController;
 use App\Http\Controllers\Public\ArticleController;
+use App\Http\Controllers\Public\AssistantController;
 use App\Http\Controllers\Public\BriefController;
 use App\Http\Controllers\Public\CaseStudyController;
 use App\Http\Controllers\Public\ContactController;
@@ -48,6 +49,21 @@ Route::get('/a-propos', [PageController::class, 'show'])->defaults('slug', 'a-pr
 Route::get('/mentions-legales', [PageController::class, 'show'])->defaults('slug', 'mentions-legales')->name('legal.notice');
 Route::get('/confidentialite', [PageController::class, 'show'])->defaults('slug', 'confidentialite')->name('legal.privacy');
 Route::get('/cookies', [PageController::class, 'show'])->defaults('slug', 'cookies')->name('legal.cookies');
+
+// API interne de l'assistant (TRD §5.2) : JSON, même origine, CSRF (groupe web) et limitation de débit.
+Route::prefix('api/assistant')->name('assistant.')->group(function (): void {
+    Route::middleware('throttle:assistant')->group(function (): void {
+        Route::post('/conversations', [AssistantController::class, 'start'])->name('start');
+        Route::post('/conversations/{conversation}/messages', [AssistantController::class, 'message'])->name('message');
+    });
+    Route::middleware('throttle:assistant-actions')->group(function (): void {
+        Route::post('/actions/{proposal}/revise', [AssistantController::class, 'revise'])->name('actions.revise');
+        Route::post('/actions/{proposal}/confirm', [AssistantController::class, 'confirm'])->name('actions.confirm');
+        Route::post('/actions/{proposal}/cancel', [AssistantController::class, 'cancel'])->name('actions.cancel');
+        Route::post('/conversations/{conversation}/messages/{message}/feedback', [AssistantController::class, 'feedback'])
+            ->whereNumber('message')->name('feedback');
+    });
+});
 
 Route::get('/sitemap.xml', [SeoController::class, 'sitemap'])->name('sitemap');
 Route::get('/robots.txt', [SeoController::class, 'robots'])->name('robots');

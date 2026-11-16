@@ -2,12 +2,20 @@
 
 namespace App\Providers;
 
+use App\Domain\Assistant\Conversation\FallbackTexts;
+use App\Domain\Assistant\Jobs\RebuildKnowledgeForSource;
+use App\Domain\Assistant\Llm\AnthropicClient;
 use App\Domain\Assistant\Llm\FakeLlmClient;
 use App\Domain\Assistant\Llm\LlmClient;
 use App\Domain\Assistant\Llm\UnavailableLlmClient;
+use App\Domain\Assistant\Models\AiActionProposal;
+use App\Domain\Assistant\Models\AiFeedback;
+use App\Domain\Assistant\Models\Conversation;
+use App\Domain\Assistant\Models\KnowledgeDocument;
 use App\Domain\Brief\Models\Brief;
 use App\Domain\Content\Models\Article;
 use App\Domain\Content\Models\CaseStudy;
+use App\Domain\Content\Models\ContentModel;
 use App\Domain\Content\Models\Faq;
 use App\Domain\Content\Models\Page;
 use App\Domain\Content\Models\Sector;
@@ -24,12 +32,15 @@ use App\Domain\Platform\Models\OutboundMessage;
 use App\Domain\Platform\Models\Setting;
 use App\Domain\Platform\Models\User;
 use App\Domain\Platform\Services\Settings;
+use App\Policies\AiFeedbackPolicy;
 use App\Policies\AuditLogPolicy;
 use App\Policies\BriefPolicy;
 use App\Policies\ContentPolicy;
+use App\Policies\ConversationPolicy;
 use App\Policies\CrmRecordPolicy;
 use App\Policies\DiagnosticSessionPolicy;
 use App\Policies\DiagnosticTemplatePolicy;
+use App\Policies\KnowledgeDocumentPolicy;
 use App\Policies\LeadPolicy;
 use App\Policies\OutboundMessagePolicy;
 use App\Policies\UserPolicy;
@@ -50,9 +61,10 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->singleton(Settings::class);
 
-        // AI_DRIVER=fake : réponses déterministes ; le client Anthropic arrive au lot 4 (repli en attendant).
+        // AI_DRIVER=fake : réponses déterministes ; anthropic : API réelle (clé dans .env uniquement) ; sinon repli.
         $this->app->bind(LlmClient::class, fn (): LlmClient => match (config('assistant.driver')) {
             'fake' => new FakeLlmClient,
+            'anthropic' => new AnthropicClient,
             default => new UnavailableLlmClient,
         });
     }
@@ -80,6 +92,9 @@ class AppServiceProvider extends ServiceProvider
             'brief' => Brief::class,
             'appointment' => Appointment::class,
             'company' => Company::class,
+            'knowledge_document' => KnowledgeDocument::class,
+            'conversation' => Conversation::class,
+            'ai_action_proposal' => AiActionProposal::class,
         ]);
 
         // Mots de passe : 12 caractères minimum (TRD §11).
@@ -91,8 +106,13 @@ class AppServiceProvider extends ServiceProvider
 
         foreach ([Service::class, Sector::class, CaseStudy::class, Article::class, Faq::class, Page::class] as $content) {
             Gate::policy($content, ContentPolicy::class);
+            // Base de connaissances de l'assistant : reconstruite après chaque modification d'un contenu (TRD §7.1).
+            $content::saved(fn (ContentModel $model) => RebuildKnowledgeForSource::dispatch($model::class, (int) $model->getKey())->afterCommit());
         }
         Gate::policy(Lead::class, LeadPolicy::class);
+        Gate::policy(KnowledgeDocument::class, KnowledgeDocumentPolicy::class);
+        Gate::policy(Conversation::class, ConversationPolicy::class);
+        Gate::policy(AiFeedback::class, AiFeedbackPolicy::class);
         foreach ([Contact::class, Company::class, Appointment::class] as $record) {
             Gate::policy($record, CrmRecordPolicy::class);
         }
@@ -107,5 +127,14 @@ class AppServiceProvider extends ServiceProvider
         RateLimiter::for('contact', fn (Request $request) => Limit::perHour(5)->by((string) $request->ip()));
         // Pages publiques à token (brief, reprise) : freine l'énumération.
         RateLimiter::for('public-token', fn (Request $request) => Limit::perMinute(30)->by((string) $request->ip()));
+        // Assistant (TRD §7.4) : 6 requêtes par minute et par IP ; repli JSON lisible par le widget.
+        RateLimiter::for('assistant', fn (Request $request) => Limit::perMinute((int) config('assistant.guards.requests_per_minute_per_ip', 6))
+            ->by((string) $request->ip())
+            ->response(fn () => response()->json([
+                'status' => 'notice',
+                'reason' => 'rate_limited',
+                'message' => FallbackTexts::RATE_LIMITED,
+            ], 429)));
+        RateLimiter::for('assistant-actions', fn (Request $request) => Limit::perMinute(20)->by((string) $request->ip()));
     }
 }

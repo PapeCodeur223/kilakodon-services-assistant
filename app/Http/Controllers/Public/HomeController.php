@@ -18,7 +18,7 @@ class HomeController extends Controller
         return view('pages.home', [
             'home' => $home->all(),
             'services' => $content->query(Service::class)->get(),
-            'faqs' => $content->query(Faq::class)->where('on_home', true)->limit(6)->get(),
+            'faqs' => $content->query(Faq::class)->where('on_home', true)->get(),
             // Section masquée tant qu'aucune réalisation n'est autorisée et publiée (Q-006).
             'caseStudies' => $content->query(CaseStudy::class)->with('sector')->limit(3)->get(),
             'methodPageVisible' => $content->query(Page::class)->where('slug', 'methode')->exists(),

@@ -6,7 +6,6 @@ use App\Domain\Crm\Data\AppointmentRequest;
 use App\Domain\Crm\Data\ProspectDetails;
 use App\Domain\Crm\Enums\ActivityType;
 use App\Domain\Crm\Enums\AppointmentStatus;
-use App\Domain\Crm\Enums\ConsentSource;
 use App\Domain\Crm\Enums\LeadType;
 use App\Domain\Crm\Exceptions\CrmException;
 use App\Domain\Crm\Models\Appointment;
@@ -82,13 +81,13 @@ class RequestAppointment
             ip: $request->ip,
         ))->contact;
 
-        $this->consents->handle($contact, $request->marketingOptIn, ConsentSource::AppointmentForm, $request->ip);
+        $this->consents->handle($contact, $request->marketingOptIn, $request->consentSource, $request->ip);
 
         $lead = Lead::query()->create([
             'contact_id' => $contact->id,
             'company_id' => $contact->company_id,
             'type' => LeadType::Appointment,
-            'source' => mb_substr($request->utm['utm_source'] ?? 'organic', 0, 64),
+            'source' => mb_substr($request->source ?? $request->utm['utm_source'] ?? 'organic', 0, 64),
             'message' => 'Demande de rendez-vous : '.trim($request->topic),
             'idempotency_key' => $key,
             'utm' => $request->utm !== [] ? $request->utm : null,
@@ -106,7 +105,7 @@ class RequestAppointment
     private function forExistingLead(Lead $lead, AppointmentRequest $request, array $slots): Appointment
     {
         $lead->loadMissing('contact');
-        $this->consents->handle($lead->contact, $request->marketingOptIn, ConsentSource::AppointmentForm, $request->ip);
+        $this->consents->handle($lead->contact, $request->marketingOptIn, $request->consentSource, $request->ip);
 
         $appointment = $this->createAppointment($lead, $request, $slots);
         $this->notifications->handle($lead, $lead->contact, 'appointment_ack', ['topic' => trim($request->topic)], 'appointment_requested_internal');

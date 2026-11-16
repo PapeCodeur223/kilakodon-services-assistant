@@ -132,12 +132,14 @@ class Settings extends Page
                     ->columns(3)
                     ->schema([
                         Toggle::make('ai_enabled')
-                            ->label('Assistant activé'),
+                            ->label('Assistant activé')
+                            ->helperText('Interrupteur d\'urgence : coupé, le bouton de l\'assistant disparaît du site, qui reste entièrement utilisable.'),
                         TextInput::make('ai_daily_budget_usd')
                             ->label('Budget quotidien (USD)')
                             ->numeric()
                             ->minValue(0)
                             ->maxValue(1000)
+                            ->helperText('Alerte e-mail à 80 %, coupure automatique à 100 %. À 0, seul le mode de démonstration (sans API réelle) fonctionne.')
                             ->required(),
                         TextInput::make('ai_max_messages_per_conversation')
                             ->label('Messages max. par conversation')
