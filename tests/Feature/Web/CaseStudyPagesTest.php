@@ -10,6 +10,8 @@ use Database\Seeders\SettingsSeeder;
 
 beforeEach(function () {
     $this->seed([SettingsSeeder::class, ContentSeeder::class]);
+    // Les réalisations seedées sont publiées (D-024) : on les repasse en brouillon pour maîtriser la liste.
+    CaseStudy::query()->update(['status' => 'draft', 'published_at' => null]);
 });
 
 function publishedCase(string $title, string $sectorCode, array $attributes = []): CaseStudy
@@ -31,7 +33,7 @@ it('ne montre au public que les réalisations publiées, avec des filtres par se
     $this->get('/realisations')->assertOk()
         ->assertSee('Caisse pour une boutique')
         ->assertSee('Gestion scolaire de test')
-        // Les 10 réalisations seedées sont des brouillons : invisibles pour le public.
+        // Les 10 réalisations seedées, repassées en brouillon, : invisibles pour le public.
         ->assertDontSee('Logiciel de gestion de pharmacie')
         ->assertSee('?secteur=retail', false)
         ->assertSee('?secteur=school', false)

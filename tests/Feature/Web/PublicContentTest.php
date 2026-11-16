@@ -2,6 +2,7 @@
 
 use App\Domain\Content\Actions\PublishContent;
 use App\Domain\Content\Enums\ContentStatus;
+use App\Domain\Content\Models\CaseStudy;
 use App\Domain\Content\Models\Faq;
 use App\Domain\Content\Models\Page;
 use App\Domain\Content\Models\Sector;
@@ -63,6 +64,7 @@ it('affiche la carte Mobile Money depuis la validation des opérateurs (D-017)',
 });
 
 it('masque la section Réalisations tant qu’aucune n’est publiée', function () {
+    CaseStudy::query()->update(['status' => 'draft', 'published_at' => null]);
     $this->get('/')->assertDontSee('id="realisations"', false);
 
     publish(CaseStudyFactory::new()->authorized()->create(['title' => 'Caisse pour une chaîne de boutiques']));
@@ -154,11 +156,12 @@ it('échappe le HTML saisi dans un contenu Markdown', function () {
         ->assertDontSee('href="javascript:', false);
 });
 
-it('n’affiche que 6 FAQ au plus sur l’accueil', function () {
+it('affiche sur l’accueil toutes les FAQ publiées et cochées « accueil »', function () {
     $html = $this->get('/')->assertOk()->getContent();
-    $shown = Faq::query()->published()->where('on_home', true)->pluck('question')
-        ->filter(fn (string $q): bool => str_contains((string) $html, e($q)));
+    $selected = Faq::query()->published()->where('on_home', true)->pluck('question');
+    $shown = $selected->filter(fn (string $q): bool => str_contains((string) $html, e($q)));
 
-    expect($shown->count())->toBeLessThanOrEqual(6)
+    expect($selected->count())->toBeGreaterThan(6)
+        ->and($shown->count())->toBe($selected->count())
         ->and(Sector::query()->published()->count())->toBe(6);
 });

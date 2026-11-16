@@ -2,6 +2,12 @@
 
 ## [Non publié]
 
+### Clôture du lot 4 (2026-11-16)
+- 10 réalisations publiées (autorisation client accordée) et exportées dans les seeds ; le seeder publie une réalisation seulement si l'autorisation est accordée (D-024).
+- prepaconcours.ml : mention « la première plateforme » retirée.
+- Accueil : toutes les FAQ cochées « accueil » sont affichées (12), sans limite.
+- Évaluation réelle Claude Haiku 5.5 : 62/69 cas réussis, écart sur 3 cas critiques de formulation accepté par la direction.
+
 ### Réalisations, budget IA et sécurité (2026-11-16)
 - Pages **Réalisations** refondues : filtres par secteur sans JavaScript, fiche à la une, cartes avec visuel du secteur et livrables ; fiche détaillée avec repères, récit en frise (contexte, défi, intervention), livrables, solutions utilisées et autres réalisations. Composant `x-kh.case-card`.
 - IA : Claude Haiku 5.5, tarifs officiels saisis, budget quotidien 0,50 $ (D-023, Q-009 tranchée).
@@ -17,7 +23,7 @@
 - Assistant renommé **Kilakodon Assistant** ; prompt `sys-v2` avec section IDENTITÉ et deux cas critiques au corpus (D-019).
 - Nouveau logo Moov Money (marges rognées, affiché plus grand dans le pied de page).
 
-### Lot 4 — Assistant IA (2026-11-16, en cours de validation)
+### Lot 4 — Assistant IA (2026-11-16, validé)
 #### Ajouté
 - Tables de l'assistant (`knowledge_documents`, `knowledge_chunks` avec index FULLTEXT, `conversations`, `messages`, `ai_action_proposals`, `ai_feedback`, `ai_usage_daily`), modèles et enums.
 - Base de connaissances : découpage en fragments (120–400 mots), reconstruction automatique à chaque modification d'un contenu publié (`RebuildKnowledgeForSource`), `KnowledgeSeeder`, documents manuels, approbation et retrait par un admin.

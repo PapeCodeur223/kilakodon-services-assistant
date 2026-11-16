@@ -17,7 +17,7 @@ return [
     ],
     [
         'category' => 'pricing',
-        'on_home' => false,
+        'on_home' => true,
         'question' => 'Peut-on payer en plusieurs fois ?',
         'answer' => 'Les modalités de paiement sont fixées dans le devis, généralement par étapes du projet.',
     ],
@@ -41,7 +41,7 @@ return [
     ],
     [
         'category' => 'support',
-        'on_home' => false,
+        'on_home' => true,
         'question' => 'Que se passe-t-il après la livraison ?',
         'answer' => 'Nous formons vos équipes et assurons le support. Des contrats de maintenance permettent de faire évoluer le logiciel.',
     ],
@@ -59,19 +59,19 @@ return [
     ],
     [
         'category' => 'diagnostic',
-        'on_home' => false,
+        'on_home' => true,
         'question' => 'Que faites-vous de mes réponses ?',
         'answer' => 'Elles servent uniquement à préparer votre brief et notre échange. Voir notre politique de confidentialité.',
     ],
     [
         'category' => 'ai',
-        'on_home' => false,
+        'on_home' => true,
         'question' => 'L\'assistant est-il un humain ?',
         'answer' => 'Non, c\'est un assistant IA qui répond à partir de nos pages. Il peut vous mettre en relation avec un conseiller à tout moment.',
     ],
     [
         'category' => 'general',
-        'on_home' => false,
+        'on_home' => true,
         'question' => 'Vendez-vous des logiciels prêts à l\'emploi ?',
         'answer' => 'Nous avons des logiciels déjà éprouvés (gestion scolaire, boulangerie, caisse) que nous adaptons à chaque client, et nous développons du sur-mesure.',
     ],

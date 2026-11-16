@@ -1,7 +1,9 @@
 <?php
 
+use App\Domain\Content\Enums\AuthorizationStatus;
 use App\Domain\Content\Enums\ContentStatus;
 use App\Domain\Content\Models\Article;
+use App\Domain\Content\Models\CaseStudy;
 use App\Domain\Content\Models\Faq;
 use App\Domain\Content\Models\Page;
 use App\Domain\Content\Models\Sector;
@@ -28,6 +30,19 @@ it('seed les contenus validés : brouillon s’ils contiennent [À VALIDER], pub
     }
 
     expect(Article::query()->where('status', '!=', ContentStatus::Draft->value)->exists())->toBeFalse();
+});
+
+it('publie une réalisation seedée seulement si l’autorisation du client est accordée', function () {
+    $this->seed(ContentSeeder::class);
+
+    $cases = CaseStudy::withoutGlobalScopes()->get();
+    expect($cases)->toHaveCount(10)
+        ->and(CaseStudy::withoutGlobalScopes()->where('slug', 'prepaconcours-ml')->value('client_descriptor'))->not->toContain('remière');
+
+    foreach ($cases as $case) {
+        $publishable = $case->authorization_status === AuthorizationStatus::Granted && $case->pendingValidationFields() === [];
+        expect($case->status)->toBe($publishable ? ContentStatus::Published : ContentStatus::Draft);
+    }
 });
 
 it('est idempotent et n’écrase pas une modification', function () {
