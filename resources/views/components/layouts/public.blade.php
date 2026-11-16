@@ -50,6 +50,10 @@
 
     @if ($chrome === 'full')
         <x-kh.footer />
+        {{-- Assistant : absent si l'interrupteur est coupé ou le budget atteint ; le site n'en dépend pas. --}}
+        @if (app(\App\Domain\Assistant\Conversation\AssistantGuard::class)->enabled())
+            <x-kh.assistant />
+        @endif
     @endif
 </body>
 </html>

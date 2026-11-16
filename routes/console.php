@@ -24,3 +24,6 @@ Schedule::command('kh:leads-unattended')
     ->hourly()
     ->between('8:00', '18:00')
     ->timezone('Africa/Bamako');
+
+// Budget quotidien de l'assistant : alerte à 80 % (le blocage à 100 % est fait par la garde).
+Schedule::command('kh:ai-budget-check')->everyFifteenMinutes();

@@ -89,15 +89,15 @@ Tâches :
 **Docs :** PRD §6.4, AI_ASSISTANT.md, TRD §7, BACKEND_SCHEMA §6, UX §4.3.
 
 Tâches :
-- [ ] Migrations : knowledge_documents, knowledge_chunks (FULLTEXT), conversations, messages, ai_action_proposals, ai_feedback, ai_usage_daily.
-- [ ] `RebuildKnowledgeForSource` (déclenché à la publication), `KnowledgeSeeder`, ressource Filament « Base de connaissances » (approbation par `admin`, documents manuels).
-- [ ] `Retriever` (natural, puis boolean, puis synonymes) avec tests sur un jeu de fragments fixe.
-- [ ] Interface `LlmClient` ; `AnthropicClient` (outil forcé `respond`, timeout, une nouvelle tentative, usage) ; `FakeLlmClient` ; `PromptBuilder` (prompt `sys-v1` versionné) ; `ResponseValidator` (citations, filtre montants, schéma).
-- [ ] `AssistantGuard` (tous les plafonds TRD §7.4) et `kh:ai-budget-check`.
-- [ ] Endpoints JSON (TRD §5.2) ; actions proposées avec confirmation, hash et idempotence ; réutilisation des Actions du lot 2/3.
-- [ ] Widget Alpine (chargé à la demande) : lanceur, panneau, sources, 👍/👎, carte de confirmation, états indisponible et limite.
-- [ ] Filament : Conversations (lecture, limitée aux leads du commercial pour `sales`), Retours à revoir, Usage (jour et mois), interrupteur IA.
-- [ ] `tests/Ai/cases.yaml` (≥ 60 cas) + `kh:ai-eval` (mode `fake` pour la CI, mode `anthropic` en manuel) + export CSV.
+- [x] Migrations : knowledge_documents, knowledge_chunks (FULLTEXT), conversations, messages, ai_action_proposals, ai_feedback, ai_usage_daily.
+- [x] `RebuildKnowledgeForSource` (déclenché à la publication), `KnowledgeSeeder`, ressource Filament « Base de connaissances » (approbation par `admin`, documents manuels).
+- [x] `Retriever` (natural, puis boolean, puis synonymes) avec tests sur un jeu de fragments fixe.
+- [x] Interface `LlmClient` ; `AnthropicClient` (outil forcé `respond`, timeout, une nouvelle tentative, usage) ; `FakeLlmClient` ; `PromptBuilder` (prompt `sys-v1` versionné) ; `ResponseValidator` (citations, filtre montants, schéma).
+- [x] `AssistantGuard` (tous les plafonds TRD §7.4) et `kh:ai-budget-check`.
+- [x] Endpoints JSON (TRD §5.2) ; actions proposées avec confirmation, hash et idempotence ; réutilisation des Actions du lot 2/3.
+- [x] Widget (JavaScript natif, CSP oblige — voir DECISIONS, chargé à la demande) : lanceur, panneau, sources, 👍/👎, carte de confirmation, états indisponible et limite.
+- [x] Filament : Conversations (lecture, limitée aux leads du commercial pour `sales`), Retours à revoir, Usage (jour et mois), interrupteur IA.
+- [x] `tests/Ai/cases.yaml` (≥ 60 cas) + `kh:ai-eval` (mode `fake` pour la CI, mode `anthropic` en manuel) + export CSV.
 
 **Critères d'acceptation :** IA-01..04, 06, 07 ; tests : interrupteur coupé → aucun appel HTTP ; plafond atteint → repli ; confirmation avec payload altéré → refus ; double confirmation → un seul lead. **Arrêt : demander une clé API à l'équipe pour l'évaluation réelle.**
 

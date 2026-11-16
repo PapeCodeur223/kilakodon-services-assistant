@@ -77,7 +77,7 @@
                 </dl>
 
                 @foreach ($answersByStep as $step => $answers)
-                    <h3 class="mt-8 text-small font-bold text-kh-blue-700">{{ $stepTitles[$step] ?? '' }}</h3>
+                    <h3 class="mt-8 text-small font-bold text-kh-blue-700">{{ $stepTitles[$step] ?? 'Votre besoin' }}</h3>
                     <dl class="mt-3 divide-y divide-line rounded-input border border-line">
                         @foreach ($answers as $answer)
                             <div class="grid gap-1 p-4 sm:grid-cols-[1fr_1fr] sm:gap-6">
@@ -106,6 +106,11 @@
             {{-- 2. Recommandé par les règles (lecture seule) --}}
             <section aria-labelledby="reco-title" class="rounded-card bg-fog p-6 sm:p-8">
                 <h2 id="reco-title" class="font-display text-h3 font-extrabold text-ink">Ce que nous recommandons</h2>
+                @if (! isset($recommended['maturity']))
+                    {{-- Brief préparé avec l'assistant : seules les règles du diagnostic produisent des recommandations. --}}
+                    <p class="mt-2 text-ink">Ce brief a été préparé avec l'assistant : nos recommandations seront établies avec vous lors du premier échange. Pour les obtenir dès maintenant, faites le diagnostic gratuit.</p>
+                    <x-kh.button :href="route('diagnostic.start')" variant="ghost" class="mt-4">Faire le diagnostic</x-kh.button>
+                @else
                 <p class="mt-1 text-small text-slate">Calculé à partir de vos réponses, selon nos règles d'analyse.</p>
 
                 <p class="mt-6 text-tag font-semibold uppercase text-slate">Niveau d'équipement numérique</p>
@@ -153,6 +158,7 @@
                             <li>{{ $clarification['label'] }}</li>
                         @endforeach
                     </ul>
+                @endif
                 @endif
             </section>
 

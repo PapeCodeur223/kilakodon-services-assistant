@@ -4,9 +4,11 @@ namespace App\Domain\Crm\Data;
 
 use App\Domain\Brief\Models\Brief;
 use App\Domain\Crm\Enums\AppointmentChannel;
+use App\Domain\Crm\Enums\ConsentSource;
 
 /**
  * Demande de rendez-vous du formulaire public (RDV-01), déjà validée.
+ * `source` : origine du lead (`assistant`…), sinon `utm_source` ou `organic`.
  * `brief` : brief accessible d'où vient le visiteur (lien privé), pour rattacher la demande à son lead.
  */
 final readonly class AppointmentRequest
@@ -27,5 +29,7 @@ final readonly class AppointmentRequest
         public ?string $ip = null,
         public array $utm = [],
         public ?Brief $brief = null,
+        public ConsentSource $consentSource = ConsentSource::AppointmentForm,
+        public ?string $source = null,
     ) {}
 }

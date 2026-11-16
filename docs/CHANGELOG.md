@@ -2,6 +2,24 @@
 
 ## [Non publié]
 
+### Lot 4 — Assistant IA (2026-11-16, en cours de validation)
+#### Ajouté
+- Tables de l'assistant (`knowledge_documents`, `knowledge_chunks` avec index FULLTEXT, `conversations`, `messages`, `ai_action_proposals`, `ai_feedback`, `ai_usage_daily`), modèles et enums.
+- Base de connaissances : découpage en fragments (120–400 mots), reconstruction automatique à chaque modification d'un contenu publié (`RebuildKnowledgeForSource`), `KnowledgeSeeder`, documents manuels, approbation et retrait par un admin.
+- `Retriever` (FULLTEXT naturel, booléen, synonymes métier, repli par termes, contexte plafonné).
+- Clients `FakeLlmClient` (déterministe, sans réseau) et `AnthropicClient` (outil `respond` imposé, 25 s, une nouvelle tentative sur 429/5xx) ; `PromptBuilder` (`sys-v1`) ; `ResponseValidator` (schéma, citations limitées aux fragments fournis, filtre des montants, brouillon de brief sans champ inventé).
+- `AssistantGuard` : interrupteur (paramètre + `AI_ENABLED`), longueur, messages par conversation, conversations par visiteur et par jour, débit par IP, budget quotidien ; `kh:ai-budget-check` (alerte e-mail à 80 %, toutes les 15 min).
+- API JSON `/api/assistant/*` (ouverture, messages, propositions : modification, confirmation, annulation ; retours) ; propositions figées (payload, hash, idempotence, 30 min) exécutées par les mêmes Actions que les formulaires (`CreateBriefFromAssistant` + `CreateLeadFromBrief`, `RequestAppointment`).
+- Widget public chargé à la demande : lanceur « Une question ? », sources, 👍/👎, carte de confirmation, états indisponible et limite ; absent du site quand l'assistant est coupé.
+- Filament (groupe Assistant) : Base de connaissances, Conversations (le commercial ne voit que ses leads), Retours à revoir, Usage (jour, mois, 31 jours).
+- Corpus `tests/Ai/cases.yaml` (62 cas) et `kh:ai-eval` (pilote factice en continu, API réelle en manuel avec confirmation) avec rapport CSV.
+
+#### Modifié
+- Page privée et PDF du brief : brief sans recommandation (origine assistant) pris en charge.
+- `AppointmentRequest` : source du lead et origine du consentement paramétrables ; `BusinessHours::isOpen()`.
+
+#### Écarts notés dans DECISIONS.md
+- Assistant coupé avec l'API réelle tant que budget et tarif ne sont pas renseignés ; widget sans Alpine (CSP) ; route `revise` ; URL des retours sans identifiant seul ; brief assistant sans recommandation ; `symfony/yaml` (dev) pour le corpus.
 ### Lot 3 — CRM, rendez-vous et notifications (2026-10-29)
 #### Ajouté
 - Tables `lead_stage_history`, `activities`, `appointments`, `privacy_requests` ; enums `ActivityType`, `AppointmentStatus`, `AppointmentChannel`, `SlotPeriod`, `LostReason`, `PrivacyRequestType|Status` ; carte des transitions de `LeadStage`.
