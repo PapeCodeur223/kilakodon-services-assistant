@@ -332,6 +332,9 @@
 /* ---------- Animations : transform et opacity uniquement, désactivées si « réduire les animations ».
    L'état initial n'est appliqué que si le JS est présent (.js sur <html>) : sans JS, tout reste visible. ---------- */
 @media (prefers-reduced-motion: no-preference) {
+  /* Démo Lab : alerte de stock qui glisse depuis le bas. */
+  .kh-toast { animation: kh-step-in .3s var(--ease-out-soft) both; }
+
   .js [data-reveal] {
     opacity: 0;
     transform: translateY(28px);

@@ -121,6 +121,19 @@ it('refuse un brief sur une restitution périmée (réponses modifiées après l
         ->and(Contact::query()->count())->toBe(0);
 });
 
+it('garde la source « lab:retail » et le type Démo Lab pour un diagnostic ouvert depuis la démo (LAB-03)', function () {
+    ['session' => $session] = completedDiagnostic(['sector' => 'retail'], ['entry' => 'lab:retail', 'sector' => 'retail']);
+    ['lead' => $lead] = app(RequestBrief::class)->handle($session, prospect());
+
+    expect($lead->type)->toBe(LeadType::Lab)->and($lead->source)->toBe('lab:retail');
+
+    // Même arrivé par une campagne, la source reste celle de la démo (l'UTM est conservé à part).
+    ['session' => $withUtm] = completedDiagnostic(['sector' => 'retail'], ['entry' => 'lab:retail', 'utm' => ['utm_source' => 'facebook']]);
+    ['lead' => $utmLead] = app(RequestBrief::class)->handle($withUtm, prospect(['phone' => '76 00 00 01', 'email' => 'autre@example.test']));
+
+    expect($utmLead->source)->toBe('lab:retail')->and($utmLead->utm)->toBe(['utm_source' => 'facebook']);
+});
+
 it('garantit un lead unique par brief, même appelé deux fois', function () {
     ['brief' => $brief, 'lead' => $lead] = requestBrief();
 

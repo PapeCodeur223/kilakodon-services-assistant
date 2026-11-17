@@ -479,7 +479,7 @@ Toutes les tables `demo_*` ont `workspace_id` (ULID FK cascade) avec un index, e
 
 | Table | Colonnes principales |
 |---|---|
-| demo_workspaces | `id` ulid, `token_hash` char(64) unique, `scenario` (`retail`), `ip_hash`, `actions_count`, `expires_at` index |
+| demo_workspaces | `id` ulid, `token_hash` char(64) unique, `scenario` (`retail`), `ip_hash`, `actions_count`, `missions` json null (missions du guide cochées), `expires_at` datetime index |
 | demo_products | `sku`, `name`, `category`, `unit` (`pièce`, `sac 25 kg`, `carton`…), `price_xof`, `cost_xof`, `stock_qty` integer, `alert_threshold` integer |
 | demo_customers | `name`, `phone_display` (fictif, format `+223 00 00 00 00`) |
 | demo_sales | `number` (`DEMO-0001`), `customer_id` null, `payment_method` (`cash` \| `mobile_money` \| `credit`), `total_xof`, `sold_at` |

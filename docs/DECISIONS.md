@@ -158,3 +158,14 @@
 
 ### 2026-11-16 — Clôture du lot 4
 - Seuil « 100 % des cas critiques » non atteint à la lettre (3 échecs de formulation, aucun prix, partenariat ni gratuité affirmés, aucune divulgation du prompt) ; écart accepté par la direction après lecture du CSV `eval-anthropic-20261116-125225.csv`. En production, le validateur bloque tout montant absent des documents et du message du visiteur ; reprendre le montant cité par le visiteur (price-03) y est autorisé par conception, le corpus étant plus strict.
+
+### 2026-11-17 — Lot 5 (Démo Lab) : interprétations
+- `demo_workspaces.missions` (JSON) ajouté au schéma §7 : état des 3 missions du guide (UX §5.6), nécessaire pour afficher la carte de conversion après 2 missions et cocher « Imprimez une facture » depuis la page de facture.
+- Limite « 3 espaces par IP et par jour » appliquée sur 24 h glissantes (IP hachée HMAC) ; « 500 actions par espace » compte les écritures (vente, réassort, inventaire), par incrément conditionnel atomique.
+- Cookie `kh_lab` : chiffré par Laravel (EncryptCookies), ce qui couvre l'exigence « cookie signé » ; il porte le token brut, la base ne stocke que son SHA-256.
+- Jeu fictif : 25 produits de boutique, 5 clients (« cliente fictive », numéros `+223 00 00 00 0X`), 30 ventes sur 14 jours. Prix en FCFA plausibles mais inventés pour la démonstration (ni tarifs Kilakodon, ni relevés de marché), étiquetés « Démo » dans l'interface.
+- Démos guidées (LAB-02) : pages `/demo-lab/gestion-scolaire` et `/demo-lab/boulangerie` marquées « Démonstration enregistrée — bientôt disponible » tant que Kilakodon n'a pas fourni vidéo ou captures ; exclues du sitemap jusque-là.
+- LAB-03 : un diagnostic ouvert depuis la démo porte `entry=lab:retail` ; le lead créé a le type « Démo Lab » et la source `lab:retail`.
+- Reportés : événements de mesure `lab_started` / `lab_action` avec la mesure first-party (lot 6) ; LAB-04 (mode hors ligne simulé, priorité L) non réalisé.
+- Revue indépendante (kh-reviewer) : corrigés — consigne de la mission « alerte » (badge « Bientôt bas » à 2 unités ou moins du seuil), source `lab:retail` conservée même avec un `utm_source`, focus visible sur le choix du paiement, limite par IP sous verrou, onglets en liens (`?onglet=`), démos guidées en `noindex`, contraste du graphique. Assumés : les requêtes Livewire de lecture (ajout au panier) ne sont pas comptées comme actions ; un visiteur qui bloque les cookies voit « espace expiré » au premier clic ; la mission « facture » est cochée à l'ouverture de la facture (consigne reformulée) ; les textes des démos guidées restent dans `LabController::GUIDED` jusqu'à réception des vidéos ; l'espace est retrouvé par recherche SQL sur le SHA-256 du token, comme les autres tokens publics.
+- `expires_at` et `sold_at` en `datetime` (et non `timestamp`) : MariaDB ajoute sinon `ON UPDATE CURRENT_TIMESTAMP` à la première colonne TIMESTAMP non nulle (garde-fou `SchemaTest`).

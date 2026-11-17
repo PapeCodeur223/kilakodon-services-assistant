@@ -226,6 +226,10 @@ CTA : `Découvrir notre méthode →`
 - Bandeau permanent : `Démo — données fictives, réinitialisées toutes les 24 h. Aucune donnée réelle n'est utilisée.`
 - Missions : « Faites une vente » · « Déclenchez une alerte de stock » · « Imprimez une facture »
 - Carte de conversion : **Vous voulez ça pour votre entreprise ?** — « Faites le diagnostic (il est déjà pré-rempli pour le commerce) ou parlez-en directement avec nous. »
+- Bloc « Comment ça marche » (page `/demo-lab`) : **Votre espace** — Chaque visiteur a sa propre boutique : personne d’autre ne voit vos essais. · **Données fictives** — Produits, clients et prix sont inventés pour la démonstration et marqués « Démo ». · **Réinitialisé en 24 h** — Votre espace et tout ce que vous y faites sont effacés après 24 heures.
+- Démos guidées, en attendant la vidéo ou les captures : badge « Démonstration enregistrée », vignette « Bientôt disponible — La visite enregistrée est en préparation. », sujets de la visite (école : inscriptions et dossiers, paiements de scolarité, notes et bulletins, tableau de bord ; boulangerie : production, ventes et caisse, pertes, matières premières et coût de revient), CTA « Demander une démonstration » et « Essayer la démo Boutique ».
+- Facture fictive : filigrane « DÉMO — DOCUMENT FICTIF », mention « Document fictif — sans valeur » et pied « Facture générée par le Démo Lab de Kilakodon Services avec des données fictives. Elle n’a aucune valeur commerciale ni comptable. »
+- Limite atteinte : **Vous avez bien *exploré* la démo** — « Vous avez ouvert le nombre maximal d’espaces de démonstration pour aujourd’hui. Vous pourrez en ouvrir un nouveau demain. »
 
 ## 6. Méthode (page complète `/methode`)
 H1 : **Une méthode claire, *du premier échange au support***

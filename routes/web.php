@@ -8,6 +8,7 @@ use App\Http\Controllers\Public\CaseStudyController;
 use App\Http\Controllers\Public\ContactController;
 use App\Http\Controllers\Public\DiagnosticController;
 use App\Http\Controllers\Public\HomeController;
+use App\Http\Controllers\Public\LabController;
 use App\Http\Controllers\Public\PageController;
 use App\Http\Controllers\Public\SectorController;
 use App\Http\Controllers\Public\SeoController;
@@ -42,6 +43,16 @@ Route::middleware('throttle:public-token')->group(function (): void {
     Route::get('/brief/{token}', [BriefController::class, 'show'])->name('brief.show');
     Route::get('/brief/{token}/pdf', [BriefController::class, 'pdf'])->name('brief.pdf');
 });
+
+// Démo Lab (TRD §8) : espace fictif par visiteur, cookie chiffré `kh_lab`.
+Route::get('/demo-lab', [LabController::class, 'index'])->name('lab.index');
+Route::middleware('throttle:lab')->group(function (): void {
+    Route::get('/demo-lab/boutique', [LabController::class, 'retail'])->name('lab.retail');
+    Route::get('/demo-lab/boutique/factures/{number}', [LabController::class, 'invoice'])
+        ->where('number', 'DEMO-[0-9]{4,6}')
+        ->name('lab.invoice');
+});
+Route::get('/demo-lab/{slug}', [LabController::class, 'guided'])->name('lab.guided');
 
 // Pages éditoriales (table `pages`).
 Route::get('/methode', [PageController::class, 'show'])->defaults('slug', 'methode')->name('pages.method');
