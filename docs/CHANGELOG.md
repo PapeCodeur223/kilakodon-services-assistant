@@ -12,6 +12,8 @@
 - Facture fictive HTML imprimable avec filigrane « DÉMO — DOCUMENT FICTIF ».
 - Pages `/demo-lab`, démos guidées « Gestion scolaire » et « Boulangerie » (« bientôt disponible »), page de limite atteinte.
 - LAB-03 : diagnostic pré-rempli `secteur=retail&entry=lab:retail` ; le lead prend le type « Démo Lab » et la source `lab:retail`.
+#### Corrigé
+- Boutique inerte dans le navigateur : la CSP bloquait Alpine/Livewire sur `/demo-lab/boutique` (ajout aux parcours Livewire de D-014, nonce conservé).
 
 ### Clôture du lot 4 (2026-11-16)
 - 10 réalisations publiées (autorisation client accordée) et exportées dans les seeds ; le seeder publie une réalisation seulement si l'autorisation est accordée (D-024).

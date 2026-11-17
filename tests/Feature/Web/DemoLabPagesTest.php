@@ -55,6 +55,19 @@ it('crée un espace à la première visite, le reprend ensuite par le cookie, et
     expect(DemoWorkspace::query()->count())->toBe(1);
 });
 
+it('autorise Livewire et Alpine dans le navigateur sur la boutique (CSP avec nonce, D-014)', function () {
+    $csp = (string) $this->get('/demo-lab/boutique')->assertOk()->headers->get('Content-Security-Policy');
+
+    expect($csp)->toContain("script-src 'self' 'nonce-")
+        ->toContain("'unsafe-eval'")
+        ->not->toContain("'unsafe-inline' 'unsafe-eval'");
+
+    // Pages de contenu du Démo Lab : pas de Livewire, donc pas d'assouplissement.
+    foreach (['/demo-lab', '/demo-lab/boulangerie'] as $path) {
+        expect((string) $this->get($path)->headers->get('Content-Security-Policy'))->not->toContain('unsafe-eval');
+    }
+});
+
 it('oriente vers le diagnostic quand la limite de 3 espaces par jour est atteinte', function () {
     foreach (range(1, 3) as $i) {
         labSpace('127.0.0.1');
