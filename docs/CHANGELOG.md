@@ -2,7 +2,7 @@
 
 ## [Non publié]
 
-### Lot 5 — Démo Lab (2026-11-17, en cours de validation)
+### Lot 5 — Démo Lab (validé le 2026-11-18)
 #### Ajouté
 - Tables `demo_*` isolées par `workspace_id` (ULID, cascade) et global scope obligatoire `BelongsToWorkspace` (sans espace courant : aucune donnée, aucune écriture) ; tests d’isolation et d’architecture.
 - Espace par visiteur : cookie chiffré `kh_lab` (token haché en base), 24 h, 3 espaces par IP sur 24 h, 500 actions par espace ; `kh:lab-purge` toutes les heures.
