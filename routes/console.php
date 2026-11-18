@@ -27,3 +27,6 @@ Schedule::command('kh:leads-unattended')
 
 // Budget quotidien de l'assistant : alerte à 80 % (le blocage à 100 % est fait par la garde).
 Schedule::command('kh:ai-budget-check')->everyFifteenMinutes();
+
+// Démo Lab : espaces expirés (24 h) supprimés toutes les heures avec leurs données fictives.
+Schedule::command('kh:lab-purge')->hourly();

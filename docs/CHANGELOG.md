@@ -2,6 +2,19 @@
 
 ## [Non publié]
 
+### Lot 5 — Démo Lab (validé le 2026-11-18)
+#### Ajouté
+- Tables `demo_*` isolées par `workspace_id` (ULID, cascade) et global scope obligatoire `BelongsToWorkspace` (sans espace courant : aucune donnée, aucune écriture) ; tests d’isolation et d’architecture.
+- Espace par visiteur : cookie chiffré `kh_lab` (token haché en base), 24 h, 3 espaces par IP sur 24 h, 500 actions par espace ; `kh:lab-purge` toutes les heures.
+- Jeu fictif : 25 produits, 5 clients, 30 ventes sur 14 jours, prix FCFA étiquetés « Démo ».
+- Actions `RecordDemoSale` (transaction, prix lus en base, alerte au franchissement du seuil), `RestockDemoProduct`, `AdjustDemoStock`, missions du guide.
+- Démo « Boutique » (Livewire) : Caisse (grille tactile, panier, Espèces / Mobile Money / Crédit), Stock (réassort, inventaire, alertes), Ventes (factures), Tableau de bord (ventes 7 jours en SVG, meilleurs produits, alertes) ; toast d’alerte ; guide des 3 missions et carte de conversion après 2 missions.
+- Facture fictive HTML imprimable avec filigrane « DÉMO — DOCUMENT FICTIF ».
+- Pages `/demo-lab`, démos guidées « Gestion scolaire » et « Boulangerie » (« bientôt disponible »), page de limite atteinte.
+- LAB-03 : diagnostic pré-rempli `secteur=retail&entry=lab:retail` ; le lead prend le type « Démo Lab » et la source `lab:retail`.
+#### Corrigé
+- Boutique inerte dans le navigateur : la CSP bloquait Alpine/Livewire sur `/demo-lab/boutique` (ajout aux parcours Livewire de D-014, nonce conservé).
+
 ### Clôture du lot 4 (2026-11-16)
 - 10 réalisations publiées (autorisation client accordée) et exportées dans les seeds ; le seeder publie une réalisation seulement si l'autorisation est accordée (D-024).
 - prepaconcours.ml : mention « la première plateforme » retirée.

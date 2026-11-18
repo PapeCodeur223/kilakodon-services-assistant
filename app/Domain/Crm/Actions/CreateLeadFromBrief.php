@@ -37,13 +37,19 @@ class CreateLeadFromBrief
                     : null;
                 $recommended = $brief->latestVersion !== null ? $brief->latestVersion->recommended : [];
                 $fromAssistant = $brief->conversation_id !== null;
+                // Diagnostic ouvert depuis le Démo Lab (LAB-03) : le lead garde la source `lab:<scénario>`.
+                $fromLab = ! $fromAssistant && ($session?->entry === 'lab' || str_starts_with((string) $session?->entry, 'lab:'));
 
                 $lead = Lead::query()->create([
                     'contact_id' => $contact->id,
                     'company_id' => $contact->company_id,
                     'brief_id' => $brief->id,
-                    'type' => $fromAssistant ? LeadType::Assistant : LeadType::Diagnostic,
-                    'source' => $fromAssistant ? 'assistant' : mb_substr($session?->utm['utm_source'] ?? $session->entry ?? 'diagnostic', 0, 64),
+                    'type' => match (true) {
+                        $fromAssistant => LeadType::Assistant,
+                        $fromLab => LeadType::Lab,
+                        default => LeadType::Diagnostic,
+                    },
+                    'source' => $fromAssistant ? 'assistant' : mb_substr($fromLab ? (string) $session->entry : $session?->utm['utm_source'] ?? $session->entry ?? 'diagnostic', 0, 64),
                     'message' => "Brief {$brief->reference} — ".$brief->latestVersion?->summary,
                     'maturity_level' => $recommended['maturity']['level'] ?? null,
                     'budget_band' => $answer('budget_band'),

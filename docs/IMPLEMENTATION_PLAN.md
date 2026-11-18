@@ -107,11 +107,11 @@ Tâches :
 **Docs :** PRD §6.5, TRD §8, BACKEND_SCHEMA §7, UX §5.6, CONTENT §5.
 
 Tâches :
-- [ ] Migrations `demo_*` ; trait `BelongsToWorkspace` + test d'architecture ; `DemoLabFixtures` (catalogue fictif réaliste : riz, huile, sucre, savon, crédit téléphonique, etc., prix en FCFA plausibles et **étiquetés fictifs**).
-- [ ] Création et reprise de l'espace (cookie signé), limites, `kh:lab-purge`.
-- [ ] Livewire : Caisse (panier, moyens de paiement, encaissement → `RecordDemoSale`), Stock (réassort, ajustement, alertes), Ventes (liste, facture imprimable avec filigrane), Tableau de bord (ventes 7 jours en SVG léger, top produits, alertes).
-- [ ] Guide des missions et carte de conversion (→ diagnostic `?secteur=retail&entry=lab` ou WhatsApp).
-- [ ] Pages de démos guidées (gestion scolaire, boulangerie) : gabarit captures commentées et vidéo (fichiers fournis par Kilakodon ; afficher « bientôt disponible » sinon).
+- [x] Migrations `demo_*` ; trait `BelongsToWorkspace` + test d'architecture ; `DemoLabFixtures` (catalogue fictif réaliste : riz, huile, sucre, savon, crédit téléphonique, etc., prix en FCFA plausibles et **étiquetés fictifs**).
+- [x] Création et reprise de l'espace (cookie signé), limites, `kh:lab-purge`.
+- [x] Livewire : Caisse (panier, moyens de paiement, encaissement → `RecordDemoSale`), Stock (réassort, ajustement, alertes), Ventes (liste, facture imprimable avec filigrane), Tableau de bord (ventes 7 jours en SVG léger, top produits, alertes).
+- [x] Guide des missions et carte de conversion (→ diagnostic `?secteur=retail&entry=lab` ou WhatsApp).
+- [x] Pages de démos guidées (gestion scolaire, boulangerie) : gabarit captures commentées et vidéo (fichiers fournis par Kilakodon ; afficher « bientôt disponible » sinon).
 
 **Critères d'acceptation :** LAB-01..03 ; test : deux espaces simultanés ne voient pas leurs données respectives ; aucune notification ni e-mail émis depuis le Démo Lab (Mail::fake + assertNothingSent).
 
@@ -146,5 +146,5 @@ Choix de la formule LWS (avec ou sans SSH), workflow GitHub Actions, préproduct
 | 2 | validé | branche `lot-2-diagnostic` | Direction Kilakodon | 2026-10-28 |
 | 3 | validé | branche `lot-3-crm` | Direction Kilakodon | 2026-11-15 |
 | 4 | validé | branche `lot-4-assistant` | Direction Kilakodon | 2026-11-16 |
-| 5 | à faire | | | |
+| 5 | validé | branche `lot-5-demo-lab` | Direction Kilakodon | 2026-11-18 |
 | 6 | à faire | | | |

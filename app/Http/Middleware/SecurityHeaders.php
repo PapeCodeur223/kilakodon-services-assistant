@@ -53,9 +53,10 @@ class SecurityHeaders
         $isAdmin = $request->is('admin', 'admin/*', 'livewire/*', 'filament/*');
         $devServer = $this->viteDevServer();
 
-        // Parcours Livewire publics (diagnostic, brief) : Alpine évalue les expressions wire:* et x-*
-        // ('unsafe-eval') ; les scripts en ligne restent soumis au nonce. Décision D-014 (Q-018).
-        $isLivewirePage = $request->is('diagnostic', 'diagnostic/*', 'brief/*');
+        // Parcours Livewire publics (diagnostic, brief, boutique du Démo Lab) : Alpine évalue les
+        // expressions wire:* et x-* ('unsafe-eval') ; les scripts en ligne restent soumis au nonce.
+        // Décision D-014 (Q-018).
+        $isLivewirePage = $request->is('diagnostic', 'diagnostic/*', 'brief/*', 'demo-lab/boutique');
 
         $script = match (true) {
             $isAdmin => ["'self'", "'unsafe-inline'", "'unsafe-eval'"],

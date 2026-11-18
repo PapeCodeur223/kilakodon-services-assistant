@@ -24,6 +24,7 @@ use App\Domain\Crm\Models\Appointment;
 use App\Domain\Crm\Models\Company;
 use App\Domain\Crm\Models\Contact;
 use App\Domain\Crm\Models\Lead;
+use App\Domain\DemoLab\Support\WorkspaceContext;
 use App\Domain\Diagnostic\Models\DiagnosticSession;
 use App\Domain\Diagnostic\Models\DiagnosticTemplate;
 use App\Domain\Platform\Listeners\RecordSuccessfulLogin;
@@ -60,6 +61,8 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->singleton(Settings::class);
+        // Espace Démo Lab courant : une instance par requête (isolation, TRD §8).
+        $this->app->scoped(WorkspaceContext::class);
 
         // AI_DRIVER=fake : réponses déterministes ; anthropic : API réelle (clé dans .env uniquement) ; sinon repli.
         $this->app->bind(LlmClient::class, fn (): LlmClient => match (config('assistant.driver')) {
@@ -136,5 +139,7 @@ class AppServiceProvider extends ServiceProvider
                 'message' => FallbackTexts::RATE_LIMITED,
             ], 429)));
         RateLimiter::for('assistant-actions', fn (Request $request) => Limit::perMinute(20)->by((string) $request->ip()));
+        // Démo Lab : pages et factures (les limites métier — espaces par IP, actions par espace — sont dans les Actions).
+        RateLimiter::for('lab', fn (Request $request) => Limit::perMinute(60)->by((string) $request->ip()));
     }
 }
