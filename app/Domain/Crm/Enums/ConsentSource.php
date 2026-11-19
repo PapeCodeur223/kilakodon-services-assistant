@@ -9,6 +9,7 @@ enum ConsentSource: string
     case AppointmentForm = 'appointment_form';
     case Assistant = 'assistant';
     case CookieBanner = 'cookie_banner';
+    case PrivacyRequest = 'privacy_request';
 
     public function label(): string
     {
@@ -18,6 +19,7 @@ enum ConsentSource: string
             self::AppointmentForm => 'Formulaire rendez-vous',
             self::Assistant => 'Assistant',
             self::CookieBanner => 'Bannière cookies',
+            self::PrivacyRequest => 'Demande de droits',
         };
     }
 

@@ -10,6 +10,7 @@ use App\Domain\DemoLab\Exceptions\DemoLimitReached;
 use App\Domain\DemoLab\Models\DemoSale;
 use App\Domain\DemoLab\Models\DemoWorkspace;
 use App\Domain\DemoLab\Support\WorkspaceContext;
+use App\Domain\Platform\Actions\RecordAnalyticsEvent;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -58,6 +59,7 @@ class LabController extends Controller
             }
 
             Cookie::queue(Cookie::make(self::COOKIE, $token, DemoWorkspace::LIFETIME_HOURS * 60, httpOnly: true, sameSite: 'lax'));
+            RecordAnalyticsEvent::server('lab_started');
         }
 
         return response()->view('pages.lab.retail', ['workspace' => $workspace]);
@@ -74,6 +76,7 @@ class LabController extends Controller
             ->first()) ?? abort(404);
 
         $missions->handle($workspace, Mission::Invoice);
+        RecordAnalyticsEvent::server('lab_action', ['action' => 'invoice']);
 
         return response()->view('pages.lab.invoice', ['sale' => $sale]);
     }

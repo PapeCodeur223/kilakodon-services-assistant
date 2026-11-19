@@ -24,6 +24,7 @@ use App\Domain\Crm\Models\Appointment;
 use App\Domain\Crm\Models\Company;
 use App\Domain\Crm\Models\Contact;
 use App\Domain\Crm\Models\Lead;
+use App\Domain\Crm\Models\PrivacyRequest;
 use App\Domain\DemoLab\Support\WorkspaceContext;
 use App\Domain\Diagnostic\Models\DiagnosticSession;
 use App\Domain\Diagnostic\Models\DiagnosticTemplate;
@@ -44,6 +45,7 @@ use App\Policies\DiagnosticTemplatePolicy;
 use App\Policies\KnowledgeDocumentPolicy;
 use App\Policies\LeadPolicy;
 use App\Policies\OutboundMessagePolicy;
+use App\Policies\PrivacyRequestPolicy;
 use App\Policies\UserPolicy;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Cache\RateLimiting\Limit;
@@ -98,6 +100,7 @@ class AppServiceProvider extends ServiceProvider
             'knowledge_document' => KnowledgeDocument::class,
             'conversation' => Conversation::class,
             'ai_action_proposal' => AiActionProposal::class,
+            'privacy_request' => PrivacyRequest::class,
         ]);
 
         // Mots de passe : 12 caractères minimum (TRD §11).
@@ -123,6 +126,7 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(DiagnosticTemplate::class, DiagnosticTemplatePolicy::class);
         Gate::policy(DiagnosticSession::class, DiagnosticSessionPolicy::class);
         Gate::policy(Brief::class, BriefPolicy::class);
+        Gate::policy(PrivacyRequest::class, PrivacyRequestPolicy::class);
 
         Event::listen(Login::class, RecordSuccessfulLogin::class);
 
@@ -141,5 +145,10 @@ class AppServiceProvider extends ServiceProvider
         RateLimiter::for('assistant-actions', fn (Request $request) => Limit::perMinute(20)->by((string) $request->ip()));
         // Démo Lab : pages et factures (les limites métier — espaces par IP, actions par espace — sont dans les Actions).
         RateLimiter::for('lab', fn (Request $request) => Limit::perMinute(60)->by((string) $request->ip()));
+        // Mesure first-party (TRD §9) et choix de la bannière cookies.
+        RateLimiter::for('events', fn (Request $request) => Limit::perMinute(120)->by((string) $request->ip()));
+        RateLimiter::for('consent', fn (Request $request) => Limit::perMinute(20)->by((string) $request->ip()));
+        // Demandes de droits (PRV-02) : formulaire public, comme le contact.
+        RateLimiter::for('privacy', fn (Request $request) => Limit::perHour(5)->by((string) $request->ip()));
     }
 }

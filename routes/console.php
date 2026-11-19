@@ -30,3 +30,6 @@ Schedule::command('kh:ai-budget-check')->everyFifteenMinutes();
 
 // Démo Lab : espaces expirés (24 h) supprimés toutes les heures avec leurs données fictives.
 Schedule::command('kh:lab-purge')->hourly();
+
+// Conversations de l'assistant non liées à un lead, inactives depuis plus de 90 jours (PRV-03).
+Schedule::command('kh:conversations-purge')->dailyAt('02:15');

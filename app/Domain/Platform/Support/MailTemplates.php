@@ -4,6 +4,7 @@ namespace App\Domain\Platform\Support;
 
 use App\Domain\Content\Support\PendingValidation;
 use App\Domain\Crm\Enums\LeadType;
+use App\Domain\Crm\Enums\PrivacyRequestType;
 use App\Domain\Platform\Models\OutboundMessage;
 use App\Domain\Platform\Services\Settings;
 use InvalidArgumentException;
@@ -18,7 +19,7 @@ final class MailTemplates
 {
     public const TEMPLATES = [
         'lead_new_internal', 'lead_ack', 'brief_ack', 'appointment_ack', 'appointment_requested_internal',
-        'appointment_confirmed', 'lead_unattended', 'ai_budget_alert',
+        'appointment_confirmed', 'lead_unattended', 'ai_budget_alert', 'privacy_request_internal',
     ];
 
     /**
@@ -69,6 +70,11 @@ final class MailTemplates
                 'subject' => 'Assistant IA : '.((int) ($p['percent'] ?? 0)).' % du budget du jour consommé',
                 'view' => 'emails.ai-budget-alert',
                 'data' => [...$data, 'adminUrl' => url('/admin')],
+            ],
+            'privacy_request_internal' => [
+                'subject' => 'Demande de droits reçue — '.mb_strtolower(PrivacyRequestType::tryFrom((string) ($p['type'] ?? ''))?->label() ?? 'à qualifier'),
+                'view' => 'emails.privacy-request-internal',
+                'data' => [...$data, 'adminUrl' => url('/admin/demandes-droits/'.($p['privacy_request_id'] ?? '').'/edit')],
             ],
             default => throw new InvalidArgumentException("Modèle d'e-mail inconnu : {$message->template}"),
         };

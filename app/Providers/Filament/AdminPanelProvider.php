@@ -55,6 +55,7 @@ class AdminPanelProvider extends PanelProvider
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->darkMode(false)
             ->navigationGroups([
+                NavigationGroup::make('Pilotage'),
                 NavigationGroup::make('Commercial'),
                 NavigationGroup::make('Contenus'),
                 NavigationGroup::make('Assistant'),

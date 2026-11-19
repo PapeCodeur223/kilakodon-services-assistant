@@ -223,7 +223,7 @@ export function createAssistant(root, launcher, config) {
         const status = h('span', { class: 'text-tag text-slate', 'aria-live': 'polite' });
         const button = (rating, emoji, label) => h('button', {
             type: 'button',
-            class: 'inline-flex size-9 items-center justify-center rounded-full text-base hover:bg-mist focus-visible:outline-3 focus-visible:outline-kh-blue-500',
+            class: 'inline-flex size-11 items-center justify-center rounded-full text-base hover:bg-mist focus-visible:outline-3 focus-visible:outline-kh-blue-500',
             'aria-label': label,
             onclick: async (event) => {
                 const { status: code } = await api(url('feedback', state.conversation, messageId), { rating });

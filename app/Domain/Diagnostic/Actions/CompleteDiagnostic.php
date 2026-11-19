@@ -8,6 +8,7 @@ use App\Domain\Diagnostic\Enums\SessionStatus;
 use App\Domain\Diagnostic\Jobs\GenerateDiagnosticSummary;
 use App\Domain\Diagnostic\Models\DiagnosticResult;
 use App\Domain\Diagnostic\Models\DiagnosticSession;
+use App\Domain\Platform\Actions\RecordAnalyticsEvent;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
@@ -36,6 +37,7 @@ class CompleteDiagnostic
         }
 
         $outcome = $this->engine->run($template, $answers);
+        $firstCompletion = $session->completed_at === null;
 
         $result = DB::transaction(function () use ($session, $outcome): DiagnosticResult {
             $existing = DiagnosticResult::query()->where('session_id', $session->id)->first();
@@ -60,6 +62,10 @@ class CompleteDiagnostic
 
             return $result;
         });
+
+        if ($firstCompletion) {
+            RecordAnalyticsEvent::server('diagnostic_completed', ['template_version' => $result->template_version, 'maturity_level' => $result->maturity_level]);
+        }
 
         if ($result->ai_summary === null) {
             GenerateDiagnosticSummary::dispatch($result->id)->afterCommit();

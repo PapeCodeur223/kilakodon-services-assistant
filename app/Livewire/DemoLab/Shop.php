@@ -16,6 +16,7 @@ use App\Domain\DemoLab\Models\DemoSale;
 use App\Domain\DemoLab\Models\DemoSaleItem;
 use App\Domain\DemoLab\Models\DemoWorkspace;
 use App\Domain\DemoLab\Support\WorkspaceContext;
+use App\Domain\Platform\Actions\RecordAnalyticsEvent;
 use App\Http\Controllers\Public\LabController;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Carbon;
@@ -161,6 +162,10 @@ class Shop extends Component
         $this->cart = [];
         $this->customerId = null;
         $this->notice = "Vente {$result->sale->number} encaissée.";
+        RecordAnalyticsEvent::server('lab_action', ['action' => 'sale']);
+        if ($result->alerts !== []) {
+            RecordAnalyticsEvent::server('lab_action', ['action' => 'alert_seen']);
+        }
 
         foreach ($result->alerts as $product) {
             $this->dispatch('lab-alert', message: "Stock bas : {$product->name} ({$product->stock_qty} restant, seuil {$product->alert_threshold}).");
@@ -177,6 +182,7 @@ class Shop extends Component
         try {
             $product = $restock->handle($this->workspace(), $productId, (int) ($this->restock[$productId] ?? 0));
             $this->notice = "Réassort enregistré : {$product->name} ({$product->stock_qty} en stock).";
+            RecordAnalyticsEvent::server('lab_action', ['action' => 'restock']);
             unset($this->restock[$productId]);
         } catch (InvalidDemoOperation $e) {
             $this->error = $e->getMessage();

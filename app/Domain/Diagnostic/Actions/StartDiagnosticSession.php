@@ -7,6 +7,7 @@ use App\Domain\Diagnostic\Engine\VisibilityResolver;
 use App\Domain\Diagnostic\Enums\SessionStatus;
 use App\Domain\Diagnostic\Models\DiagnosticSession;
 use App\Domain\Diagnostic\Models\DiagnosticTemplate;
+use App\Domain\Platform\Actions\RecordAnalyticsEvent;
 use App\Domain\Platform\Support\IpHasher;
 use App\Domain\Platform\Support\PublicToken;
 use Illuminate\Support\Facades\DB;
@@ -56,6 +57,8 @@ class StartDiagnosticSession
 
             return $session;
         });
+
+        RecordAnalyticsEvent::server('diagnostic_started', ['entry' => $session->entry ?? 'direct']);
 
         return ['session' => $session, 'token' => $token['token']];
     }

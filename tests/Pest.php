@@ -1,5 +1,11 @@
 <?php
 
+use App\Domain\Assistant\Models\Conversation;
+use App\Domain\Assistant\Models\Message;
+use App\Domain\Brief\Actions\RequestBrief;
+use App\Domain\Brief\Models\Brief;
+use App\Domain\Crm\Data\ProspectDetails;
+use App\Domain\Crm\Enums\ActivityType;
 use App\Domain\Crm\Enums\LeadType;
 use App\Domain\Crm\Models\Contact;
 use App\Domain\Crm\Models\Lead;
@@ -116,4 +122,30 @@ function makeLead(array $overrides = [], array $contact = []): Lead
     }
 
     return $lead->refresh();
+}
+
+/**
+ * Un prospect complet : diagnostic → brief → lead, plus une conversation, une note et un e-mail.
+ *
+ * @return array{contact: Contact, lead: Lead, brief: Brief, conversation: Conversation}
+ */
+function privacyProspect(): array
+{
+    ['session' => $session] = completedDiagnostic(['context_note' => 'Ma boutique Chez Awa à Kalaban']);
+    $brief = app(RequestBrief::class)->handle($session, new ProspectDetails(
+        fullName: 'Awa Traoré',
+        phone: '76 12 34 56',
+        email: 'awa@example.test',
+        company: 'Chez Awa',
+        marketingOptIn: false,
+        ip: '196.200.10.1',
+    ))['brief'];
+
+    $lead = Lead::query()->where('brief_id', $brief->id)->sole();
+    $lead->activities()->create(['type' => ActivityType::Note, 'body' => 'Awa préfère être appelée le soir au 76 12 34 56.']);
+
+    $conversation = Conversation::query()->create(['ip_hash' => str_repeat('c', 64), 'lead_id' => $lead->id, 'message_count' => 2, 'visitor_key' => '4f1c2a9e-6b1d-4c8e-9a51-2f3b7d8e9c10']);
+    Message::query()->create(['conversation_id' => $conversation->id, 'role' => 'user', 'content' => 'Bonjour, je suis Awa, appelez-moi au 76 12 34 56']);
+
+    return ['contact' => $lead->contact, 'lead' => $lead, 'brief' => $brief->refresh(), 'conversation' => $conversation];
 }

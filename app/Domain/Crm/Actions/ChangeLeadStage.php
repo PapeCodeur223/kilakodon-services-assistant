@@ -7,6 +7,7 @@ use App\Domain\Crm\Enums\LeadStage;
 use App\Domain\Crm\Enums\LostReason;
 use App\Domain\Crm\Exceptions\CrmException;
 use App\Domain\Crm\Models\Lead;
+use App\Domain\Platform\Actions\RecordAnalyticsEvent;
 use App\Domain\Platform\Actions\RecordAudit;
 use App\Domain\Platform\Enums\AuditAction;
 use App\Domain\Platform\Models\User;
@@ -73,6 +74,11 @@ class ChangeLeadStage
                 'before' => ['stage' => $from->value],
                 'after' => ['stage' => $to->value, 'reason' => $historyReason],
             ], $by);
+
+            RecordAnalyticsEvent::server('lead_stage_changed', ['from' => $from->value, 'to' => $to->value]);
+            if ($to === LeadStage::Won) {
+                RecordAnalyticsEvent::server('lead_won');
+            }
 
             return $lead;
         });

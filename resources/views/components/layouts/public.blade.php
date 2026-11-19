@@ -16,6 +16,12 @@
     {{-- La classe .js active les états initiaux des animations : sans JS, tout reste visible. --}}
     <script nonce="{{ \Illuminate\Support\Facades\Vite::cspNonce() }}">document.documentElement.classList.add('js')</script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    {{-- Jeton CSRF : lu par la mesure first-party (sendBeacon vers /api/events). --}}
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    @if (app(\App\Domain\Platform\Analytics\AudienceConsent::class)->granted())
+        {{-- Mesure d'audience acceptée : le script de mesure ne s'active qu'avec cette balise (Q-011). --}}
+        <meta name="kh-analytics" content="on">
+    @endif
     <x-kh.seo :title="$title" :description="$description" :canonical="$canonical" :image="$image" :type="$type" :noindex="$noindex" :schemas="$schemas" />
     <meta name="theme-color" content="white">
     <link rel="icon" href="{{ asset('favicon.ico') }}" sizes="any">
@@ -55,5 +61,7 @@
             <x-kh.assistant />
         @endif
     @endif
+
+    <x-kh.cookie-banner />
 </body>
 </html>
