@@ -30,6 +30,6 @@ class PrivacyController extends Controller
         );
 
         return redirect()->route('privacy.form')
-            ->with('privacy.success', 'Votre demande est bien enregistrée. Nous vous recontactons pour vérifier votre identité avant de la traiter.');
+            ->with('privacy.success', 'Votre demande est bien enregistrée. Nous vous recontactons sous 24 h pour vérifier votre identité avant de la traiter.');
     }
 }

@@ -7,7 +7,7 @@
 
     $steps = [
         ['title' => 'Vous envoyez votre demande', 'text' => 'Indiquez qui vous êtes et ce que vous souhaitez.'],
-        ['title' => 'Nous vérifions votre identité', 'text' => 'Un membre de l’équipe vous recontacte sur le numéro ou l’adresse indiqués, pour s’assurer que la demande vient bien de vous.'],
+        ['title' => 'Nous vérifions votre identité', 'text' => 'Un membre de l’équipe vous recontacte sous 24 h sur le numéro ou l’adresse indiqués, pour s’assurer que la demande vient bien de vous.'],
         ['title' => 'Nous traitons la demande', 'text' => 'Copie de vos données, correction, suppression ou arrêt des messages : nous vous confirmons ce qui a été fait.'],
     ];
 @endphp

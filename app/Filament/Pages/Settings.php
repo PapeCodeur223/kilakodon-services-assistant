@@ -42,6 +42,7 @@ class Settings extends Page
         'lead_recipients' => 'notify.lead_recipients',
         'ai_enabled' => 'ai.enabled',
         'ai_daily_budget_usd' => 'ai.daily_budget_usd',
+        'ai_monthly_budget_usd' => 'ai.monthly_budget_usd',
         'ai_max_messages_per_conversation' => 'ai.max_messages_per_conversation',
     ];
 
@@ -141,6 +142,13 @@ class Settings extends Page
                             ->maxValue(1000)
                             ->helperText('Alerte e-mail à 80 %, coupure automatique à 100 %. À 0, seul le mode de démonstration (sans API réelle) fonctionne.')
                             ->required(),
+                        TextInput::make('ai_monthly_budget_usd')
+                            ->label('Budget mensuel (USD)')
+                            ->numeric()
+                            ->minValue(0)
+                            ->maxValue(10000)
+                            ->helperText('Plafond du mois en cours : alerte e-mail à 80 %, coupure automatique à 100 %. À 0, pas de plafond mensuel.')
+                            ->required(),
                         TextInput::make('ai_max_messages_per_conversation')
                             ->label('Messages max. par conversation')
                             ->integer()
@@ -221,6 +229,7 @@ class Settings extends Page
         return match ($key) {
             'ai.enabled' => (bool) $value,
             'ai.daily_budget_usd' => $this->money((float) $value),
+            'ai.monthly_budget_usd' => $this->money((float) $value),
             'ai.max_messages_per_conversation' => (int) $value,
             'notify.lead_recipients' => array_values(array_unique(array_map('trim', (array) $value))),
             'contact.whatsapp_secondary' => filled($value) ? trim((string) $value) : null,

@@ -109,16 +109,32 @@ class AssistantGuard
         return (int) round(((float) $this->settings->get('ai.daily_budget_usd', 0)) * 1_000_000);
     }
 
+    /**
+     * Budget mensuel en millionièmes de dollar (0 = pas de plafond mensuel). Décision D-026 : 1 $.
+     */
+    public function monthlyBudgetMicros(): int
+    {
+        return (int) round(((float) $this->settings->get('ai.monthly_budget_usd', 0)) * 1_000_000);
+    }
+
+    /**
+     * Budget atteint : plafond du jour ou plafond du mois (chacun seulement s'il est fixé).
+     */
     public function budgetReached(): bool
     {
-        $budget = $this->dailyBudgetMicros();
+        $daily = $this->dailyBudgetMicros();
+        $monthly = $this->monthlyBudgetMicros();
 
-        // Budget non fixé : seul le pilote factice (coût nul) fonctionne, cf. unavailableReason().
-        if ($budget <= 0) {
-            return false;
-        }
+        // Budget quotidien non fixé : seul le pilote factice (coût nul) fonctionne, cf. unavailableReason().
+        return ($daily > 0 && $this->spentTodayMicros() >= $daily)
+            || ($monthly > 0 && $this->spentThisMonthMicros() >= $monthly);
+    }
 
-        return $this->spentTodayMicros() >= $budget;
+    public function spentThisMonthMicros(): int
+    {
+        $start = now(config('kh.display_timezone'))->startOfMonth()->toDateString();
+
+        return (int) AiUsageDaily::query()->whereDate('date', '>=', $start)->sum('cost_estimate_usd_micros');
     }
 
     public function spentTodayMicros(): int

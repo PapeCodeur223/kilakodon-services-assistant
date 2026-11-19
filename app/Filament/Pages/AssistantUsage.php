@@ -53,7 +53,9 @@ class AssistantUsage extends Page
             'enabled' => $failure === null,
             'reason' => match ($failure?->reason) {
                 null => null,
-                'budget' => 'Budget du jour atteint : l\'assistant reprend demain.',
+                'budget' => $guard->monthlyBudgetMicros() > 0 && $guard->spentThisMonthMicros() >= $guard->monthlyBudgetMicros()
+                    ? 'Budget du mois atteint : l\'assistant reprend le mois prochain, ou plus tôt si vous relevez le plafond.'
+                    : 'Budget du jour atteint : l\'assistant reprend demain.',
                 default => match (true) {
                     ! (bool) config('assistant.enabled') => 'Coupé par la variable d\'environnement AI_ENABLED.',
                     ! (bool) app(SettingsService::class)->get('ai.enabled', false) => 'Coupé par l\'interrupteur des paramètres.',
@@ -70,7 +72,7 @@ class AssistantUsage extends Page
     }
 
     /**
-     * @return array{requests: int, blocked: int, tokens_in: int, tokens_out: int, cost_usd: float, conversations: int}
+     * @return array{requests: int, blocked: int, tokens_in: int, tokens_out: int, cost_usd: float, conversations: int, budget_usd: float}
      */
     public function getMonth(): array
     {
@@ -84,6 +86,7 @@ class AssistantUsage extends Page
             'tokens_out' => (int) $rows->sum('tokens_out'),
             'cost_usd' => $rows->sum('cost_estimate_usd_micros') / 1_000_000,
             'conversations' => Conversation::query()->where('created_at', '>=', $start->copy()->utc())->count(),
+            'budget_usd' => app(AssistantGuard::class)->monthlyBudgetMicros() / 1_000_000,
         ];
     }
 

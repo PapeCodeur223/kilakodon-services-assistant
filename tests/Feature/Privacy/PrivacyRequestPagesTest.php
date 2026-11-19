@@ -59,7 +59,7 @@ it('enregistre la demande « reçue », hache l’IP et prévient les administra
     expect($mail->to)->toBe('direction@example.test')
         ->and(json_encode($mail->payload))->not->toContain('Awa')->not->toContain('6664');
 
-    $this->get('/mes-donnees')->assertSee('Votre demande est bien enregistrée');
+    $this->get('/mes-donnees')->assertSee('Votre demande est bien enregistrée')->assertSee('sous 24 h');
 });
 
 it('exige des précisions pour une correction et refuse les robots', function () {
