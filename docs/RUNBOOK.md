@@ -19,9 +19,9 @@ Le site fonctionne sans l'assistant : le couper ne casse rien, le bouton dispara
 2. `php artisan config:clear`.
 
 **Le budget du jour est atteint**
-- L'assistant se coupe tout seul à 100 % du budget quotidien et reprend le lendemain. Une alerte e-mail part à 80 %.
+- L'assistant se coupe tout seul à 100 % du budget quotidien (0,50 $, reprise le lendemain) ou du budget mensuel (1 $, reprise le mois suivant). Une alerte e-mail part à 80 % de chacun.
 - Pour suivre la consommation : Assistant → **Usage**.
-- Pour changer le budget : Réglages → **Paramètres** → Assistant IA → budget quotidien. Toute hausse du budget est une décision de la direction.
+- Pour changer les budgets : Réglages → **Paramètres** → Assistant IA → budget quotidien et budget mensuel. Toute hausse est une décision de la direction (D-023, D-026).
 
 **La clé API**
 - Elle se trouve uniquement dans `.env` (`ANTHROPIC_API_KEY`), jamais en base, dans l'administration ou dans Git.
@@ -43,7 +43,7 @@ Si rien ne part du tout : vérifier que le planificateur tourne et que `MAIL_MAI
 Les demandes arrivent par le formulaire **« Gérer mes données »** (`/mes-donnees`, lien dans le pied de page). Chaque nouvelle demande déclenche un e-mail aux administrateurs. Une demande reçue par téléphone ou WhatsApp se saisit aussi dans l'administration.
 
 1. Réglages → **Demandes de droits** → ouvrir la demande.
-2. **Vérifier l'identité** : rappeler la personne sur le numéro ou l'adresse que nous avions déjà. Ne jamais traiter une demande sur la seule foi du formulaire. Ne pas recopier de pièce d'identité dans les notes.
+2. **Vérifier l'identité** sous 24 h (délai affiché au demandeur, D-026) : rappeler la personne sur le numéro ou l'adresse que nous avions déjà. Ne jamais traiter une demande sur la seule foi du formulaire. Ne pas recopier de pièce d'identité dans les notes.
 3. Cliquer **Identité vérifiée**.
 4. Dans **Contact concerné**, rechercher le contact par nom, téléphone ou e-mail, puis enregistrer.
 5. Selon la demande :
@@ -62,7 +62,7 @@ Purges automatiques (planifiées, rien à faire) :
 | Conversations de l'assistant non liées à un lead | 90 jours | chaque jour à 02:15 |
 | Espaces du Démo Lab | 24 heures | toutes les heures |
 
-Ces durées restent à valider par la direction (PRV-03).
+Durées validées par la direction (D-026).
 
 ## 4. Restaurer un contenu
 

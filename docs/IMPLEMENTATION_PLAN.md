@@ -147,4 +147,4 @@ Choix de la formule LWS (avec ou sans SSH), workflow GitHub Actions, préproduct
 | 3 | validé | branche `lot-3-crm` | Direction Kilakodon | 2026-11-15 |
 | 4 | validé | branche `lot-4-assistant` | Direction Kilakodon | 2026-11-16 |
 | 5 | validé | branche `lot-5-demo-lab` | Direction Kilakodon | 2026-11-18 |
-| 6 | en revue | branche `lot-6-mesure-recette` | | |
+| 6 | validé | branche `lot-6-mesure-recette` | Direction Kilakodon | 2026-11-19 |

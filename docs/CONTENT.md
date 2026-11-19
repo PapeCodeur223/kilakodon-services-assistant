@@ -376,6 +376,11 @@ Fiches en brouillon : `database/seeders/content/case-studies.php` (10 fiches, [�
 ### Gérer mes données (`/mes-donnees`, `resources/views/pages/privacy-request.blade.php`)
 - Titre : « Gérer *mes données* » — chapô : « Vous pouvez demander à tout moment une copie de vos données, leur correction ou leur suppression, ou ne plus recevoir de messages de notre part. »
 - Demandes : « Recevoir une copie de mes données » · « Corriger mes données » · « Supprimer mes données » · « Ne plus être contacté »
-- Étapes : « Vous envoyez votre demande » · « Nous vérifions votre identité » (rappel sur le numéro ou l’adresse indiqués) · « Nous traitons la demande »
-- Succès : « Votre demande est bien enregistrée. Nous vous recontactons pour vérifier votre identité avant de la traiter. »
-- Aucun délai de traitement n’est promis tant que la direction ne l’a pas fixé.
+- Étapes : « Vous envoyez votre demande » · « Nous vérifions votre identité » (rappel sous 24 h sur le numéro ou l’adresse indiqués, D-026) · « Nous traitons la demande »
+- Succès : « Votre demande est bien enregistrée. Nous vous recontactons sous 24 h pour vérifier votre identité avant de la traiter. »
+- Délai de 24 h pour recontacter le demandeur, fixé par la direction (D-026).
+
+### Démos guidées (`LabController::GUIDED`, captures dans `public/images/demos/`)
+- Gestion scolaire : « Effectifs, paiements de scolarité, impayés et années académiques : visite en captures du logiciel de gestion scolaire. » — 3 captures commentées (tableau de bord de la direction ; paiements, effectifs et impayés, noms d’élèves masqués ; années académiques et trimestres).
+- Boulangerie : « Caisse du jour, production du fourneau et prises des revendeurs : visite en captures du logiciel de boulangerie. » — 3 captures commentées (vue d’ensemble du jour ; prises des revendeurs ; menu replié).
+- Les légendes décrivent seulement ce qui est visible sur les captures fournies par Kilakodon.

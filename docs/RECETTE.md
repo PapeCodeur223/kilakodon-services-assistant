@@ -66,16 +66,12 @@ Vérification manuelle : ouvrir l'assistant, demander « Combien coûte un logic
 |---|---|
 | Critères **M** et suite de tests verte | ✅ `composer kh:check` (voir CHANGELOG du lot 6) |
 | Évaluation IA : seuils et 0 échec critique | ⚠️ 62/69 ; 3 cas critiques de formulation acceptés par la direction (D-024). Un resserrement du prompt (`sys-v4`) est possible |
-| Lighthouse mobile ≥ 90 (perf) et ≥ 95 (accessibilité) | ⏳ Pas encore mesuré : l'outil n'est pas installé et son lancement ponctuel attend l'accord de l'équipe |
+| Lighthouse mobile ≥ 90 (perf) et ≥ 95 (accessibilité) | ⏳ Reporté au lot 7 (D-026) : à mesurer sur la préproduction |
 | `kh:content-audit` : 0 `[À VALIDER]` publié | ✅ 0, brouillons compris (2026-11-19) |
-| Pages légales validées, coordonnées réelles, au moins 1 réalisation autorisée | ⚠️ Coordonnées réelles ✅ ; 10 réalisations autorisées ✅ ; **validation juridique des pages légales à faire** (Q-011) |
-| Budget IA mensuel et horaires renseignés | ⚠️ Budget **quotidien** fixé (0,50 $, D-023) et horaires validés (D-015) ; budget **mensuel** non fixé |
+| Pages légales validées, coordonnées réelles, au moins 1 réalisation autorisée | ⚠️ Coordonnées réelles ✅ ; 10 réalisations autorisées ✅ ; pages légales : réglage par défaut retenu (D-026), validation juridique à prévoir avant la production |
+| Budget IA mensuel et horaires renseignés | ✅ Budget mensuel 1 $ et quotidien 0,50 $ (D-023, D-026), horaires validés (D-015) |
 | Redirections des anciennes URL testées | ✅ `SeoTest` (301) |
 
-## 4. Décisions attendues de la direction
-1. **Pages légales** (mentions, confidentialité, cookies) : relecture par un conseil juridique (loi n° 2013-015, APDP) et régime exact du consentement pour la mesure d'audience (Q-011). En attendant, la mesure reste désactivée tant que le visiteur n'a pas accepté.
-2. **Durées de conservation** (PRV-03) : 30 jours pour les diagnostics anonymes, 24 h pour le Démo Lab, 90 jours pour les conversations non liées : à confirmer.
-3. **Délai de réponse** aux demandes de droits : aucun délai n'est affiché tant qu'il n'est pas fixé.
-4. **Budget IA mensuel**.
-5. **Démos guidées** école et boulangerie : vidéo ou captures (Q-014).
-6. **Indicateurs à 3 mois** (PRD §3.3) : cibles encore `[À VALIDER]` dans le PRD.
+## 4. Décisions de la direction (2026-11-19, D-026) et points restants
+- Tranchés : réglage par défaut des pages légales et de la mesure (désactivée jusqu'à acceptation) ; durées de conservation 30 j / 24 h / 90 j ; demandeur recontacté sous 24 h ; budget IA mensuel 1 $ ; démos guidées en captures (noms masqués) ; Lighthouse reporté au lot 7.
+- Restent pour le lot 7 : validation juridique des pages légales avant la production ; mesures Lighthouse sur la préproduction ; cibles des indicateurs à 3 mois (PRD §3.3).
