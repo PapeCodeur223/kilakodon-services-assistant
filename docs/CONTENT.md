@@ -360,3 +360,22 @@ Textes fixes dans `app/Domain/Assistant/Conversation/SmallTalk.php` (salutation 
 
 ### Réalisations
 Fiches en brouillon : `database/seeders/content/case-studies.php` (10 fiches, [À VALIDER] à lever par la direction).
+
+## 16. Textes ajoutés au lot 6 (mesure, données personnelles)
+
+### Bannière cookies (`resources/views/components/kh/cookie-banner.blade.php`)
+- Titre : « Mesure d’audience »
+- « Avec votre accord, nous mesurons la fréquentation du site avec notre propre outil : aucune publicité, aucune donnée transmise à des tiers. Les cookies nécessaires au fonctionnement (sécurité, formulaires, Démo Lab) restent actifs. » — lien « En savoir plus »
+- Boutons : « Refuser » · « Accepter » (même style, même taille)
+
+### Page Cookies — « Vos choix » (`cookie-preferences.blade.php`)
+- États : « Aucun choix enregistré : la mesure d’audience est désactivée. » · « Mesure d’audience acceptée. » · « Mesure d’audience refusée. »
+- « Les cookies nécessaires (session, sécurité des formulaires, Démo Lab, mémorisation de ce choix) ne peuvent pas être désactivés : sans eux, le site ne fonctionne pas. »
+- Confirmations : « Merci, la mesure d’audience est activée. » · « C’est noté : aucune mesure d’audience liée à votre navigateur. »
+
+### Gérer mes données (`/mes-donnees`, `resources/views/pages/privacy-request.blade.php`)
+- Titre : « Gérer *mes données* » — chapô : « Vous pouvez demander à tout moment une copie de vos données, leur correction ou leur suppression, ou ne plus recevoir de messages de notre part. »
+- Demandes : « Recevoir une copie de mes données » · « Corriger mes données » · « Supprimer mes données » · « Ne plus être contacté »
+- Étapes : « Vous envoyez votre demande » · « Nous vérifions votre identité » (rappel sur le numéro ou l’adresse indiqués) · « Nous traitons la demande »
+- Succès : « Votre demande est bien enregistrée. Nous vous recontactons pour vérifier votre identité avant de la traiter. »
+- Aucun délai de traitement n’est promis tant que la direction ne l’a pas fixé.

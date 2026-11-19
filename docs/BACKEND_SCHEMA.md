@@ -389,7 +389,7 @@ Toujours internes : jamais exposées publiquement.
 Écriture seule. Un retrait crée une nouvelle ligne `granted = false`.
 
 ### privacy_requests
-`contact_id` null, `requester_name`, `requester_channel` (texte), `type` (`access` \| `rectification` \| `erasure` \| `objection`), `status` (`received` \| `verifying` \| `in_progress` \| `done` \| `rejected`), `verified_at`, `handled_by`, `decision_note` text, `completed_at`.
+`contact_id` null, `requester_name`, `requester_channel` (texte), `type` (`access` \| `rectification` \| `erasure` \| `objection`), `details` text null (précisions du demandeur, lot 6), `ip_hash` char(64) null (HMAC, formulaire public, lot 6), `status` (`received` \| `verifying` \| `in_progress` \| `done` \| `rejected`), `verified_at`, `handled_by`, `decision_note` text, `completed_at`. `verifying` : contact relié modifié après une vérification, l'identité est à revérifier.
 
 ---
 
