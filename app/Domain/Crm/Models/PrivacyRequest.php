@@ -9,13 +9,16 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 
 /**
- * Demande d'exercice des droits (PRV-02). Le traitement (export, anonymisation) arrive au lot 6.
+ * Demande d'exercice des droits (PRV-02) : formulaire public « Gérer mes données » ou saisie manuelle ;
+ * traitement dans l'admin (vérification d'identité, export JSON, anonymisation).
  *
  * @property int $id
  * @property int|null $contact_id
  * @property string $requester_name
  * @property string $requester_channel
  * @property PrivacyRequestType $type
+ * @property string|null $details
+ * @property string|null $ip_hash
  * @property PrivacyRequestStatus $status
  * @property Carbon|null $verified_at
  * @property int|null $handled_by
@@ -25,7 +28,7 @@ use Illuminate\Support\Carbon;
 class PrivacyRequest extends Model
 {
     protected $fillable = [
-        'contact_id', 'requester_name', 'requester_channel', 'type', 'status', 'verified_at', 'handled_by', 'decision_note', 'completed_at',
+        'contact_id', 'requester_name', 'requester_channel', 'type', 'details', 'ip_hash', 'status', 'verified_at', 'handled_by', 'decision_note', 'completed_at',
     ];
 
     protected $attributes = [

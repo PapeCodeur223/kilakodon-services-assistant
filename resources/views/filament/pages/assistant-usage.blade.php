@@ -28,6 +28,7 @@
         </x-filament::section>
         <x-filament::section heading="Ce mois-ci">
             <dl class="grid grid-cols-2 gap-3 text-sm">
+                <dt class="text-gray-500">Budget du mois</dt><dd class="font-semibold">{{ $month['budget_usd'] > 0 ? number_format($month['budget_usd'], 2, ',', ' ').' $' : 'Pas de plafond' }}</dd>
                 <dt class="text-gray-500">Conversations</dt><dd class="font-semibold">{{ $int($month['conversations']) }}</dd>
                 <dt class="text-gray-500">Appels au modèle</dt><dd class="font-semibold">{{ $int($month['requests']) }}</dd>
                 <dt class="text-gray-500">Requêtes bloquées (gardes)</dt><dd class="font-semibold">{{ $int($month['blocked']) }}</dd>

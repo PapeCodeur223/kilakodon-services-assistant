@@ -20,6 +20,21 @@ enum PrivacyRequestType: string
     }
 
     /**
+     * Libellés du formulaire public, formulés du point de vue du visiteur.
+     *
+     * @return array<string, string>
+     */
+    public static function publicOptions(): array
+    {
+        return [
+            self::Access->value => 'Recevoir une copie de mes données',
+            self::Rectification->value => 'Corriger mes données',
+            self::Erasure->value => 'Supprimer mes données',
+            self::Objection->value => 'Ne plus être contacté',
+        ];
+    }
+
+    /**
      * @return array<string, string>
      */
     public static function options(): array

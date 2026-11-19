@@ -2,6 +2,17 @@
 
 ## [Non publié]
 
+### Lot 6 — Mesure, données personnelles, finition, recette (validé le 2026-11-19)
+#### Ajouté
+- Mesure first-party (TRD §9) : bannière cookies sans JavaScript (« Refuser » / « Accepter » au même niveau), page Cookies « Vos choix », `POST /api/events` avec liste blanche, événements serveur des parcours et des leads. Rien n’est mesuré dans le navigateur sans accord ; jamais de coordonnée ni d’IP dans les événements.
+- Tableau de bord direction (admin) : entonnoir 7 ou 30 jours, sources des leads, délai médian de prise en charge, coût IA par brief qualifié, recalculés depuis les tables sources.
+- Données personnelles : formulaire public « Gérer mes données » (`/mes-donnees`), écran « Demandes de droits » (vérification d’identité, export JSON, anonymisation confirmée, retrait marketing, clôture motivée, tout journalisé), purge `kh:conversations-purge` (90 jours, 02:15).
+- `docs/RUNBOOK.md` (IA, envois, demandes de droits, restauration, règles de diagnostic) et `docs/RECETTE.md` (parcours P1–P5, critères Go/No-Go, décisions attendues).
+- Décisions de clôture (D-026) : budget IA mensuel 1 $ (garde, alerte à 80 %, réglage dans Paramètres, page Usage) ; demandes de droits recontactées sous 24 h ; démos guidées « Gestion scolaire » et « Boulangerie » en 3 captures commentées chacune (WebP, noms d’élèves masqués), indexées et dans le sitemap.
+#### Sécurité
+- Revue de sécurité du lot : redirection du choix cookies durcie, test « aucune trace en production », `composer audit` et `npm audit` sans vulnérabilité.
+- Revue indépendante : 1 bloquant et 3 majeurs corrigés (voir DECISIONS, 2026-11-19).
+
 ### Lot 5 — Démo Lab (validé le 2026-11-18)
 #### Ajouté
 - Tables `demo_*` isolées par `workspace_id` (ULID, cascade) et global scope obligatoire `BelongsToWorkspace` (sans espace courant : aucune donnée, aucune écriture) ; tests d’isolation et d’architecture.

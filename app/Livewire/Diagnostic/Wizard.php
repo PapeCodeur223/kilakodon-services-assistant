@@ -21,6 +21,8 @@ use App\Domain\Diagnostic\Models\DiagnosticResult;
 use App\Domain\Diagnostic\Models\DiagnosticSession;
 use App\Domain\Diagnostic\Models\DiagnosticTemplate;
 use App\Domain\Diagnostic\Services\DiagnosticSummaryWriter;
+use App\Domain\Platform\Actions\RecordAnalyticsEvent;
+use App\Domain\Platform\Analytics\AudienceConsent;
 use App\Domain\Platform\Services\Settings;
 use App\Domain\Platform\Support\IpHasher;
 use Illuminate\Contracts\View\View;
@@ -203,12 +205,18 @@ class Wizard extends Component
         $nextStep = $isLast ? $this->step : $this->step + 1;
 
         try {
-            $this->answers = app(SaveDiagnosticAnswers::class)->handle($this->session() ?? abort(404), $this->answers, $nextStep);
+            $session = $this->session() ?? abort(404);
+            // Étape franchie pour la première fois seulement (un retour arrière ne recompte pas).
+            $firstPass = $this->step >= $session->current_step;
+            $this->answers = app(SaveDiagnosticAnswers::class)->handle($session, $this->answers, $nextStep);
 
             if ($isLast) {
                 app(CompleteDiagnostic::class)->handle($this->session() ?? abort(404));
                 $this->screen = self::SCREEN_RESULT;
             } else {
+                if ($firstPass) {
+                    RecordAnalyticsEvent::server('diagnostic_step_completed', ['step' => $this->step]);
+                }
                 $this->step = $nextStep;
             }
         } catch (InvalidArgumentException) {
@@ -410,6 +418,7 @@ class Wizard extends Component
             ip: (string) request()->ip(),
             entry: $this->entry,
             sector: $this->prefillSector,
+            visitorKey: app(AudienceConsent::class)->visitorKey(),
             utm: array_map('strval', array_intersect_key((array) session('kh.utm', []), array_flip(['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content']))),
         ));
 

@@ -107,6 +107,7 @@ it('marque un retour négatif comme traité', function () {
 it('alerte les administrateurs une seule fois par jour à 80 % du budget', function () {
     User::factory()->admin()->create(['email' => 'direction@example.com']);
     app(Settings::class)->set('ai.daily_budget_usd', 2);
+    app(Settings::class)->set('ai.monthly_budget_usd', 0); // plafond du mois testé à part (AssistantApiTest)
 
     AiUsageDaily::today()->update(['cost_estimate_usd_micros' => 1_000_000]);
     expect(app(CheckAssistantBudget::class)->handle()['alerted'])->toBeFalse();

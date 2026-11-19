@@ -185,7 +185,7 @@ Les identifiants reprennent ceux du cahier des charges quand ils existent. Prior
 | MES-02 | Tableau de bord direction : entonnoir, sources, délais de prise en charge, coût IA | M | Les chiffres se recalculent depuis les tables sources |
 | PRV-01 | Consentements versionnés et séparés (traitement de la demande / marketing / mesure d'audience) | M | Le retrait est tracé |
 | PRV-02 | Demandes de droits (accès, rectification, suppression, opposition) : formulaire de contact dédié et traitement manuel dans l'admin, avec export JSON d'un contact et anonymisation | M | L'anonymisation couvre contact, leads, briefs, conversations et fragments liés |
-| PRV-03 | Purge automatique : sessions de diagnostic anonymes non converties (30 j), espaces Démo Lab (24 h), conversations non liées à un lead (90 j) [À VALIDER] | M | Commande planifiée testée |
+| PRV-03 | Purge automatique : sessions de diagnostic anonymes non converties (30 j), espaces Démo Lab (24 h), conversations non liées à un lead (90 j) — durées validées par la direction (D-026) | M | Commande planifiée testée |
 
 ## 7. Règles métier non négociables
 

@@ -6,6 +6,7 @@ use App\Domain\Brief\Models\Brief;
 use App\Domain\Crm\Enums\LeadStage;
 use App\Domain\Crm\Enums\LeadType;
 use App\Domain\Crm\Enums\LostReason;
+use App\Domain\Platform\Actions\RecordAnalyticsEvent;
 use App\Domain\Platform\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -62,6 +63,15 @@ class Lead extends Model
     protected $attributes = [
         'stage' => 'new',
     ];
+
+    protected static function booted(): void
+    {
+        // Mesure (TRD §9) : un événement par lead créé, quel que soit le canal. Aucune coordonnée.
+        static::created(fn (self $lead) => RecordAnalyticsEvent::server('lead_created', [
+            'type' => $lead->type->value,
+            'source' => $lead->source,
+        ]));
+    }
 
     protected function casts(): array
     {

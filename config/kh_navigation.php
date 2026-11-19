@@ -25,8 +25,8 @@ return [
         ['title' => 'Mentions légales', 'path' => '/mentions-legales', 'page' => 'mentions-legales'],
         ['title' => 'Confidentialité', 'path' => '/confidentialite', 'page' => 'confidentialite'],
         ['title' => 'Cookies', 'path' => '/cookies', 'page' => 'cookies'],
-        // Lot 6 : formulaire dédié aux demandes de droits.
-        ['title' => 'Gérer mes données', 'path' => '/confidentialite', 'page' => 'confidentialite'],
+        // Formulaire dédié aux demandes de droits (PRV-02).
+        ['title' => 'Gérer mes données', 'path' => '/mes-donnees'],
     ],
 
 ];

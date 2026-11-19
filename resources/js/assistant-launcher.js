@@ -16,6 +16,7 @@ export function initAssistantLauncher() {
                 widget = createAssistant(root, launcher, JSON.parse(root.dataset.config || '{}'));
             }
             widget.open();
+            window.khTrack?.('assistant_opened');
         } catch {
             // Module introuvable (réseau coupé) : on renvoie vers le diagnostic plutôt que de ne rien faire.
             window.location.href = '/diagnostic';

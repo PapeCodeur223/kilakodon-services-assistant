@@ -121,13 +121,13 @@ Tâches :
 **Docs :** PRD §6.8 et §8, TRD §9 et §11, UX §9.
 
 Tâches :
-- [ ] Bannière cookies minimale (nécessaires / mesure d'audience) ; `visitor_key` conditionnel ; endpoint `/api/events` avec liste blanche ; événements serveur.
-- [ ] Tableau de bord direction (entonnoir 30 j, sources, délai médian de prise en charge, coût IA par brief qualifié).
-- [ ] Données personnelles : `privacy_requests` dans Filament, `ExportContactData` (JSON), `AnonymizeContact`, `kh:conversations-purge` ; lien « Gérer mes données » dans le pied de page vers un formulaire dédié.
-- [ ] Passe accessibilité (clavier, lecteur d'écran sur diagnostic et assistant), passe performance (images, polices, JS), Lighthouse sur 5 pages.
-- [ ] Revue de sécurité (skill `kh-security-review`), sur les endpoints publics, les tokens et les politiques.
-- [ ] Recette complète des parcours P1 à P5 ; liste des `[À VALIDER]` restants (sortie de `kh:content-audit`) remise à la direction.
-- [ ] `docs/RUNBOOK.md` : activer ou désactiver l'IA, relancer un envoi, traiter une demande de droits, restaurer un contenu, ajouter une règle de diagnostic.
+- [x] Bannière cookies minimale (nécessaires / mesure d'audience) ; `visitor_key` conditionnel ; endpoint `/api/events` avec liste blanche ; événements serveur.
+- [x] Tableau de bord direction (entonnoir 30 j, sources, délai médian de prise en charge, coût IA par brief qualifié).
+- [x] Données personnelles : `privacy_requests` dans Filament, `ExportContactData` (JSON), `AnonymizeContact`, `kh:conversations-purge` ; lien « Gérer mes données » dans le pied de page vers un formulaire dédié.
+- [~] Passe accessibilité (clavier, lecteur d'écran sur diagnostic et assistant), passe performance (images, polices, JS), Lighthouse sur 5 pages. *(clavier et lecteur d'écran revus à la main ; Lighthouse et axe-core à lancer avec l'accord de l'équipe, voir RECETTE §3)*
+- [x] Revue de sécurité (skill `kh-security-review`), sur les endpoints publics, les tokens et les politiques.
+- [x] Recette complète des parcours P1 à P5 ; liste des `[À VALIDER]` restants (sortie de `kh:content-audit`) remise à la direction.
+- [x] `docs/RUNBOOK.md` : activer ou désactiver l'IA, relancer un envoi, traiter une demande de droits, restaurer un contenu, ajouter une règle de diagnostic.
 
 **Critères d'acceptation :** tous les critères Go/No-Go du PRD §8 vérifiables en local (sauf ceux qui dépendent de décisions de la direction, listés).
 
@@ -147,4 +147,4 @@ Choix de la formule LWS (avec ou sans SSH), workflow GitHub Actions, préproduct
 | 3 | validé | branche `lot-3-crm` | Direction Kilakodon | 2026-11-15 |
 | 4 | validé | branche `lot-4-assistant` | Direction Kilakodon | 2026-11-16 |
 | 5 | validé | branche `lot-5-demo-lab` | Direction Kilakodon | 2026-11-18 |
-| 6 | à faire | | | |
+| 6 | validé | branche `lot-6-mesure-recette` | Direction Kilakodon | 2026-11-19 |

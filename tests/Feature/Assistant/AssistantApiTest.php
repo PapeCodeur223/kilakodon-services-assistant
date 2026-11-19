@@ -1,5 +1,6 @@
 <?php
 
+use App\Domain\Assistant\Actions\CheckAssistantBudget;
 use App\Domain\Assistant\Actions\StartConversation;
 use App\Domain\Assistant\Conversation\FallbackTexts;
 use App\Domain\Assistant\Conversation\GuardFailure;
@@ -15,6 +16,8 @@ use App\Domain\Brief\Models\Brief;
 use App\Domain\Crm\Enums\LeadType;
 use App\Domain\Crm\Models\Appointment;
 use App\Domain\Crm\Models\Lead;
+use App\Domain\Platform\Models\OutboundMessage;
+use App\Domain\Platform\Models\User;
 use App\Domain\Platform\Services\Settings;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Http;
@@ -90,6 +93,28 @@ it('coupe l\'assistant une fois le budget du jour atteint', function () {
 
     expect(Message::query()->where('conversation_id', $id)->count())->toBe(0)
         ->and(AiUsageDaily::today()->blocked_requests)->toBe(1);
+});
+
+it('coupe l\'assistant une fois le budget du mois atteint, même sous le plafond du jour (D-026)', function () {
+    $this->travelTo(now(config('kh.display_timezone'))->startOfMonth()->addDays(10)->setTime(12, 0));
+    app(Settings::class)->set('ai.daily_budget_usd', 0.5);
+    app(Settings::class)->set('ai.monthly_budget_usd', 1);
+    $month = now(config('kh.display_timezone'))->startOfMonth();
+    AiUsageDaily::query()->create(['date' => $month->copy()->subDays(3)->toDateString(), 'cost_estimate_usd_micros' => 5_000_000]); // mois précédent : ignoré
+    AiUsageDaily::query()->create(['date' => $month->copy()->addDays(2)->toDateString(), 'cost_estimate_usd_micros' => 400_000]);
+
+    $id = startConversation();
+    ask($id, 'Bonjour')->assertJsonPath('status', 'ok');
+
+    AiUsageDaily::query()->create(['date' => $month->copy()->addDays(5)->toDateString(), 'cost_estimate_usd_micros' => 600_000]);
+    ask($id, 'Encore une question')->assertJsonPath('status', 'unavailable')->assertJsonPath('reason', 'budget');
+
+    // Alerte unique du mois aux administrateurs.
+    User::factory()->admin()->create();
+    app(CheckAssistantBudget::class)->handle();
+    app(CheckAssistantBudget::class)->handle();
+    expect(OutboundMessage::query()->where('template', 'ai_budget_alert')->get()
+        ->filter(fn ($m) => ($m->payload['month'] ?? null) === $month->format('Y-m'))->count())->toBe(1);
 });
 
 it('applique le plafond de messages par conversation', function () {

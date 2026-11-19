@@ -6,6 +6,7 @@ use App\Domain\Brief\Services\BriefAccess;
 use App\Domain\Crm\Actions\RequestAppointment;
 use App\Domain\Crm\Enums\AppointmentChannel;
 use App\Domain\Crm\Enums\SlotPeriod;
+use App\Domain\Platform\Actions\RecordAnalyticsEvent;
 use App\Domain\Platform\Services\Settings;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AppointmentFormRequest;
@@ -45,7 +46,9 @@ class AppointmentController extends Controller
 
     public function store(AppointmentFormRequest $request, RequestAppointment $requestAppointment): RedirectResponse
     {
-        $requestAppointment->handle($request->toAppointmentRequest());
+        $appointmentRequest = $request->toAppointmentRequest();
+        $requestAppointment->handle($appointmentRequest);
+        RecordAnalyticsEvent::server('appointment_requested', ['channel' => $appointmentRequest->channel->value]);
 
         // UX §5.7 : jamais « RDV confirmé » tant qu'un humain n'a pas confirmé (RDV-01).
         return redirect()->route('appointment')->with('appointment.success', 'Demande reçue — un conseiller vous confirme le créneau.');

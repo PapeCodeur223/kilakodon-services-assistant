@@ -42,7 +42,7 @@
                     <li data-reveal="zoom" style="--i: {{ $loop->iteration }}">
                         <a href="{{ route('lab.guided', $slug) }}" class="kh-card group flex h-full flex-col rounded-card border border-line bg-white p-7 shadow-pop focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-kh-blue-500">
                             <span class="kh-card-icon flex size-14 items-center justify-center rounded-2xl bg-kh-blue-50 text-kh-blue-700 transition-transform"><x-kh.icon :name="$demo['icon']" :size="28" /></span>
-                            <div class="mt-5 flex flex-wrap gap-2"><x-kh.badge icon="circle-play">Démo guidée</x-kh.badge><x-kh.badge tone="warning">Bientôt disponible</x-kh.badge></div>
+                            <div class="mt-5 flex flex-wrap gap-2"><x-kh.badge icon="circle-play">Démo guidée</x-kh.badge><x-kh.badge>Visite en captures</x-kh.badge></div>
                             <h3 class="mt-3 text-h3 text-ink">{{ $demo['title'] }}</h3>
                             <p class="mt-2 text-slate">{{ $demo['text'] }}</p>
                             <ul class="mt-5 space-y-2 text-small text-ink">

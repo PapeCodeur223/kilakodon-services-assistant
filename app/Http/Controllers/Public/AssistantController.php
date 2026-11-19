@@ -17,6 +17,7 @@ use App\Domain\Assistant\Models\Conversation;
 use App\Domain\Assistant\Models\Message;
 use App\Domain\Content\Support\PendingValidation;
 use App\Domain\Crm\Support\BusinessHours;
+use App\Domain\Platform\Actions\RecordAnalyticsEvent;
 use App\Domain\Platform\Services\Settings;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
@@ -77,6 +78,7 @@ class AssistantController extends Controller
 
         /** @var Message $message */
         $message = $reply->message;
+        RecordAnalyticsEvent::server('assistant_message');
         $answer = $reply->answer;
 
         return response()->json([
@@ -155,6 +157,10 @@ class AssistantController extends Controller
 
     private function blocked(GuardFailure $failure): JsonResponse
     {
+        if ($failure->unavailable) {
+            RecordAnalyticsEvent::server('assistant_unavailable', ['reason' => $failure->reason]);
+        }
+
         return response()->json([
             'status' => $failure->unavailable ? 'unavailable' : 'notice',
             'reason' => $failure->reason,

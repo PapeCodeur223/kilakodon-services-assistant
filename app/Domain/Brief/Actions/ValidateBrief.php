@@ -9,6 +9,7 @@ use App\Domain\Brief\Enums\VersionAuthor;
 use App\Domain\Brief\Models\Brief;
 use App\Domain\Brief\Models\BriefVersion;
 use App\Domain\Diagnostic\Engine\Catalog;
+use App\Domain\Platform\Actions\RecordAnalyticsEvent;
 use App\Domain\Platform\Actions\RecordAudit;
 use App\Domain\Platform\Enums\AuditAction;
 use Illuminate\Support\Facades\DB;
@@ -37,7 +38,7 @@ class ValidateBrief
             throw new InvalidArgumentException('Le résumé ne peut pas être vide.');
         }
 
-        return DB::transaction(function () use ($brief, $corrections, $summary): BriefVersion {
+        $version = DB::transaction(function () use ($brief, $corrections, $summary): BriefVersion {
             $brief = Brief::query()->lockForUpdate()->findOrFail($brief->id);
             $current = $brief->currentVersion();
 
@@ -69,6 +70,10 @@ class ValidateBrief
 
             return $version;
         });
+
+        RecordAnalyticsEvent::server('brief_validated', ['modules_count' => count((array) ($version->recommended['recommendations'] ?? []))]);
+
+        return $version;
     }
 
     private function clean(?string $value, int $max): ?string

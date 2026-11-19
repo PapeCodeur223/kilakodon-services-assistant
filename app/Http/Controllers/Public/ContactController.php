@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Public;
 use App\Domain\Content\Support\PendingValidation;
 use App\Domain\Crm\Actions\CreateLeadFromContact;
 use App\Domain\Crm\Enums\ContactSubject;
+use App\Domain\Platform\Actions\RecordAnalyticsEvent;
 use App\Domain\Platform\Services\Settings;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ContactFormRequest;
@@ -24,6 +25,7 @@ class ContactController extends Controller
     public function store(ContactFormRequest $request, CreateLeadFromContact $createLead, Settings $settings): RedirectResponse
     {
         $createLead->handle($request->toContactRequest());
+        RecordAnalyticsEvent::server('contact_submitted');
 
         // CONTENT §11 ; les horaires ne sont cités qu'une fois confirmés (Q-002).
         $hours = (string) $settings->get('contact.hours');

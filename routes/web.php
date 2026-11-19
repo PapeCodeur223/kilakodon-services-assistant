@@ -5,11 +5,14 @@ use App\Http\Controllers\Public\ArticleController;
 use App\Http\Controllers\Public\AssistantController;
 use App\Http\Controllers\Public\BriefController;
 use App\Http\Controllers\Public\CaseStudyController;
+use App\Http\Controllers\Public\ConsentController;
 use App\Http\Controllers\Public\ContactController;
 use App\Http\Controllers\Public\DiagnosticController;
+use App\Http\Controllers\Public\EventController;
 use App\Http\Controllers\Public\HomeController;
 use App\Http\Controllers\Public\LabController;
 use App\Http\Controllers\Public\PageController;
+use App\Http\Controllers\Public\PrivacyController;
 use App\Http\Controllers\Public\SectorController;
 use App\Http\Controllers\Public\SeoController;
 use App\Http\Controllers\Public\SolutionController;
@@ -35,6 +38,12 @@ Route::get('/rendez-vous', [AppointmentController::class, 'show'])->name('appoin
 Route::post('/rendez-vous', [AppointmentController::class, 'store'])
     ->middleware([ProtectAgainstSpam::class, 'throttle:contact'])
     ->name('appointment.store');
+
+// « Gérer mes données » : demandes de droits (PRV-02), traitées à la main dans l'admin.
+Route::get('/mes-donnees', [PrivacyController::class, 'show'])->name('privacy.form');
+Route::post('/mes-donnees', [PrivacyController::class, 'store'])
+    ->middleware([ProtectAgainstSpam::class, 'throttle:privacy'])
+    ->name('privacy.store');
 
 // Diagnostic (Livewire) et brief privé — liens à token limités en débit.
 Route::get('/diagnostic', [DiagnosticController::class, 'start'])->name('diagnostic.start');
@@ -75,6 +84,11 @@ Route::prefix('api/assistant')->name('assistant.')->group(function (): void {
             ->whereNumber('message')->name('feedback');
     });
 });
+
+// Mesure first-party (TRD §9) : liste blanche, CSRF (groupe web), débit limité.
+Route::post('/api/events', [EventController::class, 'store'])->middleware('throttle:events')->name('events.store');
+// Bannière cookies : formulaire simple, fonctionne sans JavaScript (PRV-01).
+Route::post('/cookies/preferences', [ConsentController::class, 'update'])->middleware('throttle:consent')->name('consent.update');
 
 Route::get('/sitemap.xml', [SeoController::class, 'sitemap'])->name('sitemap');
 Route::get('/robots.txt', [SeoController::class, 'robots'])->name('robots');

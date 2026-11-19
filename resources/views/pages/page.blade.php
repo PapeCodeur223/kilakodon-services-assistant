@@ -34,7 +34,12 @@
                             </ol>
                         </nav>
                     @endif
-                    <x-kh.markdown :content="$page->body" :anchors="true" class="text-ink" />
+                    <div>
+                        <x-kh.markdown :content="$page->body" :anchors="true" class="text-ink" />
+                        @if ($page->slug === 'cookies')
+                            <div class="mt-12"><x-kh.cookie-preferences /></div>
+                        @endif
+                    </div>
                 </div>
             </div>
         </section>

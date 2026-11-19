@@ -10,6 +10,7 @@ use App\Domain\DemoLab\Exceptions\DemoLimitReached;
 use App\Domain\DemoLab\Models\DemoSale;
 use App\Domain\DemoLab\Models\DemoWorkspace;
 use App\Domain\DemoLab\Support\WorkspaceContext;
+use App\Domain\Platform\Actions\RecordAnalyticsEvent;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -28,16 +29,32 @@ class LabController extends Controller
         'gestion-scolaire' => [
             'title' => 'Gestion scolaire',
             'icon' => 'graduation-cap',
-            'text' => 'Inscriptions, paiements, bulletins : visite guidée du logiciel utilisé en établissement privé.',
+            'text' => 'Effectifs, paiements de scolarité, impayés et années académiques : visite en captures du logiciel de gestion scolaire.',
             'sector' => 'school',
-            'topics' => ['Inscriptions et dossiers des élèves', 'Suivi des paiements de scolarité', 'Notes et bulletins', 'Tableau de bord de la direction'],
+            'topics' => ['Tableau de bord de la direction', 'Paiements, dépenses et taux de recouvrement', 'Alertes sur les impayés', 'Années académiques et trimestres'],
+            'screens' => [
+                ['file' => 'ecole-tableau-de-bord', 'width' => 1600, 'height' => 757, 'title' => 'Le tableau de bord de la direction',
+                    'caption' => 'Élèves actifs, enseignants, classes et inscriptions de l’année ; solde des caisses, taux de recouvrement, paiements et dépenses du mois ; évolution des finances sur 6 mois et élèves par niveau.'],
+                ['file' => 'ecole-paiements-alertes', 'width' => 1600, 'height' => 759, 'title' => 'Paiements, effectifs et impayés',
+                    'caption' => 'Répartition des paiements par mode, classes les plus chargées, utilisation de la licence et alertes financières sur les restes à payer (noms des élèves masqués).'],
+                ['file' => 'ecole-annees-academiques', 'width' => 1600, 'height' => 760, 'title' => 'Années académiques et trimestres',
+                    'caption' => 'Chaque année scolaire a ses dates, son statut (ouverte, clôturée, archivée), ses trimestres et son calendrier.'],
+            ],
         ],
         'boulangerie' => [
             'title' => 'Boulangerie',
             'icon' => 'croissant',
-            'text' => 'Production, ventes et pertes : visite guidée.',
+            'text' => 'Caisse du jour, production du fourneau et prises des revendeurs : visite en captures du logiciel de boulangerie.',
             'sector' => 'bakery_food',
-            'topics' => ['Planification de la production', 'Ventes et caisse', 'Suivi des pertes', 'Matières premières et coût de revient'],
+            'topics' => ['Entrées, sorties et flux net de caisse du jour', 'Rapport d’activité du fourneau', 'Prises du matin et encaissements du soir des revendeurs', 'Stocks et mouvements de stock'],
+            'screens' => [
+                ['file' => 'boulangerie-tableau-de-bord', 'width' => 1600, 'height' => 762, 'title' => 'La vue d’ensemble du jour',
+                    'caption' => 'Entrées du jour (ventes directes et revendeurs), sorties, flux net de caisse et chiffre du mois ; rapport du fourneau : pétrins, pains sortis, ratio pain par pétrin et pétrisseur d’astreinte.'],
+                ['file' => 'boulangerie-prises-revendeurs', 'width' => 1600, 'height' => 751, 'title' => 'Les prises des revendeurs',
+                    'caption' => 'Pains pris le matin, retours, montant dû, espèces payées et reliquat, par revendeur et par période, avec impression du bilan.'],
+                ['file' => 'boulangerie-menu-replie', 'width' => 1600, 'height' => 766, 'title' => 'Plus de place à l’écran',
+                    'caption' => 'Le menu se replie pour laisser toute la largeur aux chiffres, pratique sur les petits écrans.'],
+            ],
         ],
     ];
 
@@ -58,6 +75,7 @@ class LabController extends Controller
             }
 
             Cookie::queue(Cookie::make(self::COOKIE, $token, DemoWorkspace::LIFETIME_HOURS * 60, httpOnly: true, sameSite: 'lax'));
+            RecordAnalyticsEvent::server('lab_started');
         }
 
         return response()->view('pages.lab.retail', ['workspace' => $workspace]);
@@ -74,6 +92,7 @@ class LabController extends Controller
             ->first()) ?? abort(404);
 
         $missions->handle($workspace, Mission::Invoice);
+        RecordAnalyticsEvent::server('lab_action', ['action' => 'invoice']);
 
         return response()->view('pages.lab.invoice', ['sale' => $sale]);
     }

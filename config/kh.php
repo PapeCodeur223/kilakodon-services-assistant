@@ -40,6 +40,8 @@ return [
         'ai.enabled' => false,
         // Budget quotidien validé par la direction (D-023, Q-009) : alerte à 80 %, coupure à 100 %.
         'ai.daily_budget_usd' => 0.5,
+        // Plafond mensuel validé par la direction (D-026) : coupure automatique une fois atteint.
+        'ai.monthly_budget_usd' => 1,
         'ai.max_messages_per_conversation' => 20,
         'consent.texts' => [
             'version' => 1,

@@ -37,7 +37,7 @@ it('présente les 3 démos : Boutique interactive et deux démos guidées', func
     $this->get('/demo-lab')->assertOk()
         ->assertSee('Boutique')->assertSee('Interactif')
         ->assertSee('Gestion scolaire')->assertSee('Boulangerie')
-        ->assertSee('Démo guidée')->assertSee('Bientôt disponible')
+        ->assertSee('Démo guidée')->assertSee('Visite en captures')->assertDontSee('Bientôt disponible')
         ->assertSee(route('lab.retail'));
 });
 
@@ -97,12 +97,20 @@ it('affiche la facture fictive de son espace avec filigrane et coche la mission,
     $this->get('/demo-lab/boutique/factures/DEMO-0001')->assertNotFound();
 });
 
-it('présente les démos guidées comme « démonstration enregistrée » et renvoie 404 sinon', function () {
+it('présente les démos guidées en captures commentées, indexables, et renvoie 404 sinon (LAB-02)', function () {
     $this->get('/demo-lab/gestion-scolaire')->assertOk()
-        ->assertSee('Démonstration enregistrée')->assertSee('Bientôt disponible')
+        ->assertSee('Visite en captures')->assertSee('noms des élèves masqués')
+        ->assertSee('images/demos/ecole-tableau-de-bord.webp', false)
+        ->assertSee('width="1600"', false)
+        ->assertDontSee('Bientôt disponible')
+        ->assertDontSee('noindex', false)
         ->assertSee('entry=lab%3Agestion-scolaire', false);
-    $this->get('/demo-lab/boulangerie')->assertOk();
+    $this->get('/demo-lab/boulangerie')->assertOk()->assertSee('images/demos/boulangerie-prises-revendeurs.webp', false);
     $this->get('/demo-lab/inconnue')->assertNotFound();
+
+    foreach (['ecole-tableau-de-bord', 'ecole-paiements-alertes', 'ecole-annees-academiques', 'boulangerie-tableau-de-bord', 'boulangerie-prises-revendeurs', 'boulangerie-menu-replie'] as $file) {
+        expect(public_path("images/demos/{$file}.webp"))->toBeFile();
+    }
 });
 
 it('encaisse une vente depuis la caisse, alerte au seuil et propose la conversion après 2 missions', function () {
