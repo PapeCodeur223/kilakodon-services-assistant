@@ -272,19 +272,15 @@ function rollback(): void
 
 function cron(): void
 {
-    global $base, $shared, $home, $php;
+    global $base, $shared;
 
-    // Le panneau LWS compte les chemins depuis la racine du compte (exemple : php /htdocs/monfichier.php),
-    // alors que le Terminal les voit sous $HOME : on retire ce préfixe pour la ligne cron.
-    $root = substr($base, strlen($home));
-    $rootShared = substr($shared, strlen($home));
+    // Diagnostic du 2026-11-20 : le site web (et le cron) voient les mêmes chemins absolus que le
+    // Terminal (/home/home/kilakodon-hub) ; seul htdocs a un raccourci (/htdocs). Chemins absolus donc.
     echo "\n  Panneau LWS → Tâches cron → Création d'une tâche Cron :\n";
-    echo "  · Minute : toutes les minutes ; Heure, Jour du mois, Mois, Jour de la semaine : tous\n";
+    echo "  · Cases Minute, Heure, Jour du mois, Mois, Jour de la semaine : tapez * dans chacune\n";
     echo "  · Commande :\n\n";
-    echo "    php {$root}/current/artisan schedule:run >> {$rootShared}/storage/logs/cron.log 2>&1\n\n";
+    echo "    php {$base}/current/artisan schedule:run >> {$shared}/storage/logs/cron.log 2>&1\n\n";
     echo "  Vérification deux minutes plus tard, dans le Terminal : tail {$shared}/storage/logs/cron.log\n";
-    echo "  Si le fichier reste vide, remplacez la commande par la variante au chemin complet :\n";
-    echo "    {$php} {$base}/current/artisan schedule:run >> {$shared}/storage/logs/cron.log 2>&1\n";
 }
 
 match ($argv[1] ?? '') {

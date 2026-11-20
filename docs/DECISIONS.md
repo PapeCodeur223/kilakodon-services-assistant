@@ -219,3 +219,7 @@
 - LWSCache (Varnish) à désactiver pour ce site : il mettrait en cache des pages personnelles (formulaires avec jeton CSRF, admin).
 - Approbation groupée des documents de la base de connaissances (admin), pour la première mise en service de l'assistant.
 - PHP 8.5 en production alors que le projet est testé en 8.2 : les dépendances (Laravel 12.72, Symfony 7.4) acceptent 8.5. `kh-deploy.php check` contrôle la version et les extensions ; la recette en ligne valide le fonctionnement. Repli possible : choisir une version antérieure dans « Configuration php » et lancer le script avec `PHP_BIN`.
+- Constats en ligne (2026-11-20) :
+  - le Terminal LWS interrompt les commandes longues (« Killed »), en particulier les migrations sur le MySQL partagé ;
+  - la base initiale est donc importée dans phpMyAdmin depuis `dist/kilakodon-hub-base.sql` (`scripts/build-database-sql.sh` : tables, contenus validés, réglages ; aucun compte) ;
+  - le site web voit htdocs sous `/htdocs`, mais les mêmes chemins absolus que le Terminal pour le reste. Le contrôleur frontal essaie donc le chemin relatif, puis `/home/home/kilakodon-hub`, et la ligne cron utilise les chemins absolus.
