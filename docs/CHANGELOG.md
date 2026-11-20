@@ -2,7 +2,7 @@
 
 ## [Non publié]
 
-### Lot 7 — Mise en production LWS (en ligne le 2026-11-20, en cours de validation)
+### Lot 7 — Mise en production LWS (en ligne et validé le 2026-11-20)
 - **Site en ligne** sur https://www.kilakodon-services.com : ancien site remplacé, redirections des anciennes URL, HTTPS et HSTS, tâche cron chaque minute. PageSpeed Insights mobile : 100 / 100 / 100 / 100.
 - Adaptations aux limites de LWS Perso :
   - script de déploiement en PHP pur, sans liens symboliques ;
