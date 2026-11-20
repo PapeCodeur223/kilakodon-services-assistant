@@ -3,7 +3,7 @@
 ## [Non publié]
 
 ### Lot 7 — Mise en production LWS (2026-11-20, en préparation)
-- Archive de mise en ligne (`scripts/build-release.php`) et script serveur `deploy/kh-deploy.sh` (vérification, installation, mise à jour, retour arrière, ligne cron) ; code et `.env` hors du web.
+- Archive de mise en ligne (`scripts/build-release.php`) et script serveur `deploy/kh-deploy.php` (vérification, installation, mise à jour, retour arrière, ligne cron) ; code et `.env` hors du web.
 - `kh:seed-production` : installation de la base de production sans données de test, puis mises à jour sans écrasement.
 - Production : liens en HTTPS, proxys de confiance configurables, redirection vers `www`, modèle `deploy/env.production.example`.
 - Approbation groupée de la base de connaissances.

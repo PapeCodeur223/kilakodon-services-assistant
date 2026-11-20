@@ -9,7 +9,7 @@
  * - ajoute les fichiers compilés (npm run build) et les assets Filament, qui ne sont pas dans Git ;
  * - installe les dépendances de production seulement (composer --no-dev), dans un dossier à part :
  *   le vendor/ de développement local n'est pas touché ;
- * - écrit dist/kilakodon-hub-<date>-<commit>.zip et dist/kh-deploy.sh (fins de ligne Unix).
+ * - écrit dist/kilakodon-hub-<date>-<commit>.zip et dist/kh-deploy.php.
  */
 
 $root = dirname(__DIR__);
@@ -108,7 +108,7 @@ foreach ($files as $file) {
 $out->close();
 removeDir($build);
 
-// Script de déploiement à côté de l'archive, avec des fins de ligne Unix (sinon bash échoue sur LWS).
-file_put_contents("{$dist}/kh-deploy.sh", str_replace("\r\n", "\n", (string) file_get_contents("{$root}/deploy/kh-deploy.sh")));
+// Script de déploiement (PHP pur) à côté de l'archive, avec des fins de ligne Unix.
+file_put_contents("{$dist}/kh-deploy.php", str_replace("\r\n", "\n", (string) file_get_contents("{$root}/deploy/kh-deploy.php")));
 
-printf("\nPrêt :\n  %s (%.1f Mo)\n  %s\n", $archive, filesize($archive) / 1048576, "{$dist}/kh-deploy.sh");
+printf("\nPrêt :\n  %s (%.1f Mo)\n  %s\n", $archive, filesize($archive) / 1048576, "{$dist}/kh-deploy.php");

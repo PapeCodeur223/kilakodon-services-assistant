@@ -1,8 +1,9 @@
 <?php
 
 /*
- * Contrôleur frontal de production (LWS Perso) — copié dans ~/htdocs/index.php par deploy/kh-deploy.sh.
- * Le code, le .env et les journaux restent hors du dossier web, dans ~/home/kilakodon-hub/current.
+ * Contrôleur frontal de production (LWS Perso) — copié dans ~/htdocs/index.php par deploy/kh-deploy.php.
+ * Le code reste hors du dossier web, dans ~/home/kilakodon-hub/current ; le .env et les journaux
+ * dans ~/home/kilakodon-hub/shared.
  * Seuls les fichiers publics (CSS, JS, images) sont dans htdocs.
  */
 
@@ -13,8 +14,8 @@ define('LARAVEL_START', microtime(true));
 
 $appPath = __DIR__.'/../home/kilakodon-hub/current';
 
-// Mode maintenance (php artisan down)…
-if (file_exists($maintenance = $appPath.'/storage/framework/maintenance.php')) {
+// Mode maintenance (php artisan down), dans le storage partagé…
+if (file_exists($maintenance = __DIR__.'/../home/kilakodon-hub/shared/storage/framework/maintenance.php')) {
     require $maintenance;
 }
 

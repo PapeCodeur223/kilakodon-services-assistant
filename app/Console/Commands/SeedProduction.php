@@ -8,7 +8,7 @@ use Database\Seeders\SettingsSeeder;
 use Illuminate\Console\Command;
 
 /**
- * Données de production (lot 7), appelée par deploy/kh-deploy.sh à chaque mise en ligne :
+ * Données de production (lot 7), appelée par deploy/kh-deploy.php à chaque mise en ligne :
  * - base vide (première installation) : réglages, contenus validés, questionnaire, base de connaissances
  *   (DatabaseSeeder ; le DevSeeder et ses comptes de test ne tournent jamais hors local) ;
  * - base déjà installée : seulement les nouveaux réglages (firstOrCreate), sans jamais écraser
