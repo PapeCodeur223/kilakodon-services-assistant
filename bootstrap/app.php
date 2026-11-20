@@ -8,7 +8,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 
-return Application::configure(basePath: dirname(__DIR__))
+$app = Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
         commands: __DIR__.'/../routes/console.php',
@@ -26,4 +26,17 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
-    })->create();
+    });
+
+$app = $app->create();
+
+// Production LWS (lot 7) : le code est dans ~/home/kilakodon-hub/current ; le .env et storage/ sont
+// partagés entre les versions dans ~/home/kilakodon-hub/shared (repère : fichier .kh-shared).
+// Sans liens symboliques, souvent désactivés en hébergement mutualisé. Sans effet en local.
+$shared = dirname($app->basePath()).'/shared';
+if (is_file($shared.'/.kh-shared')) {
+    $app->useEnvironmentPath($shared);
+    $app->useStoragePath($shared.'/storage');
+}
+
+return $app;

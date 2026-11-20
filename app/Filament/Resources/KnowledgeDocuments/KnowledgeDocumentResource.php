@@ -12,6 +12,7 @@ use App\Filament\Resources\KnowledgeDocuments\Pages\EditKnowledgeDocument;
 use App\Filament\Resources\KnowledgeDocuments\Pages\ListKnowledgeDocuments;
 use BackedEnum;
 use Filament\Actions\Action;
+use Filament\Actions\BulkAction;
 use Filament\Actions\EditAction;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\MarkdownEditor;
@@ -25,6 +26,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use UnitEnum;
 
 /**
@@ -139,6 +141,29 @@ class KnowledgeDocumentResource extends Resource
                         Notification::make()->title('Document retiré')->success()->send();
                     }),
                 EditAction::make(),
+            ])
+            // Mise en production (lot 7) : approuver d'un coup les documents générés depuis les contenus publiés.
+            ->toolbarActions([
+                BulkAction::make('approveSelected')
+                    ->label('Approuver la sélection')
+                    ->icon(Heroicon::OutlinedCheckBadge)
+                    ->color('success')
+                    ->requiresConfirmation()
+                    ->modalDescription('L\'assistant pourra citer ces documents. Ne sélectionnez que des documents issus de contenus publics et validés.')
+                    ->visible(fn (): bool => auth()->user()?->can('approveAny', KnowledgeDocument::class) === true)
+                    ->deselectRecordsAfterCompletion()
+                    ->action(function (Collection $records): void {
+                        /** @var User $user */
+                        $user = auth()->user();
+                        $approved = 0;
+                        foreach ($records as $record) {
+                            if ($record instanceof KnowledgeDocument && $record->status === KnowledgeStatus::Draft && $user->can('approve', $record)) {
+                                app(ReviewKnowledgeDocument::class)->approve($record, $user);
+                                $approved++;
+                            }
+                        }
+                        Notification::make()->title($approved.' document(s) approuvé(s)')->success()->send();
+                    }),
             ]);
     }
 

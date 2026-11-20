@@ -11,9 +11,11 @@ use App\Domain\Content\Models\Page;
 use App\Domain\Content\Models\Service;
 use App\Domain\Content\Support\PublishGuard;
 use App\Domain\Platform\Models\User;
+use App\Filament\Resources\KnowledgeDocuments\Pages\ListKnowledgeDocuments;
 use Database\Seeders\ContentSeeder;
 use Database\Seeders\KnowledgeSeeder;
 use Illuminate\Auth\Access\AuthorizationException;
+use Livewire\Livewire;
 
 function publishedFaq(string $question = 'La caisse fonctionne-t-elle sans Internet ?', string $answer = 'Oui, la caisse continue hors-ligne et se synchronise au retour du réseau.'): Faq
 {
@@ -91,6 +93,22 @@ it('découpe une fiche solution complète (problème, bénéfices, FAQ) sans cha
     expect($chunks)->not->toBeEmpty()
         ->and($text)->toContain($service->problem)
         ->and($text)->not->toContain('MOD_');
+});
+
+it('approuve une sélection de documents d’un coup, pour un admin seulement (lot 7)', function () {
+    $first = publishedFaq('Question 1 ?', 'Réponse publique numéro un.');
+    $second = publishedFaq('Question 2 ?', 'Réponse publique numéro deux.');
+    $documents = KnowledgeDocument::query()->whereIn('source_id', [$first->id, $second->id])->where('source_type', KnowledgeSourceType::Faq)->get();
+
+    $this->actingAs(User::factory()->admin()->withMfa()->create());
+    Livewire::test(ListKnowledgeDocuments::class)
+        ->callTableBulkAction('approveSelected', $documents);
+
+    expect(KnowledgeDocument::query()->whereKey($documents->modelKeys())->where('status', KnowledgeStatus::Approved)->count())->toBe(2);
+
+    $this->actingAs(User::factory()->editor()->create());
+    Livewire::test(ListKnowledgeDocuments::class)
+        ->assertTableBulkActionHidden('approveSelected');
 });
 
 it('le seeder est idempotent', function () {

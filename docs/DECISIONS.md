@@ -32,6 +32,7 @@
 | D-024 | 2026-11-16 | **Lot 4 validé.** Les 10 réalisations relues et autorisées par la direction (autorisation client enregistrée) sont publiées et exportées dans `database/seeders/content/case-studies.php` ; le seeder ne publie une réalisation que si `authorization_status = granted`. prepaconcours.ml : « la première plateforme » retiré faute de source. Électronique et solaire restent dans « Commerce & distribution ». Toutes les FAQ s'affichent sur l'accueil (plus de limite à 6). Évaluation réelle (Claude Haiku 5.5, 69 cas) : 62 réussis ; 3 cas critiques en échec de formulation (l'assistant refuse mais reprend la phrase ou le montant du visiteur dans sa négation : price-03, nosrc-04, inj-12) et 4 non critiques (refus hors sujet trop longs, brouillon de brief trop rempli). Rapport relu et jugé acceptable par la direction ; resserrement du prompt (`sys-v4`) à envisager plus tard | Validation de la direction |
 | D-025 | 2026-11-18 | **Lot 5 validé** après recette dans le navigateur (correctif CSP de la boutique). Démos guidées « Gestion scolaire » et « Boulangerie » en « bientôt disponible » jusqu’à réception des vidéos ou captures (Q-014 ouverte). Prix du jeu de démonstration fictifs, étiquetés « Démo » | Validation de la direction |
 | D-026 | 2026-11-19 | Décisions de clôture du lot 6 : (1) Lighthouse non indispensable en local, reporté au lot 7 (critère de mise en production) ; (2) pages légales et mesure d'audience : réglage par défaut conservé, mesure désactivée tant que le visiteur n'a pas accepté ; (3) durées de conservation PRV-03 validées (diagnostics anonymes 30 j, Démo Lab 24 h, conversations non liées 90 j) ; (4) demandes de droits : le demandeur est recontacté sous 24 h ; (5) **budget IA mensuel 1 $** en plus du quotidien (0,50 $), alerte à 80 %, coupure à 100 % ; (6) démos guidées : 3 captures « Gestion scolaire » et 3 « Boulangerie » fournies par la direction, noms d'élèves masqués, légendes limitées à ce qui est visible, pages désormais indexées | Validation de la direction ; résout Q-014, précise Q-011 |
+| D-027 | 2026-11-20 | **Lot 7 validé : site en ligne** sur https://www.kilakodon-services.com (LWS Perso), ancien site remplacé (sauvegardé par la direction). Recette en production : pages, redirections, HTTPS et HSTS, cron, PageSpeed mobile 100/100/100/100. Restent : validation juridique des pages légales, cibles des indicateurs à 3 mois | Validation de la direction |
 
 ## Questions ouvertes (à trancher par Kilakodon avant la mise en production)
 
@@ -198,3 +199,28 @@
   - la revue manuelle confirme les exigences UX §9 sur le diagnostic (fieldset, legend, aria-live, focus sur le titre) et l'assistant (role dialog, aria-modal, piège à focus, Échap, aria-live) ;
   - les boutons de retour de l'assistant passent de 36 à 44 px.
   - Un audit automatique (axe-core) et Lighthouse n'ont pas pu être lancés dans l'environnement de l'agent (exécution de scripts téléchargés refusée) : ils restent à faire avec l'accord de l'équipe (RECETTE §3).
+
+### 2026-11-20 — Lot 7 (production LWS Perso) : choix techniques
+- Hébergement LWS Perso **sans SSH, avec le Terminal du panneau** (PHP 8.5 en ligne de commande), une seule base MySQL et des tâches cron à la minute. La direction a sauvegardé l'ancien site (archive LWS et export de la base) avant son remplacement.
+- Organisation des fichiers :
+  - le code, le `.env` et les journaux sont **hors du web**, dans `~/home/kilakodon-hub` (`current/` en ligne, `previous/` pour le retour arrière, `shared/.env`, `shared/storage`) ;
+  - **aucun lien symbolique** (souvent désactivés en mutualisé) : `bootstrap/app.php` détecte `../shared/.kh-shared` et y prend le `.env` (`useEnvironmentPath`) et le storage (`useStoragePath`) ; sans effet en local ;
+  - `~/htdocs` ne reçoit que les fichiers publics et un `index.php` qui charge l'application (`deploy/htdocs-index.php`, `usePublicPath`).
+- Mise en ligne : une archive fabriquée en local par `scripts/build-release.php` (dernier commit, `composer --no-dev`, fichiers compilés et assets Filament inclus), envoyée par FTP, puis installée par `deploy/kh-deploy.php` dans le Terminal. Ce script est en **PHP pur** : le premier essai en bash a échoué, le serveur ne fournissant ni `xargs` ni `basename`. Il vérifie l'environnement, crée le `.env` à compléter, met l'ancienne version de côté, migre la base, met en cache et permet un retour arrière. Pas de Node, de Composer ni de Git sur le serveur.
+- `kh:seed-production` :
+  - base vide : installation complète (réglages, contenus validés, questionnaire, base de connaissances en brouillon) ;
+  - base déjà installée : ajout des seuls nouveaux réglages, sans jamais écraser ce que l'équipe modifie dans l'admin ;
+  - jamais de comptes ni de données de test hors local.
+- Secrets uniquement dans `shared/.env` (droits 600), saisis par la direction sur le serveur. Aucun mot de passe dans le dépôt ni dans les échanges.
+- HTTPS :
+  - liens forcés en HTTPS par l'application en production ;
+  - redirection du domaine nu vers `www` par `.htaccess` ;
+  - passage de `http` à `https` confié à l'option SSL du panneau, pour éviter une boucle derrière le proxy LWS.
+  - Les proxys de confiance sont vides par défaut : `*` permettrait de falsifier l'IP et de contourner les limites de débit.
+- LWSCache (Varnish) à désactiver pour ce site : il mettrait en cache des pages personnelles (formulaires avec jeton CSRF, admin).
+- Approbation groupée des documents de la base de connaissances (admin), pour la première mise en service de l'assistant.
+- PHP 8.5 en production alors que le projet est testé en 8.2 : les dépendances (Laravel 12.72, Symfony 7.4) acceptent 8.5. `kh-deploy.php check` contrôle la version et les extensions ; la recette en ligne valide le fonctionnement. Repli possible : choisir une version antérieure dans « Configuration php » et lancer le script avec `PHP_BIN`.
+- Constats en ligne (2026-11-20) :
+  - le Terminal LWS interrompt les commandes longues (« Killed »), en particulier les migrations sur le MySQL partagé ;
+  - la base initiale est donc importée dans phpMyAdmin depuis `dist/kilakodon-hub-base.sql` (`scripts/build-database-sql.sh` : tables, contenus validés, réglages ; aucun compte) ;
+  - le site web voit htdocs sous `/htdocs`, mais les mêmes chemins absolus que le Terminal pour le reste. Le contrôleur frontal essaie donc le chemin relatif, puis `/home/home/kilakodon-hub`, et la ligne cron utilise les chemins absolus.

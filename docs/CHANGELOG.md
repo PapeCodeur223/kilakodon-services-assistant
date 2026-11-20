@@ -2,6 +2,19 @@
 
 ## [Non publié]
 
+### Lot 7 — Mise en production LWS (en ligne et validé le 2026-11-20)
+- **Site en ligne** sur https://www.kilakodon-services.com : ancien site remplacé, redirections des anciennes URL, HTTPS et HSTS, tâche cron chaque minute. PageSpeed Insights mobile : 100 / 100 / 100 / 100.
+- Adaptations aux limites de LWS Perso :
+  - script de déploiement en PHP pur, sans liens symboliques ;
+  - base initiale importable dans phpMyAdmin ;
+  - chemin absolu de l'application dans `htdocs/index.php` ;
+  - commande `publish`.
+- Archive de mise en ligne (`scripts/build-release.php`) et script serveur `deploy/kh-deploy.php` (vérification, installation, mise à jour, retour arrière, ligne cron) ; code et `.env` hors du web.
+- `kh:seed-production` : installation de la base de production sans données de test, puis mises à jour sans écrasement.
+- Production : liens en HTTPS, proxys de confiance configurables, redirection vers `www`, modèle `deploy/env.production.example`.
+- Approbation groupée de la base de connaissances.
+- RUNBOOK §9 : guide de mise en ligne pas à pas.
+
 ### Lot 6 — Mesure, données personnelles, finition, recette (validé le 2026-11-19)
 #### Ajouté
 - Mesure first-party (TRD §9) : bannière cookies sans JavaScript (« Refuser » / « Accepter » au même niveau), page Cookies « Vos choix », `POST /api/events` avec liste blanche, événements serveur des parcours et des leads. Rien n’est mesuré dans le navigateur sans accord ; jamais de coordonnée ni d’IP dans les événements.

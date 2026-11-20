@@ -5,6 +5,14 @@
 
     RewriteEngine On
 
+    # Production (lot 7) : le domaine nu redirige vers https://www (sans effet en local). Le passage
+    # http → https est forcé par l'option SSL du panneau LWS (évite une boucle derrière leur proxy).
+    RewriteCond %{HTTP_HOST} ^kilakodon-services\.com$ [NC]
+    RewriteRule ^ https://www.kilakodon-services.com%{REQUEST_URI} [L,R=301]
+
+    # Fichiers cachés (.env, .git…) jamais servis, s'ils étaient copiés ici par erreur.
+    RewriteRule (^|/)\.(?!well-known/) - [F,L]
+
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
