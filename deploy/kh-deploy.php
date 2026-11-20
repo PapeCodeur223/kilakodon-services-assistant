@@ -86,7 +86,8 @@ function copyTree(string $from, string $to): void
 function artisan(string $dir, string $command, bool $allowFailure = false): bool
 {
     global $php;
-    $line = 'cd '.escapeshellarg($dir).' && '.escapeshellarg($php).' artisan '.$command;
+    // --no-interaction : jamais de question cachée qui bloquerait le Terminal ; une erreur s'affiche à la place.
+    $line = 'cd '.escapeshellarg($dir).' && '.escapeshellarg($php).' artisan '.$command.' --no-interaction';
     if (! function_exists('passthru')) {
         fail("La fonction PHP passthru est désactivée. Lancez à la main : {$line}");
     }
