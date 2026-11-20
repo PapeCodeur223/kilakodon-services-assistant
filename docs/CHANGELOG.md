@@ -2,7 +2,13 @@
 
 ## [Non publié]
 
-### Lot 7 — Mise en production LWS (2026-11-20, en préparation)
+### Lot 7 — Mise en production LWS (en ligne le 2026-11-20, en cours de validation)
+- **Site en ligne** sur https://www.kilakodon-services.com : ancien site remplacé, redirections des anciennes URL, HTTPS et HSTS, tâche cron chaque minute. PageSpeed Insights mobile : 100 / 100 / 100 / 100.
+- Adaptations aux limites de LWS Perso :
+  - script de déploiement en PHP pur, sans liens symboliques ;
+  - base initiale importable dans phpMyAdmin ;
+  - chemin absolu de l'application dans `htdocs/index.php` ;
+  - commande `publish`.
 - Archive de mise en ligne (`scripts/build-release.php`) et script serveur `deploy/kh-deploy.php` (vérification, installation, mise à jour, retour arrière, ligne cron) ; code et `.env` hors du web.
 - `kh:seed-production` : installation de la base de production sans données de test, puis mises à jour sans écrasement.
 - Production : liens en HTTPS, proxys de confiance configurables, redirection vers `www`, modèle `deploy/env.production.example`.

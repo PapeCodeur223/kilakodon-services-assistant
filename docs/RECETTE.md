@@ -66,7 +66,7 @@ Vérification manuelle : ouvrir l'assistant, demander « Combien coûte un logic
 |---|---|
 | Critères **M** et suite de tests verte | ✅ `composer kh:check` (voir CHANGELOG du lot 6) |
 | Évaluation IA : seuils et 0 échec critique | ⚠️ 62/69 ; 3 cas critiques de formulation acceptés par la direction (D-024). Un resserrement du prompt (`sys-v4`) est possible |
-| Lighthouse mobile ≥ 90 (perf) et ≥ 95 (accessibilité) | ⏳ Reporté au lot 7 (D-026) : à mesurer sur la préproduction |
+| Lighthouse mobile ≥ 90 (perf) et ≥ 95 (accessibilité) | ✅ PageSpeed Insights sur le site en ligne (2026-11-20, mobile) : 100 performances, 100 accessibilité, 100 bonnes pratiques, 100 SEO |
 | `kh:content-audit` : 0 `[À VALIDER]` publié | ✅ 0, brouillons compris (2026-11-19) |
 | Pages légales validées, coordonnées réelles, au moins 1 réalisation autorisée | ⚠️ Coordonnées réelles ✅ ; 10 réalisations autorisées ✅ ; pages légales : réglage par défaut retenu (D-026), validation juridique à prévoir avant la production |
 | Budget IA mensuel et horaires renseignés | ✅ Budget mensuel 1 $ et quotidien 0,50 $ (D-023, D-026), horaires validés (D-015) |

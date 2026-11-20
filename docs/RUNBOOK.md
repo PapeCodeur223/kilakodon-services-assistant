@@ -173,6 +173,19 @@ php kh-deploy.php install kilakodon-hub-XXXX.zip      # 1er passage : crée shar
 ### Après une modification du `.env`
 Les réglages sont mis en cache. Après toute modification : `cd ~/home/kilakodon-hub/current && php artisan optimize`.
 
+### Particularités LWS Perso constatées à la mise en ligne (2026-11-20)
+- **Le Terminal coupe les commandes longues (« Killed »)**, notamment `php artisan migrate` sur le MySQL partagé. Il faut lancer les étapes une par une :
+  - `migrate` ;
+  - `kh:seed-production` ;
+  - puis `php kh-deploy.php publish`.
+  Si la base doit être recréée entièrement, importer dans phpMyAdmin le fichier produit par `bash scripts/build-database-sql.sh`.
+- **Serveur MySQL** : `DB_HOST=127.0.0.1` (valeur affichée en haut de phpMyAdmin).
+- **Chemins** : le site web voit `htdocs` sous `/htdocs`, mais l'application sous le même chemin absolu que le Terminal (`/home/home/kilakodon-hub`). Le `index.php` de `htdocs` essaie les deux chemins.
+- **Cron** : taper `*` dans les cinq cases de fréquence. Commande :
+  `php /home/home/kilakodon-hub/current/artisan schedule:run >> /home/home/kilakodon-hub/shared/storage/logs/cron.log 2>&1`.
+- **HTTPS** : panneau → SSL → « Redirection HTTPS » et « HSTS » activés.
+- **LWSCache** : sans effet gênant constaté (pages non mises en cache, jeton CSRF différent à chaque visite).
+
 ### En cas de problème
 - **Journaux** : `tail -n 50 ~/home/kilakodon-hub/shared/storage/logs/laravel-$(date +%F).log`.
 - **Cron** : `tail ~/home/kilakodon-hub/shared/storage/logs/cron.log`. Le fichier doit grossir chaque minute.
