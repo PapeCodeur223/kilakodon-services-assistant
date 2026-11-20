@@ -182,7 +182,7 @@ function install(?string $archive): void
     $context = stream_context_create(['http' => ['timeout' => 20, 'ignore_errors' => true]]);
     $body = @file_get_contents(SITE_URL.'/up', false, $context);
     // http_get_last_response_headers() remplace $http_response_header, déprécié en PHP 8.5.
-    $headers = function_exists('http_get_last_response_headers') ? (http_get_last_response_headers() ?? []) : [];
+    $headers = function_exists('http_get_last_response_headers') ? (http_get_last_response_headers() ?? []) : ($http_response_header ?? []);
     $status = $headers[0] ?? 'pas de réponse';
     $body !== false && str_contains($status, '200') ? ok(SITE_URL."/up : {$status}") : warn(SITE_URL."/up : {$status} — vérifiez dans le navigateur ; journaux dans {$shared}/storage/logs/");
 
