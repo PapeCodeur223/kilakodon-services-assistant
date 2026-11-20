@@ -293,5 +293,5 @@ match ($argv[1] ?? '') {
     'rollback' => rollback(),
     'publish' => publish(),
     'cron' => cron(),
-    default => print ("Usage : php kh-deploy.php check | install <archive.zip> | rollback | cron\n"),
+    default => print ("Usage : php kh-deploy.php check | install <archive.zip> | publish | rollback | cron\n"),
 };
