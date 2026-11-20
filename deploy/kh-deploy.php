@@ -29,10 +29,23 @@ $web = $home.'/htdocs';
 $shared = $base.'/shared';
 $php = getenv('PHP_BIN') ?: PHP_BINARY;
 
-function ok(string $m): void { echo "  \033[32m✔\033[0m {$m}\n"; }
-function warn(string $m): void { echo "  \033[33m!\033[0m {$m}\n"; }
-function step(string $m): void { echo "\n\033[1m{$m}\033[0m\n"; }
-function fail(string $m): never { echo "  \033[31m✘ {$m}\033[0m\n"; exit(1); }
+function ok(string $m): void
+{
+    echo "  \033[32m✔\033[0m {$m}\n";
+}
+function warn(string $m): void
+{
+    echo "  \033[33m!\033[0m {$m}\n";
+}
+function step(string $m): void
+{
+    echo "\n\033[1m{$m}\033[0m\n";
+}
+function fail(string $m): never
+{
+    echo "  \033[31m✘ {$m}\033[0m\n";
+    exit(1);
+}
 
 function removeTree(string $path): void
 {
@@ -147,7 +160,7 @@ function install(?string $archive): void
         echo "  1. Ouvrez-le : gestionnaire de fichiers LWS → home → kilakodon-hub → shared → .env\n";
         echo "     (fichier caché), ou dans le Terminal : nano {$shared}/.env\n";
         echo "  2. Remplissez les lignes « À REMPLIR » (base de données, e-mail, clé Anthropic). Enregistrez.\n";
-        echo "  3. Relancez exactement la même commande : php kh-deploy.php install ".basename($archive)."\n";
+        echo '  3. Relancez exactement la même commande : php kh-deploy.php install '.basename($archive)."\n";
         exit(0);
     }
     chmod("{$shared}/.env", 0600);
@@ -264,5 +277,5 @@ match ($argv[1] ?? '') {
     'install' => install($argv[2] ?? null),
     'rollback' => rollback(),
     'cron' => cron(),
-    default => print("Usage : php kh-deploy.php check | install <archive.zip> | rollback | cron\n"),
+    default => print ("Usage : php kh-deploy.php check | install <archive.zip> | rollback | cron\n"),
 };
