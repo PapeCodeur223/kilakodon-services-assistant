@@ -6,6 +6,7 @@
  *
  *   php kh-deploy.php check                    Vérifie PHP, extensions et dossiers (ne modifie rien)
  *   php kh-deploy.php install <archive.zip>    Installe ou met à jour le site à partir de l'archive
+ *   php kh-deploy.php publish                  Termine la mise en ligne (caches, htdocs) si l'installation a été interrompue
  *   php kh-deploy.php rollback                 Revient à la version précédente (fichiers, pas la base)
  *   php kh-deploy.php cron                     Affiche la ligne à coller dans « Tâches cron »
  *
@@ -87,7 +88,7 @@ function artisan(string $dir, string $command, bool $allowFailure = false): bool
 {
     global $php;
     // --no-interaction : jamais de question cachée qui bloquerait le Terminal ; une erreur s'affiche à la place.
-    $line = 'cd '.escapeshellarg($dir).' && '.escapeshellarg($php).' artisan '.$command.' --no-interaction';
+    $line = 'cd '.escapeshellarg($dir).' && '.escapeshellarg($php).' -d memory_limit=512M artisan '.$command.' --no-interaction';
     if (! function_exists('passthru')) {
         fail("La fonction PHP passthru est désactivée. Lancez à la main : {$line}");
     }
@@ -184,6 +185,23 @@ function install(?string $archive): void
     artisan("{$base}/current", 'migrate --force');
     artisan("{$base}/current", 'kh:seed-production');
 
+    publish();
+
+    echo "\n  Version en ligne : {$stamp}\n";
+    echo "  Première installation ? Créez un administrateur : cd {$base}/current && php artisan kh:make-admin\n";
+    echo "  Puis affichez la ligne cron : cd ~ && php kh-deploy.php cron\n";
+}
+
+/**
+ * Étapes 7 et 8 seules (caches, fichiers publics, vérification) : à relancer si le Terminal LWS
+ * a interrompu l'installation (« Killed ») après la base de données.
+ */
+function publish(): void
+{
+    global $base, $shared;
+
+    is_dir("{$base}/current/vendor") || fail('Aucune version installée dans current/ : lancez d\'abord install.');
+
     step('7. Caches de production et fichiers publics');
     artisan("{$base}/current", 'optimize');
     artisan("{$base}/current", 'filament:optimize', true);
@@ -199,10 +217,6 @@ function install(?string $archive): void
     $headers = function_exists('http_get_last_response_headers') ? (http_get_last_response_headers() ?? []) : ($http_response_header ?? []);
     $status = $headers[0] ?? 'pas de réponse';
     $body !== false && str_contains($status, '200') ? ok(SITE_URL."/up : {$status}") : warn(SITE_URL."/up : {$status} — vérifiez dans le navigateur ; journaux dans {$shared}/storage/logs/");
-
-    echo "\n  Version en ligne : {$stamp}\n";
-    echo "  Première installation ? Créez un administrateur : cd {$base}/current && php artisan kh:make-admin\n";
-    echo "  Puis affichez la ligne cron : cd ~ && php kh-deploy.php cron\n";
 }
 
 function firstWebInstall(): void
@@ -277,6 +291,7 @@ match ($argv[1] ?? '') {
     'check' => check(),
     'install' => install($argv[2] ?? null),
     'rollback' => rollback(),
+    'publish' => publish(),
     'cron' => cron(),
     default => print ("Usage : php kh-deploy.php check | install <archive.zip> | rollback | cron\n"),
 };
