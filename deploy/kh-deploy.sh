@@ -48,7 +48,14 @@ check() {
     [ -d "$WEB" ] && ok "Dossier web : $WEB" || fail "Dossier web introuvable : $WEB"
     mkdir -p "$BASE" && ok "Dossier de l'application : $BASE (hors du web)"
     command -v unzip >/dev/null && ok "unzip disponible" || warn "unzip absent : l'archive sera extraite par PHP"
-    "$PHP_BIN" -r 'echo ini_get("memory_limit");' | xargs -I{} echo "  · memory_limit = {}"
+    command -v curl >/dev/null && ok "curl disponible" || warn "curl absent : la vérification finale sera à faire dans le navigateur"
+    local tool
+    for tool in basename cp ln rm mkdir date grep sed tail ls chmod touch; do
+        command -v "$tool" >/dev/null || fail "Commande « $tool » introuvable sur le serveur : envoyez une capture à l'équipe technique."
+    done
+    ok "Commandes de base disponibles"
+    # Pas de xargs sur LWS : uniquement des commandes de base.
+    echo "  · memory_limit = $("$PHP_BIN" -r 'echo ini_get("memory_limit");')"
 }
 
 extract() {
@@ -73,16 +80,23 @@ sync_web() {
 first_web_install() {
     # Première installation : l'ancien site occupe htdocs (sauvegardé par la direction le 2026-11-20).
     if [ -f "$WEB/.kh-installed" ]; then return 0; fi
-    local old
-    old="$(find "$WEB" -mindepth 1 -maxdepth 1 ! -name '.quarantaine' ! -name '.well-known' | wc -l)"
-    if [ "$old" -gt 0 ]; then
-        step "Ancien site détecté dans $WEB ($old élément(s))"
-        find "$WEB" -mindepth 1 -maxdepth 1 ! -name '.quarantaine' ! -name '.well-known' -printf '  · %f\n'
+    # Contenu actuel de htdocs, sans find ni wc (absents de certains hébergements) : globbing bash.
+    local old=() entry name
+    shopt -s nullglob dotglob
+    for entry in "$WEB"/*; do
+        name="$(basename "$entry")"
+        case "$name" in .quarantaine | .well-known) continue ;; esac
+        old+=("$entry")
+    done
+    shopt -u nullglob dotglob
+    if [ "${#old[@]}" -gt 0 ]; then
+        step "Ancien site détecté dans $WEB (${#old[@]} élément(s))"
+        for entry in "${old[@]}"; do echo "  · $(basename "$entry")"; done
         echo
         echo "  Ces fichiers vont être SUPPRIMÉS (vous avez déjà sauvegardé l'ancien site)."
         read -r -p "  Tapez REMPLACER pour continuer, ou autre chose pour annuler : " answer
         [ "$answer" = "REMPLACER" ] || fail "Annulé : rien n'a été supprimé."
-        find "$WEB" -mindepth 1 -maxdepth 1 ! -name '.quarantaine' ! -name '.well-known' -exec rm -rf {} +
+        rm -rf "${old[@]}"
         ok "Ancien site retiré de $WEB"
     fi
     touch "$WEB/.kh-installed"
@@ -141,7 +155,7 @@ install() {
     artisan "$BASE/current" queue:restart || true
 
     # Ne garder que les $KEEP dernières versions.
-    ls -1dt "$BASE/releases"/*/ 2>/dev/null | tail -n +$((KEEP + 1)) | xargs -r rm -rf
+    ls -1dt "$BASE/releases"/*/ 2>/dev/null | tail -n +$((KEEP + 1)) | while read -r old; do rm -rf "$old"; done
 
     step "8. Vérification"
     local code
@@ -165,14 +179,19 @@ rollback() {
 }
 
 cron() {
+    # Le panneau LWS compte les chemins depuis la racine du compte (exemple : php /htdocs/monfichier.php),
+    # alors que le Terminal les voit sous $HOME : on retire ce préfixe pour la ligne cron.
+    local root="${BASE#"$HOME"}"
     echo
     echo "  Dans le panneau LWS → Tâches cron → Création d'une tâche Cron :"
-    echo "  · Minute : toutes les minutes ; Heure, Jour, Mois, Jour de la semaine : tous"
+    echo "  · Minute : toutes les minutes ; Heure, Jour du mois, Mois, Jour de la semaine : tous"
     echo "  · Commande :"
     echo
-    echo "    $PHP_BIN $BASE/current/artisan schedule:run >> $BASE/shared/storage/logs/cron.log 2>&1"
+    echo "    php $root/current/artisan schedule:run >> $root/shared/storage/logs/cron.log 2>&1"
     echo
-    echo "  Vérification deux minutes plus tard : tail $BASE/shared/storage/logs/cron.log"
+    echo "  Vérification deux minutes plus tard, dans le Terminal : tail $BASE/shared/storage/logs/cron.log"
+    echo "  Si le fichier reste vide, essayez la variante avec le chemin complet :"
+    echo "    $PHP_BIN $BASE/current/artisan schedule:run >> $BASE/shared/storage/logs/cron.log 2>&1"
 }
 
 case "${1:-}" in

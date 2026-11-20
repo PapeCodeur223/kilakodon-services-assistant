@@ -128,13 +128,13 @@ composer kh:check                     # Pint + PHPStan + tests (avant chaque liv
 4. **Base de données et boîte `contact@`** : déjà créées. Garder sous la main l'hôte MySQL, le nom de la base, l'utilisateur, les mots de passe et le serveur SMTP sortant.
 
 **B. Envoyer les fichiers**
-Avec FileZilla, copier dans le dossier `home/` du FTP les deux fichiers fournis par l'équipe technique :
+Avec FileZilla, copier à la racine du FTP, à côté de `htdocs` (dans le Terminal : `~`, c'est-à-dire `/home`), les deux fichiers fournis par l'équipe technique :
 - `kilakodon-hub-AAAAMMJJ-HHMM-xxxxxxx.zip` ;
 - `kh-deploy.sh`.
 
 **C. Dans le Terminal du panneau**
 ```bash
-cd ~/home
+cd ~
 bash kh-deploy.sh check                               # vérifie PHP et les extensions, ne modifie rien
 bash kh-deploy.sh install kilakodon-hub-XXXX.zip      # 1er passage : crée shared/.env puis s'arrête
 ```
@@ -151,7 +151,7 @@ bash kh-deploy.sh install kilakodon-hub-XXXX.zip      # 1er passage : crée shar
    ```
 5. Afficher la ligne cron, puis la coller dans **Tâches cron** (toutes les minutes) :
    ```bash
-   bash ~/home/kh-deploy.sh cron
+   cd ~ && bash kh-deploy.sh cron
    ```
 
 **D. Dans l'administration (`/admin`)**
@@ -162,12 +162,12 @@ bash kh-deploy.sh install kilakodon-hub-XXXX.zip      # 1er passage : crée shar
 
 ### Mettre à jour le site (nouvelle version)
 1. L'équipe technique fabrique la nouvelle archive : `C:\php\8.2\php.exe scripts/build-release.php`, qui produit `dist/`.
-2. Envoyer la nouvelle archive (et `kh-deploy.sh` s'il a changé) dans `home/` par FTP.
-3. Dans le Terminal : `cd ~/home && bash kh-deploy.sh install kilakodon-hub-NOUVELLE.zip`.
+2. Envoyer la nouvelle archive (et `kh-deploy.sh` s'il a changé) à la racine du FTP, à côté de `htdocs`.
+3. Dans le Terminal : `cd ~ && bash kh-deploy.sh install kilakodon-hub-NOUVELLE.zip`.
    Le `.env` et les données sont conservés. Seuls les nouveaux réglages sont ajoutés, jamais d'écrasement des contenus modifiés dans l'admin.
 
 ### Revenir en arrière
-`cd ~/home && bash kh-deploy.sh rollback` remet les fichiers de la version précédente. La base de données n'est pas modifiée : en cas de migration problématique, restaurer la sauvegarde LWS de la base.
+`cd ~ && bash kh-deploy.sh rollback` remet les fichiers de la version précédente. La base de données n'est pas modifiée : en cas de migration problématique, restaurer la sauvegarde LWS de la base.
 
 ### Après une modification du `.env`
 Les réglages sont mis en cache. Après toute modification : `cd ~/home/kilakodon-hub/current && php artisan optimize`.
