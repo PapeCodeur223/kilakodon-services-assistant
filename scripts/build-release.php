@@ -16,14 +16,19 @@ $root = dirname(__DIR__);
 $composer = $argv[1] ?? 'C:/Programmation Web/MinGW/Composer/composer.phar';
 $php = PHP_BINARY;
 
-function run(string $command, string $cwd): void
+function run(string $command, string $cwd, int $attempts = 1): void
 {
-    echo "  > {$command}\n";
-    passthru('cd '.escapeshellarg($cwd)." && {$command}", $code);
-    if ($code !== 0) {
-        fwrite(STDERR, "Échec ({$code}) : {$command}\n");
-        exit(1);
+    $code = 1;
+    for ($try = 1; $try <= $attempts; $try++) {
+        echo "  > {$command}".($try > 1 ? " (essai {$try})" : '')."\n";
+        passthru('cd '.escapeshellarg($cwd)." && {$command}", $code);
+        if ($code === 0) {
+            return;
+        }
+        sleep(3); // verrou passager de Windows : Composer reprend là où il s'est arrêté
     }
+    fwrite(STDERR, "Échec ({$code}) : {$command}\n");
+    exit(1);
 }
 
 function copyDir(string $from, string $to): void
@@ -60,10 +65,12 @@ if ($status !== '') {
 $sha = trim((string) shell_exec('git rev-parse --short HEAD'));
 $name = 'kilakodon-hub-'.date('Ymd-Hi').'-'.$sha;
 $dist = $root.'/dist';
-$build = $dist.'/'.$name;
+// Dossier de travail hors du projet (moins exposé aux verrous de l'indexeur et de l'antivirus Windows).
+$build = sys_get_temp_dir().'/kh-release/'.$name;
 
 echo "1. Copie du commit {$sha}\n";
 @mkdir($dist, 0777, true);
+@mkdir(dirname($build), 0777, true);
 removeDir($build);
 run('git archive --format=zip -o '.escapeshellarg("{$dist}/source.zip").' HEAD', $root);
 $zip = new ZipArchive;
@@ -78,7 +85,7 @@ foreach (['public/build', 'public/css/filament', 'public/js/filament', 'public/f
 }
 
 echo "3. Dépendances de production\n";
-run(escapeshellarg($php).' '.escapeshellarg($composer).' install --no-dev --optimize-autoloader --classmap-authoritative --no-interaction --no-progress', $build);
+run(escapeshellarg($php).' '.escapeshellarg($composer).' install --no-dev --optimize-autoloader --classmap-authoritative --no-interaction --no-progress', $build, 3);
 
 echo "4. Nettoyage\n";
 foreach (['tests', 'docs', '.github', 'node_modules', 'scripts'] as $dir) {
