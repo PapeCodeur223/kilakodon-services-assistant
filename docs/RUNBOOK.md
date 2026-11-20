@@ -2,7 +2,7 @@
 
 Procédures courantes pour l'équipe. Toutes se font depuis l'administration (`/admin`), sauf mention contraire. Les commandes `php artisan …` se lancent à la racine du projet.
 
-> Phase actuelle : développement local. Les procédures de production (sauvegardes, supervision, déploiement) seront ajoutées au lot 7.
+> Production : https://www.kilakodon-services.com (LWS Perso, Terminal du panneau, sans SSH). Mise en ligne et mises à jour : section 9.
 
 ---
 
@@ -109,3 +109,71 @@ php artisan kh:ai-eval --driver=fake  # vérifier l'assistant sans appel réel
 php artisan kh:conversations-purge    # lancer la purge des conversations à la main
 composer kh:check                     # Pint + PHPStan + tests (avant chaque livraison)
 ```
+
+## 9. Mise en production et mises à jour (LWS Perso)
+
+### Organisation sur le serveur
+| Dossier (vu depuis le Terminal) | Contenu |
+|---|---|
+| `~/home/kilakodon-hub/current` | La version en ligne. C'est un lien vers `releases/<date>` ; les 3 dernières versions sont gardées. |
+| `~/home/kilakodon-hub/shared/.env` | Réglages et mots de passe. Hors du web, jamais écrasé par une mise à jour. |
+| `~/home/kilakodon-hub/shared/storage` | Journaux (`logs/`), sessions et caches. |
+| `~/htdocs` | Seulement les fichiers publics (CSS, JS, images) et un `index.php` qui charge l'application. |
+
+### Première mise en ligne
+**A. Dans le panneau LWS (une seule fois)**
+1. **Configuration php** : choisir pour le site la même version que celle du Terminal. `bash kh-deploy.sh check` l'indique et vérifie les extensions.
+2. **SSL** : certificat Let's Encrypt actif pour `kilakodon-services.com` et `www.kilakodon-services.com`. Activer l'option qui force le HTTPS si elle existe.
+3. **LWSCache (Varnish)** : le désactiver pour ce site. Il mettrait en cache des pages personnelles (formulaires, diagnostic, admin).
+4. **Base de données et boîte `contact@`** : déjà créées. Garder sous la main l'hôte MySQL, le nom de la base, l'utilisateur, les mots de passe et le serveur SMTP sortant.
+
+**B. Envoyer les fichiers**
+Avec FileZilla, copier dans le dossier `home/` du FTP les deux fichiers fournis par l'équipe technique :
+- `kilakodon-hub-AAAAMMJJ-HHMM-xxxxxxx.zip` ;
+- `kh-deploy.sh`.
+
+**C. Dans le Terminal du panneau**
+```bash
+cd ~/home
+bash kh-deploy.sh check                               # vérifie PHP et les extensions, ne modifie rien
+bash kh-deploy.sh install kilakodon-hub-XXXX.zip      # 1er passage : crée shared/.env puis s'arrête
+```
+1. Ouvrir `home/kilakodon-hub/shared/.env` (gestionnaire de fichiers LWS, ou `nano ~/home/kilakodon-hub/shared/.env`).
+2. Remplir les lignes « À REMPLIR » : base de données, mot de passe de `contact@`, clé Anthropic. Enregistrer.
+3. Relancer exactement la même commande :
+   ```bash
+   bash kh-deploy.sh install kilakodon-hub-XXXX.zip
+   ```
+   Le script affiche les fichiers de l'ancien site et demande de taper `REMPLACER`. Il crée ensuite la clé de chiffrement, la base (contenus validés, questionnaire, réglages ; aucune donnée de test) et met le site en ligne.
+4. Créer les administrateurs, un par personne :
+   ```bash
+   cd ~/home/kilakodon-hub/current && php artisan kh:make-admin
+   ```
+5. Afficher la ligne cron, puis la coller dans **Tâches cron** (toutes les minutes) :
+   ```bash
+   bash ~/home/kh-deploy.sh cron
+   ```
+
+**D. Dans l'administration (`/admin`)**
+1. Se connecter, puis configurer la double authentification (application d'authentification sur le téléphone).
+2. **Assistant → Base de connaissances** : filtrer « Brouillon », tout sélectionner, puis cliquer **Approuver la sélection**.
+3. **Réglages → Paramètres** : vérifier coordonnées, horaires et destinataires des notifications, puis activer l'assistant.
+4. Faire un test complet : diagnostic, demande de brief, formulaire de contact. Vérifier que l'e-mail arrive.
+
+### Mettre à jour le site (nouvelle version)
+1. L'équipe technique fabrique la nouvelle archive : `C:\php\8.2\php.exe scripts/build-release.php`, qui produit `dist/`.
+2. Envoyer la nouvelle archive (et `kh-deploy.sh` s'il a changé) dans `home/` par FTP.
+3. Dans le Terminal : `cd ~/home && bash kh-deploy.sh install kilakodon-hub-NOUVELLE.zip`.
+   Le `.env` et les données sont conservés. Seuls les nouveaux réglages sont ajoutés, jamais d'écrasement des contenus modifiés dans l'admin.
+
+### Revenir en arrière
+`cd ~/home && bash kh-deploy.sh rollback` remet les fichiers de la version précédente. La base de données n'est pas modifiée : en cas de migration problématique, restaurer la sauvegarde LWS de la base.
+
+### Après une modification du `.env`
+Les réglages sont mis en cache. Après toute modification : `cd ~/home/kilakodon-hub/current && php artisan optimize`.
+
+### En cas de problème
+- **Journaux** : `tail -n 50 ~/home/kilakodon-hub/shared/storage/logs/laravel-$(date +%F).log`.
+- **Cron** : `tail ~/home/kilakodon-hub/shared/storage/logs/cron.log`. Le fichier doit grossir chaque minute.
+- **Page blanche ou erreur 500** : vérifier le `.env` (base de données) puis lancer `php artisan optimize`. Si cela ne suffit pas, `bash kh-deploy.sh rollback`.
+- **Maintenance manuelle** : `php artisan down` puis `php artisan up`, dans `~/home/kilakodon-hub/current`.

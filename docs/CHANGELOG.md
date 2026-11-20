@@ -2,6 +2,13 @@
 
 ## [Non publié]
 
+### Lot 7 — Mise en production LWS (2026-11-20, en préparation)
+- Archive de mise en ligne (`scripts/build-release.php`) et script serveur `deploy/kh-deploy.sh` (vérification, installation, mise à jour, retour arrière, ligne cron) ; code et `.env` hors du web.
+- `kh:seed-production` : installation de la base de production sans données de test, puis mises à jour sans écrasement.
+- Production : liens en HTTPS, proxys de confiance configurables, redirection vers `www`, modèle `deploy/env.production.example`.
+- Approbation groupée de la base de connaissances.
+- RUNBOOK §9 : guide de mise en ligne pas à pas.
+
 ### Lot 6 — Mesure, données personnelles, finition, recette (validé le 2026-11-19)
 #### Ajouté
 - Mesure first-party (TRD §9) : bannière cookies sans JavaScript (« Refuser » / « Accepter » au même niveau), page Cookies « Vos choix », `POST /api/events` avec liste blanche, événements serveur des parcours et des leads. Rien n’est mesuré dans le navigateur sans accord ; jamais de coordonnée ni d’IP dans les événements.

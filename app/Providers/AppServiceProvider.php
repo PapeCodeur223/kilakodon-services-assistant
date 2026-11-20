@@ -51,10 +51,12 @@ use Illuminate\Auth\Events\Login;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Http\Middleware\TrustProxies;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
 
@@ -78,6 +80,14 @@ class AppServiceProvider extends ServiceProvider
     {
         // Lazy loading, attributs inconnus et affectations silencieuses : erreurs hors production.
         Model::shouldBeStrict(! $this->app->isProduction());
+
+        // Production (lot 7) : liens toujours en HTTPS ; proxy de l'hébergeur seulement s'il est déclaré.
+        if ($this->app->isProduction() && str_starts_with((string) config('app.url'), 'https://')) {
+            URL::forceScheme('https');
+        }
+        if (filled(config('kh.trusted_proxies'))) {
+            TrustProxies::at(array_map('trim', explode(',', (string) config('kh.trusted_proxies'))));
+        }
 
         // Types polymorphes stables (indépendants des noms de classes).
         Relation::enforceMorphMap([

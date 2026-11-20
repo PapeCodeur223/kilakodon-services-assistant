@@ -5,6 +5,10 @@ return [
     // Développement local : secret MFA de admin@kilakodon.test restauré par le DevSeeder (jamais en production).
     'dev_admin_mfa_secret' => env('KH_DEV_ADMIN_MFA_SECRET'),
 
+    // Proxys de confiance (hébergeur) : vide par défaut. En production, seulement les adresses du proxy
+    // LWS si les en-têtes X-Forwarded-* sont nécessaires (« * » permettrait de falsifier l'IP des visiteurs).
+    'trusted_proxies' => env('TRUSTED_PROXIES'),
+
     // Fuseau d'affichage ; les dates restent stockées en UTC.
     'display_timezone' => env('KH_DISPLAY_TIMEZONE', 'Africa/Bamako'),
 

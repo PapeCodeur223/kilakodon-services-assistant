@@ -39,6 +39,12 @@ class KnowledgeDocumentPolicy
         return $user->isAdmin() && $document->status !== KnowledgeStatus::Approved && $document->chunks()->exists();
     }
 
+    /** Approbation groupée (lot 7) : admin seulement ; chaque document repasse par approve(). */
+    public function approveAny(User $user): bool
+    {
+        return $user->isAdmin();
+    }
+
     public function retire(User $user, KnowledgeDocument $document): bool
     {
         return $user->isAdmin() && $document->status !== KnowledgeStatus::Retired;

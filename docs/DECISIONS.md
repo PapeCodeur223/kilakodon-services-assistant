@@ -198,3 +198,23 @@
   - la revue manuelle confirme les exigences UX §9 sur le diagnostic (fieldset, legend, aria-live, focus sur le titre) et l'assistant (role dialog, aria-modal, piège à focus, Échap, aria-live) ;
   - les boutons de retour de l'assistant passent de 36 à 44 px.
   - Un audit automatique (axe-core) et Lighthouse n'ont pas pu être lancés dans l'environnement de l'agent (exécution de scripts téléchargés refusée) : ils restent à faire avec l'accord de l'équipe (RECETTE §3).
+
+### 2026-11-20 — Lot 7 (production LWS Perso) : choix techniques
+- Hébergement LWS Perso **sans SSH, avec le Terminal du panneau** (PHP 8.5 en ligne de commande), une seule base MySQL et des tâches cron à la minute. La direction a sauvegardé l'ancien site (archive LWS et export de la base) avant son remplacement.
+- Organisation des fichiers :
+  - le code, le `.env` et les journaux sont **hors du web**, dans `~/home/kilakodon-hub` (versions dans `releases/`, lien `current`, `shared/.env`, `shared/storage`) ;
+  - `~/htdocs` ne reçoit que les fichiers publics et un `index.php` qui charge l'application (`deploy/htdocs-index.php`, `usePublicPath`).
+- Mise en ligne : une archive fabriquée en local par `scripts/build-release.php` (dernier commit, `composer --no-dev`, fichiers compilés et assets Filament inclus), envoyée par FTP, puis installée par `deploy/kh-deploy.sh` dans le Terminal. Le script vérifie l'environnement, crée le `.env` à compléter, migre la base, met en cache, bascule de façon atomique et permet un retour arrière. Pas de Node, de Composer ni de Git sur le serveur.
+- `kh:seed-production` :
+  - base vide : installation complète (réglages, contenus validés, questionnaire, base de connaissances en brouillon) ;
+  - base déjà installée : ajout des seuls nouveaux réglages, sans jamais écraser ce que l'équipe modifie dans l'admin ;
+  - jamais de comptes ni de données de test hors local.
+- Secrets uniquement dans `shared/.env` (droits 600), saisis par la direction sur le serveur. Aucun mot de passe dans le dépôt ni dans les échanges.
+- HTTPS :
+  - liens forcés en HTTPS par l'application en production ;
+  - redirection du domaine nu vers `www` par `.htaccess` ;
+  - passage de `http` à `https` confié à l'option SSL du panneau, pour éviter une boucle derrière le proxy LWS.
+  - Les proxys de confiance sont vides par défaut : `*` permettrait de falsifier l'IP et de contourner les limites de débit.
+- LWSCache (Varnish) à désactiver pour ce site : il mettrait en cache des pages personnelles (formulaires avec jeton CSRF, admin).
+- Approbation groupée des documents de la base de connaissances (admin), pour la première mise en service de l'assistant.
+- PHP 8.5 en production alors que le projet est testé en 8.2 : les dépendances (Laravel 12.72, Symfony 7.4) acceptent 8.5. `kh-deploy.sh check` contrôle la version et les extensions ; la recette en ligne valide le fonctionnement. Repli possible : choisir une version antérieure dans « Configuration php » et lancer le script avec `PHP_BIN`.
